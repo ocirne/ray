@@ -11,7 +11,7 @@ fun main() {
     val N = 1
     var sum = 0.0
     for (i in 0 until N) {
-        val x = pow(Random.nextDouble(0.0, 8.0), 1.0/3.0)
+        val x = Random.nextDouble(0.0, 8.0).pow(1.0/3.0)
         sum += x * x / pdf(x)
     }
     println("I = ${sum/N}")
