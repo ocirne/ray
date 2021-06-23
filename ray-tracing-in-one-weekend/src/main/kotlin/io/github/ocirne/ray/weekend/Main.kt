@@ -221,6 +221,34 @@ fun final_scene(): hittable_list {
     return objects.build()
 }
 
+fun cornell_box_book3(): hittable_list {
+    val objects = hittable_list.builder()
+
+    val red   = lambertian(color(.65, .05, .05))
+    val white = lambertian(color(.73, .73, .73))
+    val green = lambertian(color(.12, .45, .15))
+    val light = diffuse_light(color(15, 15, 15))
+
+    objects.add(yz_rect(0, 555, 0, 555, 555, green))
+    objects.add(yz_rect(0, 555, 0, 555, 0, red))
+    objects.add(xz_rect(213, 343, 227, 332, 554, light))
+    objects.add(xz_rect(0, 555, 0, 555, 555, white))
+    objects.add(xz_rect(0, 555, 0, 555, 0, white))
+    objects.add(xy_rect(0, 555, 0, 555, 555, white))
+
+    var box1: hittable = box(point3(0,0,0), point3(165,330,165), white)
+    box1 = rotate_y(box1, 15.0)
+    box1 = translate(box1, vec3(265,0,295))
+    objects.add(box1)
+
+    var box2: hittable = box(point3(0,0,0), point3(165,165,165), white)
+    box2 = rotate_y(box2, -18.0)
+    box2 = translate(box2, vec3(130,0,65))
+    objects.add(box2)
+
+    return objects.build()
+}
+
 fun init_scene(scene: Int) {
     when (scene) {
         (1) -> {
@@ -289,6 +317,16 @@ fun init_scene(scene: Int) {
             lookat = point3(278, 278, 0)
             vfov = 40.0
         }
+        (9) -> {
+            world = cornell_box_book3()
+            aspect_ratio = 1.0 / 1.0
+            image_width = 600
+            samples_per_pixel = 500
+            background = color(0, 0, 0)
+            lookfrom = point3(278, 278, -800)
+            lookat = point3(278, 278, 0)
+            vfov = 40.0
+        }
         else -> throw UnsupportedOperationException()
     }
 }
@@ -303,21 +341,22 @@ const val max_depth = 50
 var world: hittable_list? = null
 var lookfrom: point3? = null
 var lookat: point3? = null
+var vup = vec3(0, 1, 0)
+var dist_to_focus = 10.0
 var vfov = 40.0
 var aperture = 0.0
 var background = color(0, 0, 0)
+var time0 = 0.0
+var time1 = 1.0
 
 // Render
 
 fun run(out: PrintWriter) {
-    init_scene(8)
+    init_scene(9)
 
     // Camera
-
-    val vup = vec3(0, 1, 0)
-    val dist_to_focus = 10.0
     val image_height = (image_width / aspect_ratio).toInt()
-    val cam = camera(lookfrom!!, lookat!!, vup, vfov, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0)
+    val cam = camera(lookfrom!!, lookat!!, vup, vfov, aspect_ratio, aperture, dist_to_focus, time0, time1)
 
     out.println("P3")
     out.println("$image_width $image_height")
