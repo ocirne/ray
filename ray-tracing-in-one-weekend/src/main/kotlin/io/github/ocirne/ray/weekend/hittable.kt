@@ -120,3 +120,16 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
         return bbox
     }
 }
+
+class flip_face(val ptr: hittable): hittable {
+
+    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
+        val rec = ptr.hit(r, t_min, t_max) ?: return null
+        rec.front_face = !rec.front_face
+        return rec
+    }
+
+    override fun bounding_box(time0: Double, time1: Double): aabb? {
+        return ptr.bounding_box(time0, time1)
+    }
+}

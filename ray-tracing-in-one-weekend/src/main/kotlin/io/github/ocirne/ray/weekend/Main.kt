@@ -2,8 +2,10 @@ package io.github.ocirne.ray.weekend
 
 import java.io.File
 import java.io.PrintWriter
+import kotlin.math.abs
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
+
 
 fun ray_color(r: ray, background: color, world: hittable, depth: Int): color {
     if (depth <= 0) {
@@ -12,8 +14,25 @@ fun ray_color(r: ray, background: color, world: hittable, depth: Int): color {
     // If the ray hits nothing, return the background color.
     val rec = world.hit(r, 0.001, infinity) ?: return background
 
-    val emitted = rec.mat.emitted(rec.u, rec.v, rec.p)
-    val (albedo, scattered, pdf) = rec.mat.scatter(r, rec) ?: return emitted
+    val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
+    val (albedo, _, _) = rec.mat.scatter(r, rec) ?: return emitted
+
+    val on_light = point3(Random.nextDouble(213.0, 343.0), 554.0, Random.nextDouble(227.0, 332.0))
+    val to_light = on_light - rec.p
+    val distance_squared = to_light.length_squared()
+    val to_light_unit = to_light.unitVector()
+
+    if (to_light.dot(rec.normal) < 0) {
+        return emitted
+    }
+    val light_area = ((343 - 213) * (332 - 227)).toDouble()
+    val light_cosine = abs(to_light_unit.y())
+    if (light_cosine < 0.000001) {
+        return emitted
+    }
+    val pdf = distance_squared / (light_cosine * light_area)
+    val scattered = ray(rec.p, to_light_unit, r.time())
+
     return emitted + albedo * rec.mat.scattering_pdf(r, rec, scattered) *
                               ray_color(scattered, background, world, depth-1) / pdf
 }
@@ -233,7 +252,7 @@ fun cornell_box_book3(): hittable_list {
 
     objects.add(yz_rect(0, 555, 0, 555, 555, green))
     objects.add(yz_rect(0, 555, 0, 555, 0, red))
-    objects.add(xz_rect(213, 343, 227, 332, 554, light))
+    objects.add(flip_face(xz_rect(213, 343, 227, 332, 554, light)))
     objects.add(xz_rect(0, 555, 0, 555, 555, white))
     objects.add(xz_rect(0, 555, 0, 555, 0, white))
     objects.add(xy_rect(0, 555, 0, 555, 555, white))

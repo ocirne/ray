@@ -17,7 +17,7 @@ interface material {
         return 0.0
     }
 
-    fun emitted(u: Double, v: Double, p: point3): color {
+    fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: point3): color {
         return color(0, 0, 0)
     }
 }
@@ -88,8 +88,8 @@ class diffuse_light(val emit: texture): material {
         return null
     }
 
-    override fun emitted(u: Double, v: Double, p: point3): color {
-        return emit.value(u, v, p)
+    override fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: point3): color {
+        return if (rec.front_face) emit.value(u, v, p) else color(0,0,0)
     }
 }
 
