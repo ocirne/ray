@@ -1,4 +1,4 @@
-package io.github.ocirne.ray
+package io.github.ocirne.ray.weekend
 
 import kotlin.math.ln
 import kotlin.random.Random

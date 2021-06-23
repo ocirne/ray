@@ -1,4 +1,4 @@
-package io.github.ocirne.ray
+package io.github.ocirne.ray.weekend
 
 import kotlin.math.min as fmin
 import kotlin.math.max as fmax

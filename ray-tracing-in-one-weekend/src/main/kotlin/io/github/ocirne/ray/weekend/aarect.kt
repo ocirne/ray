@@ -1,4 +1,4 @@
-package io.github.ocirne.ray
+package io.github.ocirne.ray.weekend
 
 class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val mat: material) : hittable {
 

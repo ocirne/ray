@@ -1,4 +1,4 @@
-package io.github.ocirne.ray
+package io.github.ocirne.ray.weekend
 
 class box(val p0: point3, val p1: point3, mat: material) : hittable {
 

@@ -1,4 +1,4 @@
-package io.github.ocirne.ray
+package io.github.ocirne.ray.weekend
 
 class hittable_list(val objects: Array<hittable>): hittable {
 

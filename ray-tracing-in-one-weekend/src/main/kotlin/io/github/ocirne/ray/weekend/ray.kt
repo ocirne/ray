@@ -1,4 +1,4 @@
-package io.github.ocirne.ray
+package io.github.ocirne.ray.weekend
 
 class ray(val origin: point3, val direction: vec3, val time: Double = 0.0) {
 
