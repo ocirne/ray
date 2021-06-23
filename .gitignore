@@ -25,3 +25,6 @@ hs_err_pid*
 .idea
 output/
 /ray-tracing-in-one-weekend/src/main/resources/
+
+.gradle
+build/
