@@ -24,25 +24,14 @@ interface material {
 
 class lambertian(val albedo: texture): material {
 
-    val random_hemisphere_sampling = false
-
     constructor(c: color): this(solid_color(c))
 
     override fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double> {
-        if (random_hemisphere_sampling) {
-            val direction = vec3.random_in_unit_sphere()
-            val scattered = ray(rec.p, direction.unitVector(), r_in.time())
-            val alb = albedo.value(rec.u, rec.v, rec.p)
-            val pdf = 0.5 / PI
-            return Triple(alb, scattered, pdf)
-        }
-        var scatter_direction = rec.normal + vec3.random_unit_vector()
-        if (scatter_direction.near_zero()) {
-            scatter_direction = rec.normal
-        }
-        val scattered = ray(rec.p, scatter_direction.unitVector(), r_in.time())
+        val uvw = onb.build_from_w(rec.normal)
+        val direction = uvw.local(random_cosine_direction())
+        val scattered = ray(rec.p, direction.unitVector(), r_in.time())
         val alb = albedo.value(rec.u, rec.v, rec.p)
-        val pdf = rec.normal.dot(scattered.direction()) / PI
+        val pdf = uvw.w.dot(scattered.direction()) / PI
         return Triple(alb, scattered, pdf)
     }
 
