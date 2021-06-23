@@ -12,8 +12,9 @@ fun ray_color(r: ray, background: color, world: hittable, depth: Int): color {
     // If the ray hits nothing, return the background color.
     val rec = world.hit(r, 0.001, infinity) ?: return background
     val emitted = rec.mat.emitted(rec.u, rec.v, rec.p)
-    val (scattered, attenuation) = rec.mat.scatter(r, rec) ?: return emitted
-    return emitted + attenuation * ray_color(scattered, background, world, depth-1)
+    val (albedo, scattered, pdf) = rec.mat.scatter(r, rec) ?: return emitted
+    return emitted + albedo * rec.mat.scattering_pdf(r, rec, scattered) *
+                              ray_color(scattered, background, world, depth-1)
 }
 
 fun random_scene(): hittable_list {
@@ -321,7 +322,7 @@ fun init_scene(scene: Int) {
             world = cornell_box_book3()
             aspect_ratio = 1.0 / 1.0
             image_width = 600
-            samples_per_pixel = 500
+            samples_per_pixel = 100
             background = color(0, 0, 0)
             lookfrom = point3(278, 278, -800)
             lookat = point3(278, 278, 0)

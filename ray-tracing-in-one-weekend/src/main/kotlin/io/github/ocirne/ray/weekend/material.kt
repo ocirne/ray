@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.weekend
 
+import kotlin.math.PI
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -8,7 +9,13 @@ import kotlin.random.Random
 
 interface material {
 
-    fun scatter(r_in: ray, rec: hit_record): Pair<ray, color>?
+    fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
+        return null
+    }
+
+    fun scattering_pdf(r_in: ray, rec: hit_record, scattered: ray): Double {
+        return 0.0
+    }
 
     fun emitted(u: Double, v: Double, p: point3): color {
         return color(0, 0, 0)
@@ -19,14 +26,20 @@ class lambertian(val albedo: texture): material {
 
     constructor(c: color): this(solid_color(c))
 
-    override fun scatter(r_in: ray, rec: hit_record): Pair<ray, color> {
+    override fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double> {
         var scatter_direction = rec.normal + vec3.random_unit_vector()
         if (scatter_direction.near_zero()) {
             scatter_direction = rec.normal
         }
-        val scattered = ray(rec.p, scatter_direction, r_in.time())
-        val attenuation = albedo.value(rec.u, rec.v, rec.p)
-        return Pair(scattered, attenuation)
+        val scattered = ray(rec.p, scatter_direction.unitVector(), r_in.time())
+        val alb = albedo.value(rec.u, rec.v, rec.p)
+        val pdf = rec.normal.dot(scattered.direction()) / PI
+        return Triple(alb, scattered, pdf)
+    }
+
+    override fun scattering_pdf(r_in: ray, rec: hit_record, scattered: ray): Double {
+        val cosine = rec.normal.dot(scattered.direction().unitVector())
+        return if (cosine < 0.0) 0.0 else cosine/PI
     }
 }
 
@@ -36,16 +49,16 @@ class metal(val albedo: color, f: Double): material {
 
     val fuzz = if (f < 1.0) f else 1.0
 
-    override fun scatter(r_in: ray, rec: hit_record): Pair<ray, color>? {
+    override fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
         val reflected = r_in.direction.unitVector().reflect(rec.normal)
         val scattered = ray(rec.p, reflected + fuzz * vec3.random_in_unit_sphere(), r_in.time())
-        return if (scattered.direction().dot(rec.normal) > 0) Pair(scattered, albedo) else null
+        return if (scattered.direction().dot(rec.normal) > 0) Triple(albedo, scattered, 0.0) else null
     }
 }
 
 class dielectric(val index_of_refraction: Double): material {
 
-    override fun scatter(r_in: ray, rec: hit_record): Pair<ray, color> {
+    override fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
         val attenuation = color(1, 1, 1)
         val refraction_ratio = if (rec.front_face) 1.0/index_of_refraction else index_of_refraction
 
@@ -58,7 +71,7 @@ class dielectric(val index_of_refraction: Double): material {
         else
             unit_direction.refract(rec.normal, refraction_ratio)
         val scattered = ray(rec.p, direction, r_in.time())
-        return Pair(scattered, attenuation)
+        return Triple(attenuation, scattered, 0.0)
     }
 
     private fun reflectance(cosine: Double, ref_idx: Double): Double {
@@ -73,7 +86,7 @@ class diffuse_light(val emit: texture): material {
 
     constructor(c: color) : this(solid_color(c))
 
-    override fun scatter(r_in: ray, rec: hit_record): Pair<ray, color>? {
+    override fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
         return null
     }
 
@@ -86,9 +99,9 @@ class isotropic(val albedo: texture): material {
 
     constructor(c: color): this(solid_color(c))
 
-    override fun scatter(r_in: ray, rec: hit_record): Pair<ray, color> {
+    override fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
         val scattered = ray(rec.p, vec3.random_in_unit_sphere(), r_in.time())
         val attenuation = albedo.value(rec.u, rec.v, rec.p)
-        return Pair(scattered, attenuation)
+        return Triple(attenuation, scattered, 0.0)
     }
 }
