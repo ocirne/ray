@@ -11,10 +11,11 @@ fun ray_color(r: ray, background: color, world: hittable, depth: Int): color {
     }
     // If the ray hits nothing, return the background color.
     val rec = world.hit(r, 0.001, infinity) ?: return background
+
     val emitted = rec.mat.emitted(rec.u, rec.v, rec.p)
     val (albedo, scattered, pdf) = rec.mat.scatter(r, rec) ?: return emitted
     return emitted + albedo * rec.mat.scattering_pdf(r, rec, scattered) *
-                              ray_color(scattered, background, world, depth-1)
+                              ray_color(scattered, background, world, depth-1) / pdf
 }
 
 fun random_scene(): hittable_list {
