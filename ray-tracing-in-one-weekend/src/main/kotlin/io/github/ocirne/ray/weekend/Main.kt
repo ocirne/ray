@@ -17,9 +17,11 @@ fun ray_color(r: ray, background: color, world: hittable, lights: hittable, dept
     val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
     val (albedo, _, _) = rec.mat.scatter(r, rec) ?: return emitted
 
-    val light_pdf = hittable_pdf(lights, rec.p)
-    val scattered = ray(rec.p, light_pdf.generate(), r.time())
-    val pdf_val = light_pdf.value(scattered.direction())
+    val p0 = hittable_pdf(lights, rec.p)
+    val p1 = cosine_pdf(rec.normal)
+    val mixed_pdf = mixture_pdf(p0, p1)
+    val scattered = ray(rec.p, mixed_pdf.generate(), r.time())
+    val pdf_val = mixed_pdf.value(scattered.direction())
 
     return emitted + albedo * rec.mat.scattering_pdf(r, rec, scattered) *
                               ray_color(scattered, background, world, lights, depth-1) / pdf_val
@@ -330,7 +332,7 @@ fun init_scene(scene: Int) {
             world = cornell_box_book3()
             aspect_ratio = 1.0 / 1.0
             image_width = 600
-            samples_per_pixel = 10
+            samples_per_pixel = 1000
             background = color(0, 0, 0)
             lookfrom = point3(278, 278, -800)
             lookat = point3(278, 278, 0)

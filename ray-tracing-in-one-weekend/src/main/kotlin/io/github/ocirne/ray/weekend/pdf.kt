@@ -46,3 +46,14 @@ class hittable_pdf(val ptr: hittable, val origin: point3): pdf {
         return ptr.random(origin)
     }
 }
+
+class mixture_pdf(val p0: pdf, val p1: pdf): pdf {
+
+    override fun value(direction: vec3): Double {
+        return 0.5 * p0.value(direction) + 0.5 *p1.value(direction)
+    }
+
+    override fun generate(): vec3 {
+        return if (Random.nextDouble() < 0.5) p0.generate() else p1.generate()
+    }
+}
