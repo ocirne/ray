@@ -5,6 +5,7 @@ import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.random.Random
 
+const val epsilon = 1e-8
 
 class Vector3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
@@ -79,8 +80,6 @@ class Vector3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     companion object {
 
-        val epsilon = 1e-8
-
         // Extension
         operator fun Double.times(v: Vector3): Vector3 =
             Vector3(this * v.x, this * v.y, this * v.z)
@@ -119,6 +118,5 @@ class Vector3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
     }
 }
 
-// Type aliases for Vector3
-typealias Point3 = Vector3   // 3D point
-typealias Color = Vector3    // RGB Color
+// Type aliases for 3D point
+typealias Point3 = Vector3

@@ -1,6 +1,6 @@
 package io.github.ocirne.ray.bewegt
 
-import io.github.ocirne.ray.bewegt.math.Color
+import io.github.ocirne.ray.bewegt.canvas.*
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import java.io.File
@@ -9,11 +9,11 @@ import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 
-fun ray_color(r: ray, background: Color, world: hittable, lights: hittable, depth: Int): Color {
+fun rayColor(r: ray, background: RgbColor, world: hittable, lights: hittable, depth: Int): RgbColor {
     if (depth <= 0) {
-        return Color(0, 0, 0)
+        return NO_COLOR
     }
-    // If the ray hits nothing, return the background color.
+    // If the ray hits nothing, return the background Color.
     val rec = world.hit(r, 0.001, infinity) ?: return background
 
     val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
@@ -21,7 +21,7 @@ fun ray_color(r: ray, background: Color, world: hittable, lights: hittable, dept
 
     if (srec.is_specular) {
         return srec.attenuation *
-                ray_color(srec.specular_ray!!, background, world, lights, depth - 1)
+                rayColor(srec.specular_ray!!, background, world, lights, depth - 1)
     }
 
     val light_ptr = hittable_pdf(lights, rec.p)
@@ -32,13 +32,13 @@ fun ray_color(r: ray, background: Color, world: hittable, lights: hittable, dept
 
     return emitted + srec.attenuation *
             rec.mat.scattering_pdf(r, rec, scattered) *
-            ray_color(scattered, background, world, lights, depth-1) / pdf_val
+            rayColor(scattered, background, world, lights, depth-1) / pdf_val
 }
 
 fun random_scene(): hittable_list {
     val builder = hittable_list.builder()
 
-    val checker = checker_texture(Color(0.2, 0.3, 0.1), Color(0.9, 0.9, 0.9))
+    val checker = checker_texture(RgbColor(0.2, 0.3, 0.1), RgbColor(0.9, 0.9, 0.9))
     builder.add(sphere(Point3(0,-1000,0), 1000, lambertian(checker)))
 
     for (a in -11..10) {
@@ -49,13 +49,13 @@ fun random_scene(): hittable_list {
             if ((center - Point3(4.0, 0.2, 0.0)).length() > 0.9) {
                 if (choose_mat < 0.8) {
                     // diffuse
-                    val albedo = Color.random() * Color.random()
+                    val albedo = RgbColor.random() * RgbColor.random()
                     val sphere_material = lambertian(albedo)
                     val center2 = center + Vector3(0.0, Random.nextDouble(0.0, 0.5), 0.0)
                     builder.add(moving_sphere(center, center2, 0.0, 1.0, 0.2, sphere_material))
                 } else if (choose_mat < 0.95) {
                     // metal
-                    val albedo = Color.random(0.5, 1.0)
+                    val albedo = RgbColor.random(0.5, 1.0)
                     val fuzz = Random.nextDouble(0.5)
                     val sphere_material = metal(albedo, fuzz)
                     builder.add(sphere(center, 0.2, sphere_material))
@@ -71,10 +71,10 @@ fun random_scene(): hittable_list {
     val material1 = dielectric(1.5)
     builder.add(sphere(Point3(0, 1, 0), 1, material1))
 
-    val material2 = lambertian(Color(0.4, 0.2, 0.1))
+    val material2 = lambertian(RgbColor(0.4, 0.2, 0.1))
     builder.add(sphere(Point3(-4, 1, 0), 1, material2))
 
-    val material3 = metal(Color(0.7, 0.6, 0.5), 0)
+    val material3 = metal(RgbColor(0.7, 0.6, 0.5), 0)
     builder.add(sphere(Point3(4, 1, 0), 1, material3))
 
     return builder.build()
@@ -83,7 +83,7 @@ fun random_scene(): hittable_list {
 fun two_spheres(): hittable_list {
     val objects = hittable_list.builder()
 
-    val checker = checker_texture(Color(0.2, 0.3, 0.1), Color(0.9, 0.9, 0.9))
+    val checker = checker_texture(RgbColor(0.2, 0.3, 0.1), RgbColor(0.9, 0.9, 0.9))
 
     objects.add(sphere(Point3(0,-10, 0), 10, lambertian(checker)))
     objects.add(sphere(Point3(0, 10, 0), 10, lambertian(checker)))
@@ -119,7 +119,7 @@ fun simple_light(): hittable_list {
     objects.add(sphere(Point3(0,-1000,0), 1000, lambertian(pertext)))
     objects.add(sphere(Point3(0,2,0), 2, lambertian(pertext)))
 
-    val difflight = diffuse_light(Color(4,4,4))
+    val difflight = diffuse_light(RgbColor(4,4,4))
     objects.add(xy_rect(3, 5, 1, 3, -2, difflight))
 
     return objects.build()
@@ -128,10 +128,10 @@ fun simple_light(): hittable_list {
 fun cornell_box(): hittable_list {
     val objects = hittable_list.builder()
 
-    val red   = lambertian(Color(.65, .05, .05))
-    val white = lambertian(Color(.73, .73, .73))
-    val green = lambertian(Color(.12, .45, .15))
-    val light = diffuse_light(Color(15, 15, 15))
+    val red   = lambertian(RgbColor(.65, .05, .05))
+    val white = lambertian(RgbColor(.73, .73, .73))
+    val green = lambertian(RgbColor(.12, .45, .15))
+    val light = diffuse_light(RgbColor(15, 15, 15))
 
     objects.add(yz_rect(0, 555, 0, 555, 555, green))
     objects.add(yz_rect(0, 555, 0, 555, 0, red))
@@ -156,10 +156,10 @@ fun cornell_box(): hittable_list {
 fun cornell_smoke(): hittable_list {
     val objects = hittable_list.builder()
 
-    val red   = lambertian(Color(.65, .05, .05))
-    val white = lambertian(Color(.73, .73, .73))
-    val green = lambertian(Color(.12, .45, .15))
-    val light = diffuse_light(Color(7, 7, 7))
+    val red   = lambertian(RgbColor(.65, .05, .05))
+    val white = lambertian(RgbColor(.73, .73, .73))
+    val green = lambertian(RgbColor(.12, .45, .15))
+    val light = diffuse_light(RgbColor(7, 7, 7))
 
     objects.add(yz_rect(0, 555, 0, 555, 555, green))
     objects.add(yz_rect(0, 555, 0, 555, 0, red))
@@ -176,15 +176,15 @@ fun cornell_smoke(): hittable_list {
     box2 = rotate_y(box2, -18.0)
     box2 = translate(box2, Vector3(130,0,65))
 
-    objects.add(constant_medium(box1, 0.01, Color(0,0,0)))
-    objects.add(constant_medium(box2, 0.01, Color(1,1,1)))
+    objects.add(constant_medium(box1, 0.01, BLACK))
+    objects.add(constant_medium(box2, 0.01, WHITE))
 
     return objects.build()
 }
 
 fun final_scene(): hittable_list {
     val boxes1 = hittable_list.builder()
-    val ground = lambertian(Color(0.48, 0.83, 0.53))
+    val ground = lambertian(RgbColor(0.48, 0.83, 0.53))
 
     val boxes_per_side = 20
     for (i in 0 until boxes_per_side) {
@@ -204,24 +204,24 @@ fun final_scene(): hittable_list {
 
     objects.add(bvh_node(boxes1.build(), time0 = 0.0, time1 = 1.0))
 
-    val light = diffuse_light(Color(7, 7, 7))
+    val light = diffuse_light(RgbColor(7, 7, 7))
     objects.add(xz_rect(123, 423, 147, 412, 554, light))
 
     val center1 = Point3(400, 400, 200)
     val center2 = center1 + Vector3(30,0,0)
-    val moving_sphere_material = lambertian(Color(0.7, 0.3, 0.1))
+    val moving_sphere_material = lambertian(RgbColor(0.7, 0.3, 0.1))
     objects.add(moving_sphere(center1, center2, 0.0, 1.0, 50.0, moving_sphere_material))
 
     objects.add(sphere(Point3(260, 150, 45), 50, dielectric(1.5)))
     objects.add(sphere(
-        Point3(0, 150, 145), 50, metal(Color(0.8, 0.8, 0.9), 1.0)
+        Point3(0, 150, 145), 50, metal(RgbColor(0.8, 0.8, 0.9), 1.0)
     ))
 
     val boundary1 = sphere(Point3(360,150,145), 70, dielectric(1.5))
     objects.add(boundary1)
-    objects.add(constant_medium(boundary1, 0.2, Color(0.2, 0.4, 0.9)))
+    objects.add(constant_medium(boundary1, 0.2, RgbColor(0.2, 0.4, 0.9)))
     val boundary2 = sphere(Point3(0, 0, 0), 5000, dielectric(1.5))
-    objects.add(constant_medium(boundary2, .0001, Color(1,1,1)))
+    objects.add(constant_medium(boundary2, .0001, WHITE))
 
     val emat = lambertian(image_texture("earthmap.jpg"))
     objects.add(sphere(Point3(400,200,400), 100, emat))
@@ -229,7 +229,7 @@ fun final_scene(): hittable_list {
     objects.add(sphere(Point3(220,280,300), 80, lambertian(pertext)))
 
     val boxes2 = hittable_list.builder()
-    val white = lambertian(Color(.73, .73, .73))
+    val white = lambertian(RgbColor(.73, .73, .73))
     val ns = 1000
     for (j in 0 until ns) {
         boxes2.add(sphere(Point3.random(0.0, 165.0), 10, white))
@@ -243,11 +243,11 @@ fun final_scene(): hittable_list {
 fun cornell_box_book3(): hittable_list {
     val objects = hittable_list.builder()
 
-    val red      = lambertian(Color(.65, .05, .05))
-    val white    = lambertian(Color(.73, .73, .73))
-    val green    = lambertian(Color(.12, .45, .15))
-    val light    = diffuse_light(Color(15, 15, 15))
-    val aluminum = metal(Color(0.8, 0.85, 0.88), 0.0)
+    val red      = lambertian(RgbColor(.65, .05, .05))
+    val white    = lambertian(RgbColor(.73, .73, .73))
+    val green    = lambertian(RgbColor(.12, .45, .15))
+    val light    = diffuse_light(RgbColor(15, 15, 15))
+    val aluminum = metal(RgbColor(0.8, 0.85, 0.88), 0.0)
     val glass    = dielectric(1.5)
 
     objects.add(yz_rect(0, 555, 0, 555, 555, green))
@@ -271,7 +271,7 @@ fun init_scene(scene: Int) {
     when (scene) {
         (1) -> {
             world = random_scene()
-            background = Color(0.7, 0.8, 1.0)
+            background = RgbColor(0.7, 0.8, 1.0)
             lookfrom = Point3(13, 2, 3)
             lookat = Point3(0, 0, 0)
             vfov = 20.0
@@ -279,21 +279,21 @@ fun init_scene(scene: Int) {
         }
         (2) -> {
             world = two_spheres()
-            background = Color(0.7, 0.8, 1.0)
+            background = RgbColor(0.7, 0.8, 1.0)
             lookfrom = Point3(13,2,3)
             lookat = Point3(0,0,0)
             vfov = 20.0
         }
         (3) -> {
             world = two_perlin_spheres()
-            background = Color(0.7, 0.8, 1.0)
+            background = RgbColor(0.7, 0.8, 1.0)
             lookfrom = Point3(13,2,3)
             lookat = Point3(0,0,0)
             vfov = 20.0
         }
         (4) -> {
             world = earth()
-            background = Color(0.7, 0.8, 1.0)
+            background = RgbColor(0.7, 0.8, 1.0)
             lookfrom = Point3(13, 2, 3)
             lookat = Point3(0, 0, 0)
             vfov = 20.0
@@ -301,7 +301,7 @@ fun init_scene(scene: Int) {
         (5) -> {
             world = simple_light()
             samples_per_pixel = 100
-            background = Color(0, 0, 0)
+            background = BLACK
             lookfrom = Point3(26,3,6)
             lookat = Point3(0,2,0)
             vfov = 20.0
@@ -311,7 +311,7 @@ fun init_scene(scene: Int) {
             aspect_ratio = 1.0
             image_width = 600
             samples_per_pixel = 200
-            background = Color(0, 0, 0)
+            background = BLACK
             lookfrom = Point3(278, 278, -800)
             lookat = Point3(278, 278, 0)
             vfov = 40.0
@@ -330,7 +330,7 @@ fun init_scene(scene: Int) {
             aspect_ratio = 1.0
             image_width = 200 // 800
             samples_per_pixel = 20  // 10000
-            background = Color(0, 0, 0)
+            background = BLACK
             lookfrom = Point3(478, 278, -600)
             lookat = Point3(278, 278, 0)
             vfov = 40.0
@@ -340,7 +340,7 @@ fun init_scene(scene: Int) {
             aspect_ratio = 1.0 / 1.0
             image_width = 600
             samples_per_pixel = 10
-            background = Color(0, 0, 0)
+            background = BLACK
             lookfrom = Point3(278, 278, -800)
             lookat = Point3(278, 278, 0)
             vfov = 40.0
@@ -363,7 +363,7 @@ var vup = Vector3(0, 1, 0)
 var dist_to_focus = 10.0
 var vfov = 40.0
 var aperture = 0.0
-var background = Color(0, 0, 0)
+var background = BLACK
 var time0 = 0.0
 var time1 = 1.0
 
@@ -389,14 +389,14 @@ fun run(out: PrintWriter) {
     for (j in image_height-1 downTo 0) {
         println("$j ")
         for (i in 0 until image_width) {
-            var pixel_Color = Color(0, 0, 0)
+            var pixelColor = NO_COLOR
             for (s in 0..samples_per_pixel) {
                 val u = (i + Random.nextDouble()) / (image_width - 1)
                 val v = (j + Random.nextDouble()) / (image_height - 1)
                 val r = cam.get_ray(u, v)
-                pixel_Color += ray_color(r, background, world!!, lights, max_depth)
+                pixelColor += rayColor(r, background, world!!, lights, max_depth)
             }
-            writeColor(out, pixel_Color, samples_per_pixel)
+            writeColor(out, pixelColor, samples_per_pixel)
         }
     }
     println()

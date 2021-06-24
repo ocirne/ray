@@ -1,6 +1,8 @@
 package io.github.ocirne.ray.bewegt
 
-import io.github.ocirne.ray.bewegt.math.Color
+import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.NO_COLOR
+import io.github.ocirne.ray.bewegt.canvas.WHITE
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
@@ -13,7 +15,7 @@ import kotlin.random.Random
 data class scatter_record(
     val specular_ray: ray?,
     val is_specular: Boolean,
-    val attenuation: Color,
+    val attenuation: RgbColor,
     val pdf_ptr: pdf?
 )
 
@@ -27,14 +29,14 @@ open class material {
         return 0.0
     }
 
-    open fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: Point3): Color {
-        return Color(0, 0, 0)
+    open fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: Point3): RgbColor {
+        return NO_COLOR
     }
 }
 
 class lambertian(val albedo: texture): material() {
 
-    constructor(c: Color): this(solid_Color(c))
+    constructor(c: RgbColor): this(solidColor(c))
 
     override fun scatter(r_in: ray, rec: hit_record): scatter_record {
         return scatter_record(
@@ -50,9 +52,9 @@ class lambertian(val albedo: texture): material() {
     }
 }
 
-class metal(val albedo: Color, f: Double): material() {
+class metal(val albedo: RgbColor, f: Double): material() {
 
-    constructor(albedo: Color, f: Int): this(albedo, f.toDouble())
+    constructor(albedo: RgbColor, f: Int): this(albedo, f.toDouble())
 
     val fuzz = if (f < 1.0) f else 1.0
 
@@ -69,7 +71,7 @@ class metal(val albedo: Color, f: Double): material() {
 class dielectric(val index_of_refraction: Double): material() {
 
     override fun scatter(r_in: ray, rec: hit_record): scatter_record {
-        val attenuation = Color(1, 1, 1)
+        val attenuation = WHITE
         val refraction_ratio = if (rec.front_face) 1.0/index_of_refraction else index_of_refraction
         val unit_direction = r_in.direction().unitVector()
         val cos_theta: Double = min((-unit_direction).dot(rec.normal), 1.0)
@@ -97,20 +99,20 @@ class dielectric(val index_of_refraction: Double): material() {
 
 class diffuse_light(val emit: texture): material() {
 
-    constructor(c: Color) : this(solid_Color(c))
+    constructor(c: RgbColor) : this(solidColor(c))
 
     override fun scatter(r_in: ray, rec: hit_record): scatter_record? {
         return null
     }
 
-    override fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: Point3): Color {
-        return if (rec.front_face) emit.value(u, v, p) else Color(0, 0, 0)
+    override fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: Point3): RgbColor {
+        return if (rec.front_face) emit.value(u, v, p) else NO_COLOR
     }
 }
 
 class isotropic(val albedo: texture): material() {
 
-    constructor(c: Color): this(solid_Color(c))
+    constructor(c: RgbColor): this(solidColor(c))
 
     override fun scatter(r_in: ray, rec: hit_record): scatter_record? {
         val scattered = ray(rec.p, Vector3.randomInUnitSphere(), r_in.time())

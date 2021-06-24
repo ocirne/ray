@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.bewegt
 
-import io.github.ocirne.ray.bewegt.math.Color
+import io.github.ocirne.ray.bewegt.canvas.CYAN
+import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.math.Vector3
 import javax.imageio.ImageIO
 
@@ -11,10 +12,10 @@ class image_texture(filename: String) :  texture {
     val width = data?.width ?: 0
     val height = data?.height ?: 0
 
-    override fun value(u: Double, v: Double, p: Vector3): Color {
+    override fun value(u: Double, v: Double, p: Vector3): RgbColor {
         // If we have no texture data, then return solid cyan as a debugging aid.
         if (data == null)
-            return Color(0, 1, 1)
+            return CYAN
 
         // Clamp input texture coordinates to [0,1] x [1,0]
         val u_clamped = u.clamp(0.0, 1.0)
@@ -27,8 +28,8 @@ class image_texture(filename: String) :  texture {
         if (i >= width) i = width - 1
         if (j >= height) j = height - 1
 
-        val color_scale = 1.0 / 255.0
+        val colorScale = 1.0 / 255.0
         val pixel: Int = data.getRGB(i, j)
-        return Color(color_scale * pixel.r(), color_scale * pixel.g(), color_scale * pixel.b())
+        return RgbColor(colorScale * pixel.r(), colorScale * pixel.g(), colorScale * pixel.b())
     }
 }
