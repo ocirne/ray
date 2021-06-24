@@ -17,24 +17,12 @@ fun ray_color(r: ray, background: color, world: hittable, depth: Int): color {
     val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
     val (albedo, _, _) = rec.mat.scatter(r, rec) ?: return emitted
 
-    val on_light = point3(Random.nextDouble(213.0, 343.0), 554.0, Random.nextDouble(227.0, 332.0))
-    val to_light = on_light - rec.p
-    val distance_squared = to_light.length_squared()
-    val to_light_unit = to_light.unitVector()
-
-    if (to_light.dot(rec.normal) < 0) {
-        return emitted
-    }
-    val light_area = ((343 - 213) * (332 - 227)).toDouble()
-    val light_cosine = abs(to_light_unit.y())
-    if (light_cosine < 0.000001) {
-        return emitted
-    }
-    val pdf = distance_squared / (light_cosine * light_area)
-    val scattered = ray(rec.p, to_light_unit, r.time())
+    val p = cosine_pdf(rec.normal)
+    val scattered = ray(rec.p, p.generate(), r.time())
+    val pdf_val = p.value(scattered.direction())
 
     return emitted + albedo * rec.mat.scattering_pdf(r, rec, scattered) *
-                              ray_color(scattered, background, world, depth-1) / pdf
+                              ray_color(scattered, background, world, depth-1) / pdf_val
 }
 
 fun random_scene(): hittable_list {
