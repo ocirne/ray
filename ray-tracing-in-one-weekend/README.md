@@ -40,4 +40,4 @@ The expected images are in the original book. Here are the somehow funny impleme
 
 ![obvious wrong, was a combination of the previous errors](images/image1624220234602.png?raw=true "obvious wrong, was a combination of the previous errors")
 
-![missing normalization by pdf_val](images/image1624481801517?raw=true "missing normalization by pdf_val")
+![missing normalization by pdf_val](images/image1624481801517.png?raw=true "missing normalization by pdf_val")
