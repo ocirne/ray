@@ -1,5 +1,7 @@
 package io.github.ocirne.ray.weekend
 
+import kotlin.random.Random
+
 class hittable_list(val objects: Array<hittable>): hittable {
 
     operator fun get(i: Int): hittable {
@@ -38,7 +40,22 @@ class hittable_list(val objects: Array<hittable>): hittable {
         return output_box
     }
 
-    class builder() {
+    override fun pdf_value(origin: point3, v: vec3): Double {
+        val weight = 1.0 / objects.size
+        var sum = 0.0
+
+        for (obj in objects) {
+            sum += weight * obj.pdf_value(origin, v)
+        }
+        return sum
+    }
+
+    override fun random(origin: vec3): vec3 {
+        val int_size = objects.size
+        return objects[Random.nextInt(0, int_size-1)].random(origin)
+    }
+
+    class builder {
 
         val objects: ArrayList<hittable> = ArrayList()
 

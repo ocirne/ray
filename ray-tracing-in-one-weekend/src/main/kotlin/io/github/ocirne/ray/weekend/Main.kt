@@ -370,14 +370,10 @@ val scene = 9
 fun run(out: PrintWriter) {
     init_scene(scene)
 
-//    val lights = xz_rect(213, 343, 227, 332, 554, material())
-
-    val lights = sphere(point3(190, 90, 190), 90, material())
-
-//    val lights = hittable_list.builder()
-//        .add(xz_rect(213, 343, 227, 332, 554, material()))
-//        .add(sphere(point3(190, 90, 190), 90, material()))
-//        .build()
+    val lights = hittable_list.builder()
+        .add(xz_rect(213, 343, 227, 332, 554, material()))
+        .add(sphere(point3(190, 90, 190), 90, material()))
+        .build()
 
     // Camera
     val image_height = (image_width / aspect_ratio).toInt()
