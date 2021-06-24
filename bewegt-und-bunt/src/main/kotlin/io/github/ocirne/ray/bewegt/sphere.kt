@@ -1,19 +1,21 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Point3
+import io.github.ocirne.ray.bewegt.math.Vector3
 import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class sphere(val center: point3, val radius: Double, val mat: material): hittable {
+class sphere(val center: Point3, val radius: Double, val mat: material): hittable {
 
-    constructor(center: point3, radius: Int, mat: material): this(center, radius.toDouble(), mat)
+    constructor(center: Point3, radius: Int, mat: material): this(center, radius.toDouble(), mat)
 
     override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
         val oc = r.origin() - center
-        val a = r.direction().length_squared()
+        val a = r.direction().lengthSquared()
         val half_b = oc.dot(r.direction())
-        val c = oc.length_squared() - radius*radius
+        val c = oc.lengthSquared() - radius*radius
 
         val discriminant = half_b*half_b - a*c
         if (discriminant < 0) return null
@@ -36,25 +38,25 @@ class sphere(val center: point3, val radius: Double, val mat: material): hittabl
     }
 
     override fun bounding_box(time0: Double, time1: Double): aabb {
-        return aabb(center - vec3(radius, radius, radius), center + vec3(radius, radius, radius))
+        return aabb(center - Vector3(radius, radius, radius), center + Vector3(radius, radius, radius))
     }
 
-    override fun pdf_value(origin: point3, v: vec3): Double {
+    override fun pdf_value(origin: Point3, v: Vector3): Double {
         val rec = hit(ray(origin, v), 0.001, infinity) ?: return 0.0
-        val cos_theta_max = sqrt(1 - radius*radius/(center-origin).length_squared())
+        val cos_theta_max = sqrt(1 - radius*radius/(center-origin).lengthSquared())
         val solid_angle = 2*PI*(1-cos_theta_max)
         return 1.0 / solid_angle
     }
 
-    override fun random(origin: vec3): vec3 {
+    override fun random(origin: Vector3): Vector3 {
         val direction = center - origin
-        val distance_squared = direction.length_squared()
+        val distance_squared = direction.lengthSquared()
         val uvw = onb.build_from_w(direction)
         return uvw.local(random_to_sphere(radius, distance_squared))
     }
 
     companion object {
-        fun get_sphere_uv(p: point3): Pair<Double, Double> {
+        fun get_sphere_uv(p: Point3): Pair<Double, Double> {
             // p: a given point on the sphere of radius one, centered at the origin.
             // u: returned value [0,1] of angle around the Y axis from X=-1.
             // v: returned value [0,1] of angle from Y=-1 to Y=+1.
@@ -62,8 +64,8 @@ class sphere(val center: point3, val radius: Double, val mat: material): hittabl
             //     <0 1 0> yields <0.50 1.00>       < 0 -1  0> yields <0.50 0.00>
             //     <0 0 1> yields <0.25 0.50>       < 0  0 -1> yields <0.75 0.50>
 
-            val theta = acos(-p.y())
-            val phi = atan2(-p.z(), p.x()) + PI
+            val theta = acos(-p.y)
+            val phi = atan2(-p.z, p.x) + PI
 
             val u = phi / (2*PI)
             val v = theta / PI

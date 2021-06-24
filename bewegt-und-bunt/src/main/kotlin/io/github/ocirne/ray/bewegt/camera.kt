@@ -1,11 +1,14 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Point3
+import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
 import kotlin.math.tan
 import kotlin.random.Random
 
-class camera(lookfrom: point3,
-             lookat: point3,
-             vup: vec3,
+class camera(lookfrom: Point3,
+             lookat: Point3,
+             vup: Vector3,
              vfov: Double,
              aspect_ratio: Double,
              aperture: Double,
@@ -30,8 +33,8 @@ class camera(lookfrom: point3,
     val lens_radius = aperture / 2
 
     fun get_ray(s: Double, t: Double): ray {
-        val rd = lens_radius * vec3.random_in_unit_disk()
-        val offset = u * rd.x() + v * rd.y()
+        val rd = lens_radius * Vector3.randomInUnitDisk()
+        val offset = u * rd.x + v * rd.y
         return ray(origin + offset,
             lower_left_corner + s*horizontal + t*vertical - origin - offset,
                     Random.nextDouble(time0, time1))

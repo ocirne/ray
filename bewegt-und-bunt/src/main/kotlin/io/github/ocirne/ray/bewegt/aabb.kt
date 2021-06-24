@@ -1,13 +1,14 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Point3
 import kotlin.math.min as fmin
 import kotlin.math.max as fmax
 
 // TODO try optimized version
-class aabb(val minimum: point3, val maximum: point3) {
+class aabb(val minimum: Point3, val maximum: Point3) {
 
-    fun min(): point3 { return minimum }
-    fun max(): point3 { return maximum }
+    fun min(): Point3 { return minimum }
+    fun max(): Point3 { return maximum }
 
     fun hit(r: ray, t_min: Double, t_max: Double): Boolean {
         val t_min2x = fmax(fmin(min_t0_x(r), max_t0_x(r)), t_min)
@@ -55,11 +56,11 @@ class aabb(val minimum: point3, val maximum: point3) {
 }
 
 fun surrounding_box(box0: aabb, box1: aabb): aabb {
-    val small = point3(fmin(box0.min().x(), box1.min().x()),
-                       fmin(box0.min().y(), box1.min().y()),
-                       fmin(box0.min().z(), box1.min().z()))
-    val big = point3(fmax(box0.max().x(), box1.max().x()),
-                     fmax(box0.max().y(), box1.max().y()),
-                     fmax(box0.max().z(), box1.max().z()))
+    val small = Point3(fmin(box0.min().x, box1.min().x),
+                       fmin(box0.min().y, box1.min().y),
+                       fmin(box0.min().z, box1.min().z))
+    val big = Point3(fmax(box0.max().x, box1.max().x),
+                     fmax(box0.max().y, box1.max().y),
+                     fmax(box0.max().z, box1.max().z))
     return aabb(small, big)
 }

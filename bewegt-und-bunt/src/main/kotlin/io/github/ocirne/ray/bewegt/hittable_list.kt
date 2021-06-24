@@ -1,5 +1,7 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Point3
+import io.github.ocirne.ray.bewegt.math.Vector3
 import kotlin.random.Random
 
 class hittable_list(val objects: Array<hittable>): hittable {
@@ -40,7 +42,7 @@ class hittable_list(val objects: Array<hittable>): hittable {
         return output_box
     }
 
-    override fun pdf_value(origin: point3, v: vec3): Double {
+    override fun pdf_value(origin: Point3, v: Vector3): Double {
         val weight = 1.0 / objects.size
         var sum = 0.0
 
@@ -50,7 +52,7 @@ class hittable_list(val objects: Array<hittable>): hittable {
         return sum
     }
 
-    override fun random(origin: vec3): vec3 {
+    override fun random(origin: Vector3): Vector3 {
         val int_size = objects.size
         return objects[Random.nextInt(0, int_size-1)].random(origin)
     }

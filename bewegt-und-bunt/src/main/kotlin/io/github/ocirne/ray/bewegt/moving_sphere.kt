@@ -1,9 +1,12 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Point3
+import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
 import kotlin.math.sqrt
 
-class moving_sphere(val center0: point3,
-                    val center1: point3,
+class moving_sphere(val center0: Point3,
+                    val center1: Point3,
                     val time0: Double,
                     val time1: Double,
                     val radius: Double,
@@ -11,9 +14,9 @@ class moving_sphere(val center0: point3,
 
     override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
         val oc = r.origin() - center(r.time())
-        val a = r.direction().length_squared()
+        val a = r.direction().lengthSquared()
         val half_b = oc.dot(r.direction())
-        val c = oc.length_squared() - radius * radius
+        val c = oc.lengthSquared() - radius * radius
 
         val discriminant = half_b * half_b - a * c
         if (discriminant < 0) return null
@@ -37,17 +40,17 @@ class moving_sphere(val center0: point3,
 
     override fun bounding_box(time0: Double, time1: Double): aabb {
         val box0 = aabb(
-            center(time0) - vec3(radius, radius, radius),
-            center(time0) + vec3(radius, radius, radius),
+            center(time0) - Vector3(radius, radius, radius),
+            center(time0) + Vector3(radius, radius, radius),
         )
         val box1 = aabb(
-            center(time1) - vec3(radius, radius, radius),
-            center(time1) + vec3(radius, radius, radius),
+            center(time1) - Vector3(radius, radius, radius),
+            center(time1) + Vector3(radius, radius, radius),
         )
         return surrounding_box(box0, box1)
     }
 
-    fun center(time: Double): point3 {
+    fun center(time: Double): Point3 {
         return center0 + ((time - time0) / (time1 - time0))*(center1 - center0)
     }
 }

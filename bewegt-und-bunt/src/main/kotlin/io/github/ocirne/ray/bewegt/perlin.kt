@@ -1,14 +1,16 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Point3
+import io.github.ocirne.ray.bewegt.math.Vector3
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.random.Random
 
-class perlin() {
+class perlin {
 
     val point_count = 256
 
-    val ranvec: Array<vec3> = Array(point_count) { vec3.random(-1.0, 1.0).unitVector() }
+    val ranvec: Array<Vector3> = Array(point_count) { Vector3.random(-1.0, 1.0).unitVector() }
     val perm_x : Array<Int>
     val perm_y : Array<Int>
     val perm_z : Array<Int>
@@ -19,15 +21,15 @@ class perlin() {
         perm_z = perlin_generate_perm()
     }
 
-    fun noise(p: point3) : Double {
-        val u = p.x() - floor(p.x())
-        val v = p.y() - floor(p.y())
-        val w = p.z() - floor(p.z())
+    fun noise(p: Point3) : Double {
+        val u = p.x - floor(p.x)
+        val v = p.y - floor(p.y)
+        val w = p.z - floor(p.z)
 
-        val i = floor(p.x()).toInt()
-        val j = floor(p.y()).toInt()
-        val k = floor(p.z()).toInt()
-        val c = Array(2) { Array(2) { Array<vec3?>(2) { null } } }
+        val i = floor(p.x).toInt()
+        val j = floor(p.y).toInt()
+        val k = floor(p.z).toInt()
+        val c = Array(2) { Array(2) { Array<Vector3?>(2) { null } } }
 
         for (di in 0..1) {
             for (dj in 0..1) {
@@ -57,7 +59,7 @@ class perlin() {
         }
     }
 
-    fun turb(p: point3, depth: Int=7): Double {
+    fun turb(p: Point3, depth: Int=7): Double {
         var accum = 0.0
         var temp_p = p
         var weight = 1.0
@@ -86,7 +88,7 @@ fun trilinear_interp(c: Array<Array<Array<Double>>>, u: Double, v: Double, w :Do
     return accum
 }
 
-fun perlin_interp(c: Array<Array<Array<vec3?>>>, u: Double, v: Double, w: Double): Double {
+fun perlin_interp(c: Array<Array<Array<Vector3?>>>, u: Double, v: Double, w: Double): Double {
     val uu = u*u*(3-2*u)
     val vv = v*v*(3-2*v)
     val ww = w*w*(3-2*w)
@@ -95,7 +97,7 @@ fun perlin_interp(c: Array<Array<Array<vec3?>>>, u: Double, v: Double, w: Double
     for (i in 0..1) {
         for (j in 0..1) {
             for (k in 0..1) {
-                val weight_v = vec3(u - i, v-j, w-k)
+                val weight_v = Vector3(u - i, v-j, w-k)
                 accum += (i * uu + (1 - i) * (1 - uu)) *
                          (j * vv + (1 - j) * (1 - vv)) *
                          (k * ww + (1 - k) * (1 - ww)) * c[i][j][k]!!.dot(weight_v)

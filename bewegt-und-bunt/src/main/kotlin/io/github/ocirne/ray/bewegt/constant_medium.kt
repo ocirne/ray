@@ -1,5 +1,8 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Color
+import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
 import kotlin.math.ln
 import kotlin.random.Random
 
@@ -8,7 +11,7 @@ class constant_medium(val boundary: hittable, density: Double, a: texture): hitt
     val neg_inv_density = -1.0/density
     val phase_function = isotropic(a)
 
-    constructor(boundary: hittable, density: Double, c: color): this(boundary, density, solid_color(c))
+    constructor(boundary: hittable, density: Double, c: Color): this(boundary, density, solid_Color(c))
 
     override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
         // Print occasional samples when debugging. To enable, set enableDebug true.
@@ -44,7 +47,7 @@ class constant_medium(val boundary: hittable, density: Double, a: texture): hitt
         if (debugging) {
             println("hit_distance = $hit_distance\nrec.t = $t\nrec.p = $p")
         }
-        val normal = vec3(1,0,0)  // arbitrary
+        val normal = Vector3(1,0,0)  // arbitrary
         val front_face = true     // also arbitrary
 
         return hit_record(p, normal, phase_function, t, u ,v, front_face)
