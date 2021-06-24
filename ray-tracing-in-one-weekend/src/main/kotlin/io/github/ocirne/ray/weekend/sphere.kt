@@ -39,6 +39,20 @@ class sphere(val center: point3, val radius: Double, val mat: material): hittabl
         return aabb(center - vec3(radius, radius, radius), center + vec3(radius, radius, radius))
     }
 
+    override fun pdf_value(origin: point3, v: vec3): Double {
+        val rec = hit(ray(origin, v), 0.001, infinity) ?: return 0.0
+        val cos_theta_max = sqrt(1 - radius*radius/(center-origin).length_squared())
+        val solid_angle = 2*PI*(1-cos_theta_max)
+        return 1.0 / solid_angle
+    }
+
+    override fun random(origin: vec3): vec3 {
+        val direction = center - origin
+        val distance_squared = direction.length_squared()
+        val uvw = onb.build_from_w(direction)
+        return uvw.local(random_to_sphere(radius, distance_squared))
+    }
+
     companion object {
         fun get_sphere_uv(p: point3): Pair<Double, Double> {
             // p: a given point on the sphere of radius one, centered at the origin.
