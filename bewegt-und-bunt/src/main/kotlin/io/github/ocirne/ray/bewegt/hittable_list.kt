@@ -2,6 +2,7 @@ package io.github.ocirne.ray.bewegt
 
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.random.Random
 
 class hittable_list(val objects: Array<hittable>): hittable {
@@ -10,7 +11,7 @@ class hittable_list(val objects: Array<hittable>): hittable {
         return objects[i]
     }
 
-    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
         var result: hit_record? = null
         var closest_so_far = t_max
 

@@ -2,6 +2,7 @@ package io.github.ocirne.ray.bewegt
 
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.atan2
@@ -11,10 +12,10 @@ class sphere(val center: Point3, val radius: Double, val mat: material): hittabl
 
     constructor(center: Point3, radius: Int, mat: material): this(center, radius.toDouble(), mat)
 
-    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
-        val oc = r.origin() - center
-        val a = r.direction().lengthSquared()
-        val half_b = oc.dot(r.direction())
+    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+        val oc = r.origin - center
+        val a = r.direction.lengthSquared()
+        val half_b = oc.dot(r.direction)
         val c = oc.lengthSquared() - radius*radius
 
         val discriminant = half_b*half_b - a*c
@@ -30,7 +31,7 @@ class sphere(val center: Point3, val radius: Double, val mat: material): hittabl
         }
         val p = r.at(root)
         val outward_normal = (r.at(root) - center) / radius
-        val front_face = r.direction().dot(outward_normal) < 0
+        val front_face = r.direction.dot(outward_normal) < 0
         val normal = if (front_face) outward_normal else -outward_normal
         val (u, v) = get_sphere_uv(outward_normal)
 
@@ -42,7 +43,7 @@ class sphere(val center: Point3, val radius: Double, val mat: material): hittabl
     }
 
     override fun pdf_value(origin: Point3, v: Vector3): Double {
-        val rec = hit(ray(origin, v), 0.001, infinity) ?: return 0.0
+        hit(Ray(origin, v), 0.001, infinity) ?: return 0.0
         val cos_theta_max = sqrt(1 - radius*radius/(center-origin).lengthSquared())
         val solid_angle = 2*PI*(1-cos_theta_max)
         return 1.0 / solid_angle

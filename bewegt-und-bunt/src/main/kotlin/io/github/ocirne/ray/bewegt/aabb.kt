@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.bewegt
 
 import io.github.ocirne.ray.bewegt.math.Point3
+import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.math.min as fmin
 import kotlin.math.max as fmax
 
@@ -10,7 +11,7 @@ class aabb(val minimum: Point3, val maximum: Point3) {
     fun min(): Point3 { return minimum }
     fun max(): Point3 { return maximum }
 
-    fun hit(r: ray, t_min: Double, t_max: Double): Boolean {
+    fun hit(r: Ray, t_min: Double, t_max: Double): Boolean {
         val t_min2x = fmax(fmin(min_t0_x(r), max_t0_x(r)), t_min)
         val t_max2x = fmin(fmax(min_t0_x(r), max_t0_x(r)), t_max)
         if (t_max2x <= t_min2x) {
@@ -29,28 +30,28 @@ class aabb(val minimum: Point3, val maximum: Point3) {
         return true
     }
 
-    private fun min_t0_x(r: ray): Double {
-        return (minimum.x - r.origin().x) / r.direction().x
+    private fun min_t0_x(r: Ray): Double {
+        return (minimum.x - r.origin.x) / r.direction.x
     }
 
-    private fun min_t0_y(r: ray): Double {
-        return (minimum.y - r.origin().y) / r.direction().y
+    private fun min_t0_y(r: Ray): Double {
+        return (minimum.y - r.origin.y) / r.direction.y
     }
 
-    private fun min_t0_z(r: ray): Double {
-        return (minimum.z - r.origin().z) / r.direction().z
+    private fun min_t0_z(r: Ray): Double {
+        return (minimum.z - r.origin.z) / r.direction.z
     }
 
-    private fun max_t0_x(r: ray): Double {
-        return (maximum.x - r.origin().x) / r.direction().x
+    private fun max_t0_x(r: Ray): Double {
+        return (maximum.x - r.origin.x) / r.direction.x
     }
 
-    private fun max_t0_y(r: ray): Double {
-        return (maximum.y - r.origin().y) / r.direction().y
+    private fun max_t0_y(r: Ray): Double {
+        return (maximum.y - r.origin.y) / r.direction.y
     }
 
-    private fun max_t0_z(r: ray): Double {
-        return (maximum.z - r.origin().z) / r.direction().z
+    private fun max_t0_z(r: Ray): Double {
+        return (maximum.z - r.origin.z) / r.direction.z
     }
 
 }

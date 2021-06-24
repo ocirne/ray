@@ -3,6 +3,7 @@ package io.github.ocirne.ray.bewegt
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
+import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.math.sqrt
 
 class moving_sphere(val center0: Point3,
@@ -12,10 +13,10 @@ class moving_sphere(val center0: Point3,
                     val radius: Double,
                     val mat: material): hittable {
 
-    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
-        val oc = r.origin() - center(r.time())
-        val a = r.direction().lengthSquared()
-        val half_b = oc.dot(r.direction())
+    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+        val oc = r.origin - center(r.time)
+        val a = r.direction.lengthSquared()
+        val half_b = oc.dot(r.direction)
         val c = oc.lengthSquared() - radius * radius
 
         val discriminant = half_b * half_b - a * c
@@ -30,8 +31,8 @@ class moving_sphere(val center0: Point3,
                 return null
         }
         val p = r.at(root)
-        val outward_normal = (r.at(root) - center(r.time())) / radius
-        val front_face = r.direction().dot(outward_normal) < 0
+        val outward_normal = (r.at(root) - center(r.time)) / radius
+        val front_face = r.direction.dot(outward_normal) < 0
         val normal = if (front_face) outward_normal else -outward_normal
         val (u, v) = sphere.get_sphere_uv(outward_normal)
 

@@ -3,13 +3,14 @@ package io.github.ocirne.ray.bewegt
 import io.github.ocirne.ray.bewegt.canvas.*
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.Ray
 import java.io.File
 import java.io.PrintWriter
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 
-fun rayColor(r: ray, background: RgbColor, world: hittable, lights: hittable, depth: Int): RgbColor {
+fun rayColor(r: Ray, background: RgbColor, world: hittable, lights: hittable, depth: Int): RgbColor {
     if (depth <= 0) {
         return NO_COLOR
     }
@@ -27,8 +28,8 @@ fun rayColor(r: ray, background: RgbColor, world: hittable, lights: hittable, de
     val light_ptr = hittable_pdf(lights, rec.p)
     val p = mixture_pdf(light_ptr, srec.pdf_ptr!!)
 
-    val scattered = ray(rec.p, p.generate(), r.time())
-    val pdf_val = p.value(scattered.direction())
+    val scattered = Ray(rec.p, p.generate(), r.time)
+    val pdf_val = p.value(scattered.direction)
 
     return emitted + srec.attenuation *
             rec.mat.scattering_pdf(r, rec, scattered) *

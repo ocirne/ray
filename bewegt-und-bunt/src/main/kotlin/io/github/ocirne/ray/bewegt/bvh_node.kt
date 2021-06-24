@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.random.Random
 
 class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.objects.size, time0: Double, time1: Double): hittable {
@@ -8,7 +9,7 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
     var right: hittable
     var box: aabb
 
-    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
         if (!box.hit(r, t_min, t_max)) {
             return null
         }

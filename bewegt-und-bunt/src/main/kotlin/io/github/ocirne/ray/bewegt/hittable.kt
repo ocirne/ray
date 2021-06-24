@@ -2,6 +2,7 @@ package io.github.ocirne.ray.bewegt
 
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
@@ -16,15 +17,15 @@ data class hit_record(
     val v: Double,
     var front_face: Boolean) {
 
-    fun set_face_normal(r: ray, outward_normal: Vector3) {
-        front_face = r.direction().dot(outward_normal) < 0
+    fun set_face_normal(r: Ray, outward_normal: Vector3) {
+        front_face = r.direction.dot(outward_normal) < 0
         normal = if (front_face) outward_normal else -outward_normal
     }
 }
 
 interface hittable {
 
-    fun hit(r: ray, t_min: Double, t_max: Double): hit_record?
+    fun hit(r: Ray, t_min: Double, t_max: Double): hit_record?
 
     fun bounding_box(time0: Double, time1: Double): aabb?
 
@@ -39,8 +40,8 @@ interface hittable {
 
 class translate(val ptr: hittable, val offset: Vector3): hittable {
 
-    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
-        val moved_r = ray(r.origin() - offset, r.direction(), r.time())
+    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+        val moved_r = Ray(r.origin - offset, r.direction, r.time)
         val rec = ptr.hit(moved_r, t_min, t_max) ?: return null
         rec.p += offset
         rec.set_face_normal(moved_r, rec.normal)
@@ -98,18 +99,18 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
         }
     }
 
-    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
         val origin = Point3(
-            cos_theta * r.origin().x - sin_theta * r.origin().z,
+            cos_theta * r.origin.x - sin_theta * r.origin.z,
             r.origin.y,
-            sin_theta * r.origin().x + cos_theta * r.origin().z
+            sin_theta * r.origin.x + cos_theta * r.origin.z
         )
         val direction = Vector3(
-            cos_theta * r.direction().x - sin_theta * r.direction().z,
+            cos_theta * r.direction.x - sin_theta * r.direction.z,
             r.direction.y,
-            sin_theta * r.direction().x + cos_theta * r.direction().z
+            sin_theta * r.direction.x + cos_theta * r.direction.z
         )
-        val rotated_r = ray(origin, direction, r.time())
+        val rotated_r = Ray(origin, direction, r.time)
         val rec = ptr.hit(rotated_r, t_min, t_max) ?: return null
         val p = Point3(
             cos_theta * rec.p.x + sin_theta * rec.p.z,
@@ -133,7 +134,7 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
 
 class flip_face(val ptr: hittable): hittable {
 
-    override fun hit(r: ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
         val rec = ptr.hit(r, t_min, t_max) ?: return null
         rec.front_face = !rec.front_face
         return rec
