@@ -14,7 +14,7 @@ Changing Double -> Float: slower, 199 s -> 218 s, reverted.
 
 # License
 
-As my own contribution apart from the translation is low the same license applies.
+My own contribution apart from the translation is low. So i decided that the same license as in the original applies.
 
 
 ## Sources
