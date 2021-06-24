@@ -259,12 +259,7 @@ fun cornell_box_book3(): hittable_list {
     box1 = translate(box1, vec3(265,0,295))
     objects.add(box1)
 
-//    objects.add(sphere(point3(190,90,190), 90 , glass))
-
-    var box2: hittable = box(point3(0,0,0), point3(165,165,165), white)
-    box2 = rotate_y(box2, -18.0)
-    box2 = translate(box2, vec3(130,0,65))
-    objects.add(box2)
+    objects.add(sphere(point3(190,90,190), 90 , glass))
 
     return objects.build()
 }
@@ -341,7 +336,7 @@ fun init_scene(scene: Int) {
             world = cornell_box_book3()
             aspect_ratio = 1.0 / 1.0
             image_width = 600
-            samples_per_pixel = 1000
+            samples_per_pixel = 10
             background = color(0, 0, 0)
             lookfrom = point3(278, 278, -800)
             lookat = point3(278, 278, 0)
