@@ -2,7 +2,6 @@ package io.github.ocirne.ray.weekend
 
 import java.io.File
 import java.io.PrintWriter
-import kotlin.math.abs
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
@@ -15,16 +14,22 @@ fun ray_color(r: ray, background: color, world: hittable, lights: hittable, dept
     val rec = world.hit(r, 0.001, infinity) ?: return background
 
     val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
-    val (albedo, _, _) = rec.mat.scatter(r, rec) ?: return emitted
+    val srec = rec.mat.scatter(r, rec) ?: return emitted
 
-    val p0 = hittable_pdf(lights, rec.p)
-    val p1 = cosine_pdf(rec.normal)
-    val mixed_pdf = mixture_pdf(p0, p1)
-    val scattered = ray(rec.p, mixed_pdf.generate(), r.time())
-    val pdf_val = mixed_pdf.value(scattered.direction())
+    if (srec.is_specular) {
+        return srec.attenuation *
+                ray_color(srec.specular_ray!!, background, world, lights, depth - 1)
+    }
 
-    return emitted + albedo * rec.mat.scattering_pdf(r, rec, scattered) *
-                              ray_color(scattered, background, world, lights, depth-1) / pdf_val
+    val light_ptr = hittable_pdf(lights, rec.p)
+    val p = mixture_pdf(light_ptr, srec.pdf_ptr!!)
+
+    val scattered = ray(rec.p, p.generate(), r.time())
+    val pdf_val = p.value(scattered.direction())
+
+    return emitted + srec.attenuation *
+            rec.mat.scattering_pdf(r, rec, scattered) *
+            ray_color(scattered, background, world, lights, depth-1) / pdf_val
 }
 
 fun random_scene(): hittable_list {
@@ -235,10 +240,12 @@ fun final_scene(): hittable_list {
 fun cornell_box_book3(): hittable_list {
     val objects = hittable_list.builder()
 
-    val red   = lambertian(color(.65, .05, .05))
-    val white = lambertian(color(.73, .73, .73))
-    val green = lambertian(color(.12, .45, .15))
-    val light = diffuse_light(color(15, 15, 15))
+    val red      = lambertian(color(.65, .05, .05))
+    val white    = lambertian(color(.73, .73, .73))
+    val green    = lambertian(color(.12, .45, .15))
+    val light    = diffuse_light(color(15, 15, 15))
+    val aluminum = metal(color(0.8, 0.85, 0.88), 0.0)
+    val glass    = dielectric(1.5)
 
     objects.add(yz_rect(0, 555, 0, 555, 555, green))
     objects.add(yz_rect(0, 555, 0, 555, 0, red))
@@ -247,10 +254,12 @@ fun cornell_box_book3(): hittable_list {
     objects.add(xz_rect(0, 555, 0, 555, 0, white))
     objects.add(xy_rect(0, 555, 0, 555, 555, white))
 
-    var box1: hittable = box(point3(0,0,0), point3(165,330,165), white)
+    var box1: hittable = box(point3(0,0,0), point3(165,330,165), aluminum)
     box1 = rotate_y(box1, 15.0)
     box1 = translate(box1, vec3(265,0,295))
     objects.add(box1)
+
+//    objects.add(sphere(point3(190,90,190), 90 , glass))
 
     var box2: hittable = box(point3(0,0,0), point3(165,165,165), white)
     box2 = rotate_y(box2, -18.0)
@@ -366,6 +375,11 @@ fun run(out: PrintWriter) {
     init_scene(9)
 
     val lights = xz_rect(213, 343, 227, 332, 554, material())
+
+//    val lights = hittable_list.builder()
+//        .add(xz_rect(213, 343, 227, 332, 554, material()))
+//        .add(sphere(point3(190, 90, 190), 90, material()))
+//        .build()
 
     // Camera
     val image_height = (image_width / aspect_ratio).toInt()

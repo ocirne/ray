@@ -44,7 +44,10 @@ class hittable_list(val objects: Array<hittable>): hittable {
 
         fun clear() { objects.clear() }
 
-        fun add(obj: hittable) { objects.add(obj) }
+        fun add(obj: hittable): builder {
+            objects.add(obj)
+            return this
+        }
 
         fun build() : hittable_list {
             return hittable_list(objects.toTypedArray())
