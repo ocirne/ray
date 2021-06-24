@@ -254,7 +254,7 @@ fun cornell_box_book3(): hittable_list {
     objects.add(xz_rect(0, 555, 0, 555, 0, white))
     objects.add(xy_rect(0, 555, 0, 555, 555, white))
 
-    var box1: hittable = box(point3(0,0,0), point3(165,330,165), aluminum)
+    var box1: hittable = box(point3(0,0,0), point3(165,330,165), white)
     box1 = rotate_y(box1, 15.0)
     box1 = translate(box1, vec3(265,0,295))
     objects.add(box1)
