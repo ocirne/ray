@@ -1,5 +1,8 @@
 package io.github.ocirne.ray.weekend
 
+import kotlin.math.abs
+import kotlin.random.Random
+
 class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val mat: material) : hittable {
 
     constructor(x0: Int, x1: Int, y0: Int, y1: Int, k: Int, mat: material):
@@ -61,6 +64,21 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
         // The bounding box must have non-zero width in each dimension, so pad the Y
         // dimension a small amount.
         return aabb(point3(x0, k-0.0001, z0), point3(x1, k+0.0001, z1))
+    }
+
+    override fun pdf_value(origin: point3, v: vec3): Double {
+        val rec = hit(ray(origin, v), 0.001, infinity) ?: return 0.0
+
+        val area = (x1-x0)*(z1-z0)
+        val distance_squared = rec.t * rec.t * v.length_squared()
+        val cosine = abs(v.dot(rec.normal) / v.length())
+
+        return distance_squared / (cosine * area)
+    }
+
+    override fun random(origin: vec3): vec3 {
+        val random_point = point3(Random.nextDouble(x0, x1), k, Random.nextDouble(z0, z1))
+        return random_point - origin
     }
 }
 

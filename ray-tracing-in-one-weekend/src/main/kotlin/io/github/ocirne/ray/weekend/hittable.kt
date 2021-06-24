@@ -25,6 +25,14 @@ interface hittable {
     fun hit(r: ray, t_min: Double, t_max: Double): hit_record?
 
     fun bounding_box(time0: Double, time1: Double): aabb?
+
+    fun pdf_value(origin: point3, v: vec3): Double {
+        return 0.0
+    }
+
+    fun random(origin: vec3): vec3 {
+        return vec3(1, 0, 0)
+    }
 }
 
 class translate(val ptr: hittable, val offset: vec3): hittable {

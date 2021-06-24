@@ -7,22 +7,22 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 
-interface material {
+open class material {
 
-    fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
+    open fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
         return null
     }
 
-    fun scattering_pdf(r_in: ray, rec: hit_record, scattered: ray): Double {
+    open fun scattering_pdf(r_in: ray, rec: hit_record, scattered: ray): Double {
         return 0.0
     }
 
-    fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: point3): color {
+    open fun emitted(r_in: ray, rec: hit_record, u: Double, v: Double, p: point3): color {
         return color(0, 0, 0)
     }
 }
 
-class lambertian(val albedo: texture): material {
+class lambertian(val albedo: texture): material() {
 
     constructor(c: color): this(solid_color(c))
 
@@ -41,7 +41,7 @@ class lambertian(val albedo: texture): material {
     }
 }
 
-class metal(val albedo: color, f: Double): material {
+class metal(val albedo: color, f: Double): material() {
 
     constructor(albedo: color, f: Int): this(albedo, f.toDouble())
 
@@ -54,7 +54,7 @@ class metal(val albedo: color, f: Double): material {
     }
 }
 
-class dielectric(val index_of_refraction: Double): material {
+class dielectric(val index_of_refraction: Double): material() {
 
     override fun scatter(r_in: ray, rec: hit_record): Triple<color, ray, Double>? {
         val attenuation = color(1, 1, 1)
@@ -80,7 +80,7 @@ class dielectric(val index_of_refraction: Double): material {
     }
 }
 
-class diffuse_light(val emit: texture): material {
+class diffuse_light(val emit: texture): material() {
 
     constructor(c: color) : this(solid_color(c))
 
@@ -93,7 +93,7 @@ class diffuse_light(val emit: texture): material {
     }
 }
 
-class isotropic(val albedo: texture): material {
+class isotropic(val albedo: texture): material() {
 
     constructor(c: color): this(solid_color(c))
 

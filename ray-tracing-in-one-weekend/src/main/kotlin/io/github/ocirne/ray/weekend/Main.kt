@@ -7,7 +7,7 @@ import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 
-fun ray_color(r: ray, background: color, world: hittable, depth: Int): color {
+fun ray_color(r: ray, background: color, world: hittable, lights: hittable, depth: Int): color {
     if (depth <= 0) {
         return color(0, 0, 0)
     }
@@ -17,12 +17,12 @@ fun ray_color(r: ray, background: color, world: hittable, depth: Int): color {
     val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
     val (albedo, _, _) = rec.mat.scatter(r, rec) ?: return emitted
 
-    val p = cosine_pdf(rec.normal)
-    val scattered = ray(rec.p, p.generate(), r.time())
-    val pdf_val = p.value(scattered.direction())
+    val light_pdf = hittable_pdf(lights, rec.p)
+    val scattered = ray(rec.p, light_pdf.generate(), r.time())
+    val pdf_val = light_pdf.value(scattered.direction())
 
     return emitted + albedo * rec.mat.scattering_pdf(r, rec, scattered) *
-                              ray_color(scattered, background, world, depth-1) / pdf_val
+                              ray_color(scattered, background, world, lights, depth-1) / pdf_val
 }
 
 fun random_scene(): hittable_list {
@@ -330,7 +330,7 @@ fun init_scene(scene: Int) {
             world = cornell_box_book3()
             aspect_ratio = 1.0 / 1.0
             image_width = 600
-            samples_per_pixel = 100
+            samples_per_pixel = 10
             background = color(0, 0, 0)
             lookfrom = point3(278, 278, -800)
             lookat = point3(278, 278, 0)
@@ -363,6 +363,8 @@ var time1 = 1.0
 fun run(out: PrintWriter) {
     init_scene(9)
 
+    val lights = xz_rect(213, 343, 227, 332, 554, material())
+
     // Camera
     val image_height = (image_width / aspect_ratio).toInt()
     val cam = camera(lookfrom!!, lookat!!, vup, vfov, aspect_ratio, aperture, dist_to_focus, time0, time1)
@@ -379,7 +381,7 @@ fun run(out: PrintWriter) {
                 val u = (i + Random.nextDouble()) / (image_width - 1)
                 val v = (j + Random.nextDouble()) / (image_height - 1)
                 val r = cam.get_ray(u, v)
-                pixel_color += ray_color(r, background, world!!, max_depth)
+                pixel_color += ray_color(r, background, world!!, lights, max_depth)
             }
             write_color(out, pixel_color, samples_per_pixel)
         }

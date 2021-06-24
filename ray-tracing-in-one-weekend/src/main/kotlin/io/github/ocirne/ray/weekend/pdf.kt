@@ -35,3 +35,14 @@ class cosine_pdf(w: vec3): pdf {
         return uvw.local(random_cosine_direction())
     }
 }
+
+class hittable_pdf(val ptr: hittable, val origin: point3): pdf {
+
+    override fun value(direction: vec3): Double {
+        return ptr.pdf_value(origin, direction)
+    }
+
+    override fun generate(): vec3 {
+        return ptr.random(origin)
+    }
+}
