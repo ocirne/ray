@@ -336,7 +336,7 @@ fun init_scene(scene: Int) {
             world = cornell_box_book3()
             aspect_ratio = 1.0 / 1.0
             image_width = 600
-            samples_per_pixel = 1000
+            samples_per_pixel = 10
             background = color(0, 0, 0)
             lookfrom = point3(278, 278, -800)
             lookat = point3(278, 278, 0)
@@ -365,9 +365,10 @@ var time0 = 0.0
 var time1 = 1.0
 
 // Render
+val scene = 9
 
 fun run(out: PrintWriter) {
-    init_scene(9)
+    init_scene(scene)
 
 //    val lights = xz_rect(213, 343, 227, 332, 554, material())
 
@@ -405,7 +406,7 @@ fun run(out: PrintWriter) {
 fun main() {
     val timestamp = System.currentTimeMillis().toString()
     val timeInMillis = measureTimeMillis {
-        File("output/image$timestamp.ppm").printWriter().use(::run)
+        File("output/image${timestamp}_scene_${scene}_${samples_per_pixel}_samples.ppm").printWriter().use(::run)
     }
     println("elapsed $timeInMillis ms")
 }
