@@ -30,12 +30,14 @@ As my own contribution apart from the translation is low the same license applie
 
 The expected images are in the original book. Here are the somehow funny implementation/translation errors. Guess the error or look in the alt text. 
 
-![wrong calculcation of the pattern](images/image1624114594948.png?raw=true "asdad")
+![wrong calculcation of the pattern](images/image1624114594948.png?raw=true "wrong calculcation of the pattern")
 
-![missed the instruction about comment out](images/image1624126052168.png?raw=true "asdad")
+![missed the instruction about comment out](images/image1624126052168.png?raw=true "missed the instruction about comment out")
 
-![Use origin() and direction() directly instead of a copy](images/image1624192388685.png?raw=true "asdad")
+![Use origin() and direction() directly instead of a copy](images/image1624192388685.png?raw=true "Use origin() and direction() directly instead of a copy")
 
-![sign error for inverted density](images/image1624345263532.png?raw=true "asdad")
+![sign error for inverted density](images/image1624345263532.png?raw=true "sign error for inverted density")
 
-![obvious wrong, was a combination of the previous errors](images/image1624220234602.png?raw=true "asdad")
+![obvious wrong, was a combination of the previous errors](images/image1624220234602.png?raw=true "obvious wrong, was a combination of the previous errors")
+
+![missing normalization by pdf_val](images/image1624481801517?raw=true "missing normalization by pdf_val")
