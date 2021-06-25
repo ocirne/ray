@@ -383,19 +383,19 @@ fun main() {
     val image_height = (image_width / aspect_ratio).toInt()
     val cam = camera(lookfrom!!, lookat!!, vup, vfov, aspect_ratio, aperture, dist_to_focus, time0, time1)
 
-    val ppm = PPM(image_width, image_height)
+    val frame = RgbDataFrame(image_width, image_height)
 
     val timeInMillisRendering = measureTimeMillis {
-        for (s in 0 until samples_per_pixel) {
-            ppm.incSamples()
+        for (s in samples_per_pixel-1 downTo 0) {
+            frame.incSamples()
             println("$s ")
-            for (y in image_height-1 downTo 0) {
+            for (y in 0 until image_height) {
                 for (x in 0 until image_width) {
                     val u = (x + Random.nextDouble()) / (image_width - 1)
                     val v = (y + Random.nextDouble()) / (image_height - 1)
                     val r = cam.get_ray(u, v)
                     val pixelColor = rayColor(r, background, world!!, lights, max_depth)
-                    ppm.add(x, y, pixelColor)
+                    frame.plus(x, y, pixelColor)
                 }
             }
         }
@@ -404,8 +404,13 @@ fun main() {
     println("rendering $timeInMillisRendering ms")
     val timeInMillisWriteToFile = measureTimeMillis {
         val timestamp = System.currentTimeMillis().toString()
-        val filename = "output/image${timestamp}_scene_${scene}_${samples_per_pixel}_samples.ppm"
-        ppm.writeToFile(filename)
+        val filename = "output/image${timestamp}_scene_${scene}_${samples_per_pixel}_samples"
+        val ppm = PPM("$filename.ppm")
+        ppm.writeToFile(frame)
+
+        val gif = GIF("$filename.gif", image_width, image_height)
+        gif.addDataFrame(frame)
+        gif.writeToFile()
     }
-    println("write to file $timeInMillisWriteToFile ms")
+    println("write to files $timeInMillisWriteToFile ms")
 }
