@@ -7,8 +7,8 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 
 class AnimatableCornellBox(val angle: Double) : Scene(
     aspectRatio = 1.0,
-    imageWidth = 800,
-    samplesPerPixel = 5,
+    imageWidth = 100,
+    samplesPerPixel = 2,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0)
 ) {
