@@ -7,8 +7,8 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 
 class AnimatableCornellBox(val angle: Double) : Scene(
     aspectRatio = 1.0,
-    imageWidth = 100,
-    samplesPerPixel = 2,
+    imageWidth = 200,
+    samplesPerPixel = 10,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0)
 ) {
@@ -31,9 +31,10 @@ class AnimatableCornellBox(val angle: Double) : Scene(
         objects.add(xz_rect(0, 555, 0, 555, 0, white))
         objects.add(xy_rect(0, 555, 0, 555, 555, white))
 
-        var box1: hittable = box(Point3(0, 0, 0), Point3(165, 330, 165), aluminium)
+        var box1: hittable = box(Point3(0, 0, 0), Point3(164, 330, 164), aluminium)
+        box1 = translate(box1, Vector3(-82, 0, -82))
         box1 = rotate_y(box1, angle)
-        box1 = translate(box1, Vector3(265, 0, 295))
+        box1 = translate(box1, Vector3(265+82, 0, 295+82))
         objects.add(box1)
 
         objects.add(sphere(Point3(190, 90, 190), 90, glass))
