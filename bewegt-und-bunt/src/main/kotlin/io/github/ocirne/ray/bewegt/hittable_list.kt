@@ -55,7 +55,7 @@ class hittable_list(val objects: Array<hittable>): hittable {
 
     override fun random(origin: Vector3): Vector3 {
         val int_size = objects.size
-        return objects[Random.nextInt(0, int_size-1)].random(origin)
+        return objects[Random.nextInt(0, int_size)].random(origin)
     }
 
     class builder {
