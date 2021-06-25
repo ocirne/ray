@@ -35,7 +35,7 @@ fun rayColor(r: Ray, background: RgbColor, world: hittable, lights: hittable, de
             rayColor(scattered, background, world, lights, depth-1) / pdf_val
 }
 
-fun init_scene(sceneNo: Int) {
+fun init_scene(sceneNo: Int): Scene {
     val scene: Scene = when (sceneNo) {
         (1) -> RandomSceneWeekend()
         (2) -> TwoSpheres()
@@ -58,6 +58,8 @@ fun init_scene(sceneNo: Int) {
     lookfrom = scene.lookFrom
     samples_per_pixel = scene.samples_per_pixel
     vfov = scene.vfov
+
+    return scene
 }
 
 // Image
@@ -79,10 +81,10 @@ var time0 = 0.0
 var time1 = 1.0
 
 // Render
-val scene = 9
+val sceneNo = 9
 
 fun main() {
-    init_scene(scene)
+    val scene = init_scene(sceneNo)
 
     val lights = hittable_list.builder()
         .add(xz_rect(213, 343, 227, 332, 554, material()))
@@ -91,7 +93,7 @@ fun main() {
 
     // Camera
     val image_height = (image_width / aspect_ratio).toInt()
-    val cam = camera(lookfrom!!, lookat!!, vup, vfov, aspect_ratio, aperture, dist_to_focus, time0, time1)
+    val camera = Camera(scene, time0, time1)
 
     val frame = RgbDataFrame(image_width, image_height)
 
@@ -103,7 +105,7 @@ fun main() {
                 for (x in 0 until image_width) {
                     val u = (x + Random.nextDouble()) / (image_width - 1)
                     val v = (y + Random.nextDouble()) / (image_height - 1)
-                    val r = cam.get_ray(u, v)
+                    val r = camera.getRay(u, v)
                     val pixelColor = rayColor(r, background, world!!, lights, max_depth)
                     frame.plus(x, y, pixelColor)
                 }
