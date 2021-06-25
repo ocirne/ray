@@ -371,7 +371,7 @@ var time1 = 1.0
 // Render
 val scene = 9
 
-fun run(out: PrintWriter) {
+fun main() {
     init_scene(scene)
 
     val lights = hittable_list.builder()
@@ -383,30 +383,29 @@ fun run(out: PrintWriter) {
     val image_height = (image_width / aspect_ratio).toInt()
     val cam = camera(lookfrom!!, lookat!!, vup, vfov, aspect_ratio, aperture, dist_to_focus, time0, time1)
 
-    out.println("P3")
-    out.println("$image_width $image_height")
-    out.println("255")
+    val ppm = PPM(image_width, image_height)
 
-    for (j in image_height-1 downTo 0) {
-        println("$j ")
-        for (i in 0 until image_width) {
-            var pixelColor = NO_COLOR
-            for (s in 0..samples_per_pixel) {
-                val u = (i + Random.nextDouble()) / (image_width - 1)
-                val v = (j + Random.nextDouble()) / (image_height - 1)
-                val r = cam.get_ray(u, v)
-                pixelColor += rayColor(r, background, world!!, lights, max_depth)
+    val timeInMillisRendering = measureTimeMillis {
+        for (s in 0..samples_per_pixel) {
+            println("$s ")
+            for (y in image_height-1 downTo 0) {
+                for (x in 0 until image_width) {
+                    val u = (x + Random.nextDouble()) / (image_width - 1)
+                    val v = (y + Random.nextDouble()) / (image_height - 1)
+                    val r = cam.get_ray(u, v)
+                    val pixelColor = rayColor(r, background, world!!, lights, max_depth)
+                    ppm.add(x, y, pixelColor)
+                }
             }
-            writeColor(out, pixelColor, samples_per_pixel)
+            ppm.incSamples()
         }
     }
     println()
-}
-
-fun main() {
-    val timestamp = System.currentTimeMillis().toString()
-    val timeInMillis = measureTimeMillis {
-        File("output/image${timestamp}_scene_${scene}_${samples_per_pixel}_samples.ppm").printWriter().use(::run)
+    println("rendering $timeInMillisRendering ms")
+    val timeInMillisWriteToFile = measureTimeMillis {
+        val timestamp = System.currentTimeMillis().toString()
+        val filename = "output/image${timestamp}_scene_${scene}_${samples_per_pixel}_samples.ppm"
+        ppm.writeToFile(filename)
     }
-    println("elapsed $timeInMillis ms")
+    println("write to file $timeInMillisWriteToFile ms")
 }
