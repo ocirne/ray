@@ -8,9 +8,9 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 
 /** Default values for a scene */
 abstract class Scene(
-    val aspect_ratio: Double = 16.0 / 9.0,
-    val image_width: Int = 600,
-    val samples_per_pixel: Int = 100,
+    val aspectRatio: Double = 16.0 / 9.0,
+    val imageWidth: Int = 600,
+    val samplesPerPixel: Int = 100,
     val maxDepth: Int = 50,
     val lookFrom: Point3 = Point3(13, 2, 3),
     val lookAt: Point3 = Point3(0, 0, 0),
@@ -22,5 +22,8 @@ abstract class Scene(
     val time0: Double = 0.0,
     val time1: Double = 1.0
 ) {
+
+    val imageHeight = (imageWidth / aspectRatio).toInt()
+
     abstract fun world(): hittable_list
 }

@@ -8,9 +8,9 @@ import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 
 class CornellBoxSmoke : Scene(
-    aspect_ratio = 1.0,
-    image_width = 200, // 600
-    samples_per_pixel = 200,
+    aspectRatio = 1.0,
+    imageWidth = 200, // 600
+    samplesPerPixel = 200,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0),
 ) {

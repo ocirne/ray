@@ -7,16 +7,12 @@ import io.github.ocirne.ray.bewegt.scene.Scene
 import kotlin.math.tan
 import kotlin.random.Random
 
-class Camera(
-    scene: Scene,
-    val time0: Double = 0.0,
-    val time1: Double = 0.0
-) {
+class Camera(val scene: Scene) {
 
     private val theta = scene.vfov.degrees_to_radians()
     private val h = tan(theta / 2.0)
     private val viewportHeight = 2.0 * h
-    private val viewportWidth = scene.aspect_ratio * viewportHeight
+    private val viewportWidth = scene.aspectRatio * viewportHeight
 
     private val w = scene.lookFrom.minus(scene.lookAt).unitVector()
     private val u = scene.vup.cross(w).unitVector()
@@ -35,7 +31,7 @@ class Camera(
         return Ray(
             origin + offset,
             lowerLeftCorner + s * horizontal + t * vertical - origin - offset,
-            Random.nextDouble(time0, time1)
+            Random.nextDouble(scene.time0, scene.time1)
         )
     }
 }

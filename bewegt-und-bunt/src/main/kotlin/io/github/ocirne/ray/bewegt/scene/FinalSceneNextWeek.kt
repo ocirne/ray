@@ -8,9 +8,9 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 import kotlin.random.Random
 
 class FinalSceneNextWeek : Scene(
-    aspect_ratio = 1.0,
-    image_width = 200, // 800
-    samples_per_pixel = 20,  // 10000
+    aspectRatio = 1.0,
+    imageWidth = 200, // 800
+    samplesPerPixel = 20,  // 10000
     lookFrom = Point3(478, 278, -600),
     lookAt = Point3(278, 278, 0)
 ) {

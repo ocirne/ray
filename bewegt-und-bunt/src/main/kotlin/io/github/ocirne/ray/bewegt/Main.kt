@@ -2,7 +2,6 @@ package io.github.ocirne.ray.bewegt
 
 import io.github.ocirne.ray.bewegt.canvas.*
 import io.github.ocirne.ray.bewegt.math.Point3
-import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
 import io.github.ocirne.ray.bewegt.scene.*
 import kotlin.random.Random
@@ -32,7 +31,7 @@ fun rayColor(r: Ray, background: RgbColor, world: hittable, lights: hittable, de
 
     return emitted + srec.attenuation *
             rec.mat.scattering_pdf(r, rec, scattered) *
-            rayColor(scattered, background, world, lights, depth-1) / pdf_val
+            rayColor(scattered, background, world, lights, depth - 1) / pdf_val
 }
 
 fun init_scene(sceneNo: Int): Scene {
@@ -48,37 +47,8 @@ fun init_scene(sceneNo: Int): Scene {
         (9) -> CornellBoxBook3()
         else -> throw UnsupportedOperationException()
     }
-
-    world = scene.world()
-    aperture = scene.aperture
-    aspect_ratio = scene.aspect_ratio
-    background = scene.background
-    image_width = scene.image_width
-    lookat = scene.lookAt
-    lookfrom = scene.lookFrom
-    samples_per_pixel = scene.samples_per_pixel
-    vfov = scene.vfov
-
     return scene
 }
-
-// Image
-var aspect_ratio = 16.0 / 9.0
-var image_width = 600
-var samples_per_pixel = 100
-const val max_depth = 50
-
-// World
-var world: hittable_list? = null
-var lookfrom: Point3? = null
-var lookat: Point3? = null
-var vup = Vector3(0, 1, 0)
-var dist_to_focus = 10.0
-var vfov = 40.0
-var aperture = 0.0
-var background = BLACK
-var time0 = 0.0
-var time1 = 1.0
 
 // Render
 val sceneNo = 9
@@ -92,21 +62,20 @@ fun main() {
         .build()
 
     // Camera
-    val image_height = (image_width / aspect_ratio).toInt()
-    val camera = Camera(scene, time0, time1)
+    val camera = Camera(scene)
 
-    val frame = RgbDataFrame(image_width, image_height)
+    val frame = RgbDataFrame(scene.imageWidth, scene.imageHeight)
 
     val timeInMillisRendering = measureTimeMillis {
-        for (s in samples_per_pixel-1 downTo 0) {
+        for (s in scene.samplesPerPixel - 1 downTo 0) {
             frame.incSamples()
             println("$s ")
-            for (y in 0 until image_height) {
-                for (x in 0 until image_width) {
-                    val u = (x + Random.nextDouble()) / (image_width - 1)
-                    val v = (y + Random.nextDouble()) / (image_height - 1)
+            for (y in 0 until scene.imageHeight) {
+                for (x in 0 until scene.imageWidth) {
+                    val u = (x + Random.nextDouble()) / (scene.imageWidth - 1)
+                    val v = (y + Random.nextDouble()) / (scene.imageHeight - 1)
                     val r = camera.getRay(u, v)
-                    val pixelColor = rayColor(r, background, world!!, lights, max_depth)
+                    val pixelColor = rayColor(r, scene.background, scene.world(), lights, scene.maxDepth)
                     frame.plus(x, y, pixelColor)
                 }
             }
@@ -116,11 +85,11 @@ fun main() {
     println("rendering $timeInMillisRendering ms")
     val timeInMillisWriteToFile = measureTimeMillis {
         val timestamp = System.currentTimeMillis().toString()
-        val filename = "output/image${timestamp}_scene_${scene}_${samples_per_pixel}_samples"
+        val filename = "output/image${timestamp}_scene_${scene}_${scene.samplesPerPixel}_samples"
         val ppm = PPM("$filename.ppm")
         ppm.writeToFile(frame)
 
-        val gif = GIF("$filename.gif", image_width, image_height)
+        val gif = GIF("$filename.gif", scene.imageWidth, scene.imageHeight)
         gif.addDataFrame(frame)
         gif.writeToFile()
     }
