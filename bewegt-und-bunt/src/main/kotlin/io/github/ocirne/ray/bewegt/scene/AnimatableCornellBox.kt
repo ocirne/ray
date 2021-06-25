@@ -8,7 +8,7 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 class AnimatableCornellBox(val angle: Double) : Scene(
     aspectRatio = 1.0,
     imageWidth = 200,
-    samplesPerPixel = 10,
+    samplesPerPixel = 200,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0)
 ) {
@@ -38,7 +38,6 @@ class AnimatableCornellBox(val angle: Double) : Scene(
         objects.add(box1)
 
         objects.add(sphere(Point3(190, 90, 190), 90, glass))
-
         objects.add(sphere(Point3(400, 30, 100), 30, diamond))
 
         return objects.build()
