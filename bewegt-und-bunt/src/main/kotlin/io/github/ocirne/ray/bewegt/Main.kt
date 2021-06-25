@@ -340,7 +340,7 @@ fun init_scene(scene: Int) {
             world = cornell_box_book3()
             aspect_ratio = 1.0 / 1.0
             image_width = 600
-            samples_per_pixel = 10
+            samples_per_pixel = 5
             background = BLACK
             lookfrom = Point3(278, 278, -800)
             lookat = Point3(278, 278, 0)
@@ -386,7 +386,8 @@ fun main() {
     val ppm = PPM(image_width, image_height)
 
     val timeInMillisRendering = measureTimeMillis {
-        for (s in 0..samples_per_pixel) {
+        for (s in 0 until samples_per_pixel) {
+            ppm.incSamples()
             println("$s ")
             for (y in image_height-1 downTo 0) {
                 for (x in 0 until image_width) {
@@ -397,7 +398,6 @@ fun main() {
                     ppm.add(x, y, pixelColor)
                 }
             }
-            ppm.incSamples()
         }
     }
     println()
