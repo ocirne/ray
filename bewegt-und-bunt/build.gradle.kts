@@ -11,4 +11,6 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+
+    implementation("com.squareup:gifencoder:0.10.1")
 }
