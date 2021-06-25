@@ -45,17 +45,13 @@ fun init_scene(sceneNo: Int): Scene {
         (7) -> CornellBoxSmoke()
         (8) -> FinalSceneNextWeek()
         (9) -> CornellBoxBook3()
+        (10) -> AnimatableCornellBox(0.0)
         else -> throw UnsupportedOperationException()
     }
     return scene
 }
 
-// Render
-val sceneNo = 9
-
-fun main() {
-    val scene = init_scene(sceneNo)
-
+fun renderScene(scene: Scene) {
     val lights = hittable_list.builder()
         .add(xz_rect(213, 343, 227, 332, 554, material()))
         .add(sphere(Point3(190, 90, 190), 90, material()))
@@ -85,7 +81,7 @@ fun main() {
     println("rendering $timeInMillisRendering ms")
     val timeInMillisWriteToFile = measureTimeMillis {
         val timestamp = System.currentTimeMillis().toString()
-        val filename = "output/image${timestamp}_scene_${scene}_${scene.samplesPerPixel}_samples"
+        val filename = "output/imagetimestamp_scene_${scene}_${scene.samplesPerPixel}_samples"
         val ppm = PPM("$filename.ppm")
         ppm.writeToFile(frame)
 
@@ -94,4 +90,9 @@ fun main() {
         gif.writeToFile()
     }
     println("write to files $timeInMillisWriteToFile ms")
+}
+
+fun main() {
+    val scene = AnimatableCornellBox(15.0)
+    renderScene(scene)
 }
