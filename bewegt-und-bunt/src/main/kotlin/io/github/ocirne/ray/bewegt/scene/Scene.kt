@@ -3,8 +3,11 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.canvas.BLACK
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.hittable_list
+import io.github.ocirne.ray.bewegt.material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.sphere
+import io.github.ocirne.ray.bewegt.xz_rect
 
 /** Default values for a scene */
 abstract class Scene(
@@ -26,4 +29,9 @@ abstract class Scene(
     val imageHeight = (imageWidth / aspectRatio).toInt()
 
     abstract fun world(): hittable_list
+
+    open fun lights() = hittable_list.builder()
+        .add(xz_rect(213, 343, 227, 332, 554, material()))
+        .add(sphere(Point3(190, 90, 190), 90, material()))
+        .build()
 }

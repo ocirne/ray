@@ -1,29 +1,27 @@
 package io.github.ocirne.ray.bewegt
 
 import io.github.ocirne.ray.bewegt.canvas.*
-import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Ray
 import io.github.ocirne.ray.bewegt.scene.*
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 
-fun rayColor(r: Ray, background: RgbColor, world: hittable, lights: hittable, depth: Int): RgbColor {
+fun rayColor(r: Ray, scene: Scene, depth: Int=scene.maxDepth): RgbColor {
     if (depth <= 0) {
         return NO_COLOR
     }
     // If the ray hits nothing, return the background Color.
-    val rec = world.hit(r, 0.001, infinity) ?: return background
+    val rec = scene.world().hit(r, 0.001, infinity) ?: return scene.background
 
     val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
     val srec = rec.mat.scatter(r, rec) ?: return emitted
 
     if (srec.is_specular) {
         return srec.attenuation *
-                rayColor(srec.specular_ray!!, background, world, lights, depth - 1)
+                rayColor(srec.specular_ray!!, scene, depth - 1)
     }
-
-    val light_ptr = hittable_pdf(lights, rec.p)
+    val light_ptr = hittable_pdf(scene.lights(), rec.p)
     val p = mixture_pdf(light_ptr, srec.pdf_ptr!!)
 
     val scattered = Ray(rec.p, p.generate(), r.time)
@@ -31,7 +29,7 @@ fun rayColor(r: Ray, background: RgbColor, world: hittable, lights: hittable, de
 
     return emitted + srec.attenuation *
             rec.mat.scattering_pdf(r, rec, scattered) *
-            rayColor(scattered, background, world, lights, depth - 1) / pdf_val
+            rayColor(scattered, scene, depth - 1) / pdf_val
 }
 
 fun init_scene(sceneNo: Int): Scene {
@@ -52,11 +50,6 @@ fun init_scene(sceneNo: Int): Scene {
 }
 
 fun renderScene(scene: Scene) {
-    val lights = hittable_list.builder()
-        .add(xz_rect(213, 343, 227, 332, 554, material()))
-        .add(sphere(Point3(190, 90, 190), 90, material()))
-        .build()
-
     // Camera
     val camera = Camera(scene)
 
@@ -71,7 +64,7 @@ fun renderScene(scene: Scene) {
                     val u = (x + Random.nextDouble()) / (scene.imageWidth - 1)
                     val v = (y + Random.nextDouble()) / (scene.imageHeight - 1)
                     val r = camera.getRay(u, v)
-                    val pixelColor = rayColor(r, scene.background, scene.world(), lights, scene.maxDepth)
+                    val pixelColor = rayColor(r, scene, scene.maxDepth)
                     frame.plus(x, y, pixelColor)
                 }
             }
