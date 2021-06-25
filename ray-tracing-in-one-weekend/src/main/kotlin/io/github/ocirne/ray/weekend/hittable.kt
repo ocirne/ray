@@ -46,7 +46,7 @@ class translate(val ptr: hittable, val offset: vec3): hittable {
     }
 
     override fun bounding_box(time0: Double, time1: Double): aabb? {
-        val output_box = bounding_box(time0, time1) ?: return null
+        val output_box = ptr.bounding_box(time0, time1) ?: return null
         return aabb(output_box.min() + offset, output_box.max() + offset)
     }
 }
