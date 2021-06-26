@@ -14,9 +14,9 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
     constructor(x0: Int, x1: Int, y0: Int, y1: Int, k: Int, mat: Material):
             this(x0.toDouble(), x1.toDouble(), y0.toDouble(), y1.toDouble(), k.toDouble(), mat)
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val t = (k-r.origin.z) / r.direction.z
-        if (t < t_min || t > t_max) {
+        if (t < tMin || t > tMax) {
             return null
         }
         val x = r.origin.x + t*r.direction.x
@@ -47,9 +47,9 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
     constructor(x0: Int, x1: Int, z0: Int, z1: Int, k: Int, mat: Material):
             this(x0.toDouble(), x1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val t = (k-r.origin.y) / r.direction.y
-        if (t < t_min || t > t_max) {
+        if (t < tMin || t > tMax) {
             return null
         }
         val x = r.origin.x + t*r.direction.x
@@ -95,9 +95,9 @@ class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, va
     constructor(y0: Int, y1: Int, z0: Int, z1: Int, k: Int, mat: Material):
             this(y0.toDouble(), y1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val t = (k-r.origin.x) / r.direction.x
-        if (t < t_min || t > t_max) {
+        if (t < tMin || t > tMax) {
             return null
         }
         val y = r.origin.y + t*r.direction.y

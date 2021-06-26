@@ -10,12 +10,12 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
     var right: Hittable
     var box: aabb
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
-        if (!box.hit(r, t_min, t_max)) {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
+        if (!box.hit(r, tMin, tMax)) {
             return null
         }
-        val hit_left = left.hit(r, t_min, t_max)
-        val hit_right = right.hit(r, t_min, hit_left?.t ?: t_max)
+        val hit_left = left.hit(r, tMin, tMax)
+        val hit_right = right.hit(r, tMin, hit_left?.t ?: tMax)
 
         hit_left?. let { return hit_left }
         return hit_right

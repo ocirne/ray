@@ -16,7 +16,7 @@ class moving_sphere(
     val mat: Material
 ) : Hittable() {
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val oc = r.origin - center(r.time)
         val a = r.direction.lengthSquared()
         val half_b = oc.dot(r.direction)
@@ -28,9 +28,9 @@ class moving_sphere(
 
         // Find the nearest root that lies in the acceptable range.
         var root = (-half_b - sqrtd) / a
-        if (root < t_min || t_max < root) {
+        if (root < tMin || tMax < root) {
             root = (-half_b + sqrtd) / a
-            if (root < t_min || t_max < root)
+            if (root < tMin || tMax < root)
                 return null
         }
         val p = r.at(root)

@@ -3,7 +3,6 @@ package io.github.ocirne.ray.bewegt.hittable
 import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.*
-import io.github.ocirne.ray.bewegt.texture.Texture
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
@@ -16,9 +15,10 @@ data class HitRecord(
     var t: Double,
     val u: Double,
     val v: Double,
-    var frontFace: Boolean) {
+    var frontFace: Boolean
+) {
 
-    fun set_face_normal(r: Ray, outward_normal: Vector3) {
+    fun setFaceNormal(r: Ray, outward_normal: Vector3) {
         frontFace = r.direction.dot(outward_normal) < 0
         normal = if (frontFace) outward_normal else -outward_normal
     }
@@ -26,7 +26,7 @@ data class HitRecord(
 
 abstract class Hittable {
 
-    abstract fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord?
+    abstract fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord?
 
     abstract fun boundingBox(time0: Double, time1: Double): aabb?
 
@@ -53,58 +53,54 @@ abstract class Hittable {
         return FlipFace(this)
     }
 
-    fun toConstantMedium(density: Double, texture: Texture): Hittable {
-        return ConstantMedium(this, density, texture)
-    }
-
     fun toConstantMedium(density: Double, color: RGBColor): Hittable {
         return ConstantMedium(this, density, color)
     }
 }
 
-private class Translation(private val delegate: Hittable, private val offset: Vector3): Hittable() {
+private class Translation(private val delegate: Hittable, private val offset: Vector3) : Hittable() {
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
-        val moved_r = Ray(r.origin - offset, r.direction, r.time)
-        val rec = delegate.hit(moved_r, t_min, t_max) ?: return null
-        rec.p += offset
-        rec.set_face_normal(moved_r, rec.normal)
-        return rec
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
+        val movedRay = Ray(r.origin - offset, r.direction, r.time)
+        return delegate.hit(movedRay, tMin, tMax)?.let {
+            it.p += offset
+            it.setFaceNormal(movedRay, it.normal)
+            it
+        }
     }
 
     override fun boundingBox(time0: Double, time1: Double): aabb? {
-        val output_box = delegate.boundingBox(time0, time1) ?: return null
-        return aabb(output_box.min() + offset, output_box.max() + offset)
+        return delegate.boundingBox(time0, time1)?.let {
+            aabb(it.min() + offset, it.max() + offset)
+        }
     }
 }
 
-private class RotationY(val delegate: Hittable, angle: Double): Hittable() {
+private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
 
-    var sin_theta = 0.0
-    var cos_theta = 0.0
-    var bbox: aabb?
+    val sinTheta: Double
+    val cosTheta: Double
+    val bbox: aabb?
 
     init {
         val radians = angle.degreesToRadians()
-        sin_theta = sin(radians)
-        cos_theta = cos(radians)
-        bbox = delegate.boundingBox(0.0, 1.0)
-        bbox?.let {
-
+        sinTheta = sin(radians)
+        cosTheta = cos(radians)
+        bbox = delegate.boundingBox(0.0, 1.0)?.let {
             var min = Point3(infinity, infinity, infinity)
             var max = Point3(-infinity, -infinity, -infinity)
 
             for (i in 0..1) {
                 for (j in 0..1) {
                     for (k in 0..1) {
-                        val x = i * bbox!!.max().x + (1 - i) * bbox!!.min().x
-                        val y = j * bbox!!.max().y + (1 - j) * bbox!!.min().y
-                        val z = k * bbox!!.max().z + (1 - k) * bbox!!.min().z
+                        val x = i * it.max().x + (1 - i) * it.min().x
+                        val y = j * it.max().y + (1 - j) * it.min().y
+                        val z = k * it.max().z + (1 - k) * it.min().z
 
-                        val newx = cos_theta * x + sin_theta * z
-                        val newz = -sin_theta * x + cos_theta * z
+                        val newX = cosTheta * x + sinTheta * z
+                        val newZ = -sinTheta * x + cosTheta * z
 
-                        val tester = Vector3(newx, y, newz)
+                        val tester = Vector3(newX, y, newZ)
 
                         min = Point3(
                             min(min.x, tester.x),
@@ -119,35 +115,35 @@ private class RotationY(val delegate: Hittable, angle: Double): Hittable() {
                     }
                 }
             }
-            bbox = aabb(min, max)
+            aabb(min, max)
         }
     }
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val origin = Point3(
-            cos_theta * r.origin.x - sin_theta * r.origin.z,
+            cosTheta * r.origin.x - sinTheta * r.origin.z,
             r.origin.y,
-            sin_theta * r.origin.x + cos_theta * r.origin.z
+            sinTheta * r.origin.x + cosTheta * r.origin.z
         )
         val direction = Vector3(
-            cos_theta * r.direction.x - sin_theta * r.direction.z,
+            cosTheta * r.direction.x - sinTheta * r.direction.z,
             r.direction.y,
-            sin_theta * r.direction.x + cos_theta * r.direction.z
+            sinTheta * r.direction.x + cosTheta * r.direction.z
         )
-        val rotated_r = Ray(origin, direction, r.time)
-        val rec = delegate.hit(rotated_r, t_min, t_max) ?: return null
+        val rotatedRay = Ray(origin, direction, r.time)
+        val rec = delegate.hit(rotatedRay, tMin, tMax) ?: return null
         val p = Point3(
-            cos_theta * rec.p.x + sin_theta * rec.p.z,
+            cosTheta * rec.p.x + sinTheta * rec.p.z,
             rec.p.y,
-            -sin_theta * rec.p.x + cos_theta * rec.p.z
+            -sinTheta * rec.p.x + cosTheta * rec.p.z
         )
         val normal = Vector3(
-            cos_theta * rec.normal.x + sin_theta * rec.normal.z,
+            cosTheta * rec.normal.x + sinTheta * rec.normal.z,
             rec.normal.y,
-            -sin_theta * rec.normal.x + cos_theta * rec.normal.z
+            -sinTheta * rec.normal.x + cosTheta * rec.normal.z
         )
         rec.p = p
-        rec.set_face_normal(rotated_r, normal)
+        rec.setFaceNormal(rotatedRay, normal)
         return rec
     }
 
@@ -156,10 +152,10 @@ private class RotationY(val delegate: Hittable, angle: Double): Hittable() {
     }
 }
 
-private class FlipFace(private val delegate: Hittable): Hittable() {
+private class FlipFace(private val delegate: Hittable) : Hittable() {
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
-        val rec = delegate.hit(r, t_min, t_max) ?: return null
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
+        val rec = delegate.hit(r, tMin, tMax) ?: return null
         rec.frontFace = !rec.frontFace
         return rec
     }

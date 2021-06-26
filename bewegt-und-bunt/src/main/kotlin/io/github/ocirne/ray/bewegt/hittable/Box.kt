@@ -19,8 +19,8 @@ class box(val p0: Point3, val p1: Point3, mat: Material) : Hittable() {
         sides = objects.build()
     }
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
-        return sides.hit(r, t_min, t_max)
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
+        return sides.hit(r, tMin, tMax)
     }
 
     override fun boundingBox(time0: Double, time1: Double): aabb {

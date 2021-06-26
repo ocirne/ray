@@ -17,7 +17,7 @@ class ConstantMedium(private val boundary: Hittable, density: Double, a: Texture
 
     constructor(boundary: Hittable, density: Double, c: RGBColor): this(boundary, density, SolidColor(c))
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         // Print occasional samples when debugging. To enable, set enableDebug true.
         val enableDebug = false
         val debugging = enableDebug && Random.nextDouble() < 0.00001
@@ -28,8 +28,8 @@ class ConstantMedium(private val boundary: Hittable, density: Double, a: Texture
         if (debugging)
             println("t_min=${rec1.t}, t_max=${rec2.t}")
 
-        if (rec1.t < t_min) rec1.t = t_min
-        if (rec2.t > t_max) rec2.t = t_max
+        if (rec1.t < tMin) rec1.t = tMin
+        if (rec2.t > tMax) rec2.t = tMax
 
         if (rec1.t >= rec2.t)
             return null

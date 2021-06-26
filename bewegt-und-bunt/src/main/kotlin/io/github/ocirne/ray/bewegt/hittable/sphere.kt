@@ -11,7 +11,7 @@ class sphere(val center: Point3, val radius: Double, val mat: Material): Hittabl
 
     constructor(center: Point3, radius: Int, mat: Material): this(center, radius.toDouble(), mat)
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+    override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val oc = r.origin - center
         val a = r.direction.lengthSquared()
         val half_b = oc.dot(r.direction)
@@ -23,9 +23,9 @@ class sphere(val center: Point3, val radius: Double, val mat: Material): Hittabl
 
         // Find the nearest root that lies in the acceptable range.
         var root = (-half_b - sqrtd) / a
-        if (root < t_min || t_max < root) {
+        if (root < tMin || tMax < root) {
             root = (-half_b + sqrtd) / a
-            if (root < t_min || t_max < root)
+            if (root < tMin || tMax < root)
                 return null
         }
         val p = r.at(root)
