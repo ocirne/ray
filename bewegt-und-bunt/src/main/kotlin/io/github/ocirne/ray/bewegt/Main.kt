@@ -60,7 +60,9 @@ fun renderFrame(scene: Scene): RgbDataFrame {
 
     for (s in scene.samplesPerPixel - 1 downTo 0) {
         frame.incSamples()
-        print("$s ")
+        if (s % 10 == 0) {
+            print("$s ")
+        }
         for (y in 0 until scene.imageHeight) {
             for (x in 0 until scene.imageWidth) {
                 val u = (x + Random.nextDouble()) / (scene.imageWidth - 1)
@@ -107,6 +109,5 @@ fun renderScene(sceneNo: Int) {
 }
 
 fun main() {
-    // renderAnimatedCornellBox()
-    renderScene(3)
+    renderAnimatedCornellBox()
 }
