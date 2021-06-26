@@ -63,9 +63,9 @@ private class Translation(private val delegate: Hittable, private val offset: Ve
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val movedRay = Ray(r.origin - offset, r.direction, r.time)
         return delegate.hit(movedRay, tMin, tMax)?.let {
-            it.p += offset
-            it.setFaceNormal(movedRay, it.normal)
-            it
+            val x = HitRecord(it.p + offset, it.normal, it.mat, it.t, it.u, it.v, it.frontFace)
+            x.setFaceNormal(movedRay, it.normal)
+            x
         }
     }
 
@@ -119,6 +119,7 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
         }
     }
 
+    // TODO smells like rotation matrix
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val origin = Point3(
             cosTheta * r.origin.x - sinTheta * r.origin.z,
