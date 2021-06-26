@@ -17,7 +17,7 @@ class CornellBoxBook3 : Scene(
     lookAt = Point3(278, 278, 0)
 ) {
 
-    override fun world(): hittable_list {
+    override fun buildWorld(): hittable_list {
         val objects = hittable_list.builder()
 
         val red = Lambertian(RgbColor(.65, .05, .05))

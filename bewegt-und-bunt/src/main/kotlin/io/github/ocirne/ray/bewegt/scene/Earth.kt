@@ -12,7 +12,7 @@ class Earth : Scene(
     vfov = 20.0
 ) {
 
-    override fun world(): hittable_list {
+    override fun buildWorld(): hittable_list {
         val objects = hittable_list.builder()
 
         val earthTexture = ImageTexture("earthmap.jpg")

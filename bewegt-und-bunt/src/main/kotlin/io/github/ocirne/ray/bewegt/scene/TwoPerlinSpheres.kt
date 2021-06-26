@@ -8,12 +8,11 @@ import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.texture.NoiseTexture
 
 class TwoPerlinSpheres : Scene(
-    samplesPerPixel = 2,
     background = RgbColor(0.7, 0.8, 1.0),
     vfov = 20.0
 ) {
 
-    override fun world(): hittable_list {
+    override fun buildWorld(): hittable_list {
         val objects = hittable_list.builder()
 
         val perlinTexture = NoiseTexture(4.0)

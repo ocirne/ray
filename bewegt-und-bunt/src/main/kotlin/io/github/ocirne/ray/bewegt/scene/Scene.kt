@@ -28,10 +28,10 @@ abstract class Scene(
 
     val imageHeight = (imageWidth / aspectRatio).toInt()
 
-    abstract fun world(): hittable_list
+    abstract fun buildWorld(): hittable_list
 
-    open fun lights() = hittable_list.builder()
+    open fun buildLights() = hittable_list.builder()
         .add(xz_rect(213, 343, 227, 332, 554, Material()))
-//        .add(sphere(Point3(190, 90, 190), 90, Material()))
+        .add(sphere(Point3(190, 90, 190), 90, Material()))
         .build()
 }

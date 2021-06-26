@@ -15,7 +15,7 @@ class SimpleLight : Scene(
     vfov = 20.0
 ) {
 
-    override fun world(): hittable_list {
+    override fun buildWorld(): hittable_list {
         val objects = hittable_list.builder()
 
         val perlinTexture = NoiseTexture(4.0)

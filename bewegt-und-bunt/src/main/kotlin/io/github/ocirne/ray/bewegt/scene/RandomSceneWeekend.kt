@@ -18,7 +18,7 @@ class RandomSceneWeekend : Scene(
     aperture = 0.1
 ) {
 
-    override fun world(): hittable_list {
+    override fun buildWorld(): hittable_list {
         val builder = hittable_list.builder()
 
         val checker = CheckerTexture(RgbColor(0.2, 0.3, 0.1), RgbColor(0.9, 0.9, 0.9))

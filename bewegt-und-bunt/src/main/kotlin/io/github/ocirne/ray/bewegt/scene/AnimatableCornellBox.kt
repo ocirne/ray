@@ -15,7 +15,7 @@ class AnimatableCornellBox(private val angle: Double) : Scene(
     lookAt = Point3(278, 278, 0)
 ) {
 
-    override fun world(): hittable_list {
+    override fun buildWorld(): hittable_list {
         val objects = hittable_list.builder()
 
         val red = Lambertian(RgbColor(.65, .05, .05))
@@ -55,7 +55,7 @@ class AnimatableCornellBox(private val angle: Double) : Scene(
         return objects.build()
     }
 
-    override fun lights() = hittable_list.builder()
+    override fun buildLights() = hittable_list.builder()
         .add(xz_rect(213, 343, 227, 332, 554, Material()))
         .add(sphere(Point3(190, 90, 190), 90, Material()))
         .add(sphere(Point3(400, 30, 100), 30, Material()))
