@@ -1,7 +1,7 @@
 package io.github.ocirne.ray.bewegt.material
 
-import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.canvas.NO_COLOR
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.canvas.WHITE
 import io.github.ocirne.ray.bewegt.hittable.HitRecord
 import io.github.ocirne.ray.bewegt.math.*
@@ -123,14 +123,14 @@ class Isotropic(private val albedo: Texture): Material() {
 
     constructor(c: RGBColor): this(SolidColor(c))
 
-    override fun scatter(rayIn: Ray, rec: HitRecord): ScatterRecord? {
-        val scattered = Ray(rec.p, Vector3.randomInUnitSphere(), rayIn.time)
-        val attenuation = albedo.value(rec.u, rec.v, rec.p)
-        TODO("Issue #669")
-/*        return ScatterRecord(
-            specular_ray = scattered,
-            attenuation = attenuation,
-            is_specular = true,
-            pdf_ptr = null)  // never called, see Issue #669 */
+    override fun scatter(rayIn: Ray, rec: HitRecord): ScatterRecord {
+        return ScatterRecord(
+            specularRay = null,
+            attenuation = albedo.value(rec.u, rec.v, rec.p),
+            pdf = SpherePDF())
+    }
+
+    override fun scatteringPdf(rayIn: Ray, rec: HitRecord, scattered: Ray): Double {
+        return 1 / (4 * PI)
     }
 }

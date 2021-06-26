@@ -11,7 +11,6 @@ import io.github.ocirne.ray.bewegt.scene.*
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-
 fun rayColor(r: Ray, background: RGBColor, world: Hittable, lights: Hittable, depth: Int): RGBColor {
     if (depth <= 0) {
         return NO_COLOR
@@ -113,4 +112,5 @@ fun renderScene(sceneNo: Int) {
 
 fun main() {
     renderAnimatedCornellBox()
+//    renderScene(8)
 }

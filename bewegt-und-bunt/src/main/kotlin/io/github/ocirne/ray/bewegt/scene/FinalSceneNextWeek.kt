@@ -3,10 +3,7 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.canvas.WHITE
 import io.github.ocirne.ray.bewegt.hittable.*
-import io.github.ocirne.ray.bewegt.material.Dielectric
-import io.github.ocirne.ray.bewegt.material.DiffuseLight
-import io.github.ocirne.ray.bewegt.material.Lambertian
-import io.github.ocirne.ray.bewegt.material.Metal
+import io.github.ocirne.ray.bewegt.material.*
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.texture.ImageTexture
@@ -44,7 +41,7 @@ class FinalSceneNextWeek : Scene(
         objects.add(bvh_node(boxes1.build(), time0 = 0.0, time1 = 1.0))
 
         val light = DiffuseLight(RGBColor(7, 7, 7))
-        objects.add(xz_rect(123, 423, 147, 412, 554, light))
+        objects.add(xz_rect(123, 423, 147, 412, 554, light).flipFace())
 
         val center1 = Point3(400, 400, 200)
         val center2 = center1 + Vector3(30, 0, 0)
@@ -82,4 +79,8 @@ class FinalSceneNextWeek : Scene(
 
         return objects.build()
     }
+
+    override fun buildLights() = hittable_list.builder()
+        .add(xz_rect(123, 423, 147, 412, 554, Material()))
+        .build()
 }

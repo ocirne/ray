@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.bewegt.math
 
 import io.github.ocirne.ray.bewegt.hittable.Hittable
+import io.github.ocirne.ray.bewegt.math.Vector3.Companion.randomUnitVector
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -57,6 +58,17 @@ class MixturePDF(private val p0: PDF, private val p1: PDF) : PDF {
 
     override fun generate(): Vector3 {
         return if (Random.nextDouble() < 0.5) p0.generate() else p1.generate()
+    }
+}
+
+class SpherePDF : PDF {
+
+    override fun value(direction: Vector3): Double {
+        return 1/ (4 * PI)
+    }
+
+    override fun generate() : Vector3 {
+        return randomUnitVector()
     }
 }
 
