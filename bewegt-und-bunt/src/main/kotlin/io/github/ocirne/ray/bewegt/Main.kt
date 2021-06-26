@@ -17,18 +17,17 @@ fun rayColor(r: Ray, scene: Scene, depth: Int=scene.maxDepth): RgbColor {
     val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
     val srec = rec.mat.scatter(r, rec) ?: return emitted
 
-    if (srec.is_specular) {
-        return srec.attenuation *
-                rayColor(srec.specular_ray!!, scene, depth - 1)
+    srec.specularRay?.let {
+        return srec.attenuation * rayColor(srec.specularRay, scene, depth - 1)
     }
     val light_ptr = hittable_pdf(scene.lights(), rec.p)
-    val p = mixture_pdf(light_ptr, srec.pdf_ptr!!)
+    val p = mixture_pdf(light_ptr, srec.pdf!!)
 
     val scattered = Ray(rec.p, p.generate(), r.time)
     val pdf_val = p.value(scattered.direction)
 
     return emitted + srec.attenuation *
-            rec.mat.scattering_pdf(r, rec, scattered) *
+            rec.mat.scatteringPdf(r, rec, scattered) *
             rayColor(scattered, scene, depth - 1) / pdf_val
 }
 
@@ -72,22 +71,37 @@ fun renderFrame(scene: Scene): RgbDataFrame {
 }
 
 fun renderAnimatedCornellBox() {
-    val nullScene = AnimatableCornellBox(0.0)
-    val filename = "output/image${nullScene.javaClass.simpleName}_${nullScene.samplesPerPixel}_spf"
+    val timeInMillisRendering = measureTimeMillis {
+        val nullScene = AnimatableCornellBox(0.0)
+        val filename = "output/image${nullScene.javaClass.simpleName}_${nullScene.samplesPerPixel}_spf"
 
-    val gif = GIF("$filename.gif", nullScene.imageWidth, nullScene.imageHeight)
-    for (i in 1..30) {
-        print("Frame $i: ")
-        val scene = AnimatableCornellBox(15.0 + 3*i)
+        val gif = GIF("$filename.gif", nullScene.imageWidth, nullScene.imageHeight)
+        for (i in 1..30) {
+            print("Frame $i: ")
+            val scene = AnimatableCornellBox(15.0 + 3*i)
+            val frame = renderFrame(scene)
+            gif.addDataFrame(frame)
+        }
+        gif.writeToFile()
+    }
+    println("rendering $timeInMillisRendering ms")
+}
+
+fun renderScene(sceneNo: Int) {
+    val timeInMillisRendering = measureTimeMillis {
+        val nullScene = init_scene(sceneNo)
+        val filename = "output/image${nullScene.javaClass.simpleName}_${nullScene.samplesPerPixel}_spf"
+
+        val gif = GIF("$filename.gif", nullScene.imageWidth, nullScene.imageHeight)
+        val scene = init_scene(sceneNo)
         val frame = renderFrame(scene)
         gif.addDataFrame(frame)
+        gif.writeToFile()
     }
-    gif.writeToFile()
+    println("rendering $timeInMillisRendering ms")
 }
 
 fun main() {
-    val timeInMillisRendering = measureTimeMillis {
-        renderAnimatedCornellBox()
-    }
-    println("rendering $timeInMillisRendering ms")
+    // renderAnimatedCornellBox()
+    renderScene(9)
 }

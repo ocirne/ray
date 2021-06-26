@@ -3,7 +3,7 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.canvas.BLACK
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.hittable_list
-import io.github.ocirne.ray.bewegt.material
+import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.sphere
@@ -31,7 +31,7 @@ abstract class Scene(
     abstract fun world(): hittable_list
 
     open fun lights() = hittable_list.builder()
-        .add(xz_rect(213, 343, 227, 332, 554, material()))
-        .add(sphere(Point3(190, 90, 190), 90, material()))
+        .add(xz_rect(213, 343, 227, 332, 554, Material()))
+        .add(sphere(Point3(190, 90, 190), 90, Material()))
         .build()
 }

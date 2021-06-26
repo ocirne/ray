@@ -11,8 +11,8 @@ class hittable_list(val objects: Array<hittable>): hittable {
         return objects[i]
     }
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
-        var result: hit_record? = null
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
+        var result: HitRecord? = null
         var closest_so_far = t_max
 
         for (obj in objects) {

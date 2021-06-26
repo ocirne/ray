@@ -3,6 +3,10 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.canvas.WHITE
+import io.github.ocirne.ray.bewegt.material.Dielectric
+import io.github.ocirne.ray.bewegt.material.DiffuseLight
+import io.github.ocirne.ray.bewegt.material.Lambertian
+import io.github.ocirne.ray.bewegt.material.Metal
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import kotlin.random.Random
@@ -17,7 +21,7 @@ class FinalSceneNextWeek : Scene(
 
     override fun world(): hittable_list {
         val boxes1 = hittable_list.builder()
-        val ground = lambertian(RgbColor(0.48, 0.83, 0.53))
+        val ground = Lambertian(RgbColor(0.48, 0.83, 0.53))
 
         val boxesPerSide = 20
         for (i in 0 until boxesPerSide) {
@@ -37,34 +41,34 @@ class FinalSceneNextWeek : Scene(
 
         objects.add(bvh_node(boxes1.build(), time0 = 0.0, time1 = 1.0))
 
-        val light = diffuse_light(RgbColor(7, 7, 7))
+        val light = DiffuseLight(RgbColor(7, 7, 7))
         objects.add(xz_rect(123, 423, 147, 412, 554, light))
 
         val center1 = Point3(400, 400, 200)
         val center2 = center1 + Vector3(30, 0, 0)
-        val movingSphereMaterial = lambertian(RgbColor(0.7, 0.3, 0.1))
+        val movingSphereMaterial = Lambertian(RgbColor(0.7, 0.3, 0.1))
         objects.add(moving_sphere(center1, center2, 0.0, 1.0, 50.0, movingSphereMaterial))
 
-        objects.add(sphere(Point3(260, 150, 45), 50, dielectric(1.5)))
+        objects.add(sphere(Point3(260, 150, 45), 50, Dielectric(1.5)))
         objects.add(
             sphere(
-                Point3(0, 150, 145), 50, metal(RgbColor(0.8, 0.8, 0.9), 1.0)
+                Point3(0, 150, 145), 50, Metal(RgbColor(0.8, 0.8, 0.9), 1.0)
             )
         )
 
-        val boundary1 = sphere(Point3(360, 150, 145), 70, dielectric(1.5))
+        val boundary1 = sphere(Point3(360, 150, 145), 70, Dielectric(1.5))
         objects.add(boundary1)
         objects.add(constant_medium(boundary1, 0.2, RgbColor(0.2, 0.4, 0.9)))
-        val boundary2 = sphere(Point3(0, 0, 0), 5000, dielectric(1.5))
+        val boundary2 = sphere(Point3(0, 0, 0), 5000, Dielectric(1.5))
         objects.add(constant_medium(boundary2, .0001, WHITE))
 
-        val earthMaterial = lambertian(image_texture("earthmap.jpg"))
+        val earthMaterial = Lambertian(image_texture("earthmap.jpg"))
         objects.add(sphere(Point3(400, 200, 400), 100, earthMaterial))
         val perlinTexture = noise_texture(0.1)
-        objects.add(sphere(Point3(220, 280, 300), 80, lambertian(perlinTexture)))
+        objects.add(sphere(Point3(220, 280, 300), 80, Lambertian(perlinTexture)))
 
         val boxes2 = hittable_list.builder()
-        val white = lambertian(RgbColor(.73, .73, .73))
+        val white = Lambertian(RgbColor(.73, .73, .73))
         val ns = 1000
         for (j in 0 until ns) {
             boxes2.add(sphere(Point3.random(0.0, 165.0), 10, white))

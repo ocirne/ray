@@ -1,19 +1,22 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
 import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.math.sqrt
 
-class moving_sphere(val center0: Point3,
-                    val center1: Point3,
-                    val time0: Double,
-                    val time1: Double,
-                    val radius: Double,
-                    val mat: material): hittable {
+class moving_sphere(
+    val center0: Point3,
+    val center1: Point3,
+    val time0: Double,
+    val time1: Double,
+    val radius: Double,
+    val mat: Material
+) : hittable {
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val oc = r.origin - center(r.time)
         val a = r.direction.lengthSquared()
         val half_b = oc.dot(r.direction)
@@ -36,7 +39,7 @@ class moving_sphere(val center0: Point3,
         val normal = if (front_face) outward_normal else -outward_normal
         val (u, v) = sphere.get_sphere_uv(outward_normal)
 
-        return hit_record(p, normal, mat, root, u, v, front_face)
+        return HitRecord(p, normal, mat, root, u, v, front_face)
     }
 
     override fun bounding_box(time0: Double, time1: Double): aabb {

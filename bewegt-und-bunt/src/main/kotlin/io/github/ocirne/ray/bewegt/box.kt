@@ -1,9 +1,10 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Ray
 
-class box(val p0: Point3, val p1: Point3, mat: material) : hittable {
+class box(val p0: Point3, val p1: Point3, mat: Material) : hittable {
 
     val sides: hittable_list
 
@@ -18,7 +19,7 @@ class box(val p0: Point3, val p1: Point3, mat: material) : hittable {
         sides = objects.build()
     }
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         return sides.hit(r, t_min, t_max)
     }
 

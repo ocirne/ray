@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
@@ -8,11 +9,11 @@ import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class sphere(val center: Point3, val radius: Double, val mat: material): hittable {
+class sphere(val center: Point3, val radius: Double, val mat: Material): hittable {
 
-    constructor(center: Point3, radius: Int, mat: material): this(center, radius.toDouble(), mat)
+    constructor(center: Point3, radius: Int, mat: Material): this(center, radius.toDouble(), mat)
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val oc = r.origin - center
         val a = r.direction.lengthSquared()
         val half_b = oc.dot(r.direction)
@@ -35,7 +36,7 @@ class sphere(val center: Point3, val radius: Double, val mat: material): hittabl
         val normal = if (front_face) outward_normal else -outward_normal
         val (u, v) = get_sphere_uv(outward_normal)
 
-        return hit_record(p, normal, mat, root, u, v, front_face)
+        return HitRecord(p, normal, mat, root, u, v, front_face)
     }
 
     override fun bounding_box(time0: Double, time1: Double): aabb {

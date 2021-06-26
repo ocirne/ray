@@ -2,13 +2,14 @@ package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.material.*
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 
-class AnimatableCornellBox(val angle: Double) : Scene(
+class AnimatableCornellBox(private val angle: Double) : Scene(
     aspectRatio = 1.0,
     imageWidth = 200,
-    samplesPerPixel = 200,
+    samplesPerPixel = 20,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0)
 ) {
@@ -16,15 +17,15 @@ class AnimatableCornellBox(val angle: Double) : Scene(
     override fun world(): hittable_list {
         val objects = hittable_list.builder()
 
-        val red = lambertian(RgbColor(.65, .05, .05))
-        val white = lambertian(RgbColor(.73, .73, .73))
-        val green = lambertian(RgbColor(.12, .45, .15))
-        val orange = lambertian(RgbColor(.55, .85, .12))
-        val blue = lambertian(RgbColor(.12, .25, .76))
-        val light = diffuse_light(RgbColor(15, 15, 15))
-        val aluminium = metal(RgbColor(0.8, 0.85, 0.88), 0.0)
-        val glass = dielectric(1.5)
-        val diamond = dielectric(2.14)
+        val red = Lambertian(RgbColor(.65, .05, .05))
+        val white = Lambertian(RgbColor(.73, .73, .73))
+        val green = Lambertian(RgbColor(.12, .45, .15))
+        val orange = Lambertian(RgbColor(.55, .85, .12))
+        val blue = Lambertian(RgbColor(.12, .25, .76))
+        val light = DiffuseLight(RgbColor(15, 15, 15))
+        val aluminium = Metal(RgbColor(0.8, 0.85, 0.88), 0.0)
+        val glass = Dielectric(1.5)
+        val diamond = Dielectric(2.14)
 
         objects.add(yz_rect(0, 555, 0, 555, 555, green))
         objects.add(yz_rect(0, 555, 0, 555, 0, red))
@@ -54,8 +55,8 @@ class AnimatableCornellBox(val angle: Double) : Scene(
     }
 
     override fun lights() = hittable_list.builder()
-        .add(xz_rect(213, 343, 227, 332, 554, material()))
-        .add(sphere(Point3(190, 90, 190), 90, material()))
-        .add(sphere(Point3(400, 30, 100), 30, material()))
+        .add(xz_rect(213, 343, 227, 332, 554, Material()))
+        .add(sphere(Point3(190, 90, 190), 90, Material()))
+        .add(sphere(Point3(400, 30, 100), 30, Material()))
         .build()
 }

@@ -8,7 +8,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-interface pdf {
+interface ProbabilityDensityFunction {
 
     fun value(direction: Vector3): Double
     fun generate(): Vector3
@@ -24,7 +24,7 @@ fun random_cosine_direction(): Vector3 {
     return Vector3(x, y, z)
 }
 
-class cosine_pdf(w: Vector3): pdf {
+class cosine_pdf(w: Vector3): ProbabilityDensityFunction {
 
     val uvw = onb.build_from_w(w)
 
@@ -38,7 +38,7 @@ class cosine_pdf(w: Vector3): pdf {
     }
 }
 
-class hittable_pdf(val ptr: hittable, val origin: Point3): pdf {
+class hittable_pdf(val ptr: hittable, val origin: Point3): ProbabilityDensityFunction {
 
     override fun value(direction: Vector3): Double {
         return ptr.pdf_value(origin, direction)
@@ -49,7 +49,7 @@ class hittable_pdf(val ptr: hittable, val origin: Point3): pdf {
     }
 }
 
-class mixture_pdf(val p0: pdf, val p1: pdf): pdf {
+class mixture_pdf(val p0: ProbabilityDensityFunction, val p1: ProbabilityDensityFunction): ProbabilityDensityFunction {
 
     override fun value(direction: Vector3): Double {
         return 0.5 * p0.value(direction) + 0.5 *p1.value(direction)

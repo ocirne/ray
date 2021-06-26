@@ -9,7 +9,7 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
     var right: hittable
     var box: aabb
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         if (!box.hit(r, t_min, t_max)) {
             return null
         }

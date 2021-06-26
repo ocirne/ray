@@ -3,7 +3,7 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.hittable_list
 import io.github.ocirne.ray.bewegt.image_texture
-import io.github.ocirne.ray.bewegt.lambertian
+import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.sphere
 
@@ -16,7 +16,7 @@ class Earth : Scene(
         val objects = hittable_list.builder()
 
         val earthTexture = image_texture("earthmap.jpg")
-        val earthSurface = lambertian(earthTexture)
+        val earthSurface = Lambertian(earthTexture)
         val globe = sphere(Point3(0, 0, 0), 2, earthSurface)
         objects.add(globe)
 

@@ -74,7 +74,7 @@ class perlin {
     }
 }
 
-fun trilinear_interp(c: Array<Array<Array<Double>>>, u: Double, v: Double, w :Double): Double {
+fun trilinearayInterp(c: Array<Array<Array<Double>>>, u: Double, v: Double, w :Double): Double {
     var accum = 0.0
     for (i in 0..1) {
         for (j in 0..1) {

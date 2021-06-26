@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
@@ -8,10 +9,10 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
-data class hit_record(
+data class HitRecord(
     var p: Point3,
     var normal: Vector3,
-    val mat: material,
+    val mat: Material,
     var t: Double,
     val u: Double,
     val v: Double,
@@ -25,7 +26,7 @@ data class hit_record(
 
 interface hittable {
 
-    fun hit(r: Ray, t_min: Double, t_max: Double): hit_record?
+    fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord?
 
     fun bounding_box(time0: Double, time1: Double): aabb?
 
@@ -40,7 +41,7 @@ interface hittable {
 
 class translate(val ptr: hittable, val offset: Vector3): hittable {
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val moved_r = Ray(r.origin - offset, r.direction, r.time)
         val rec = ptr.hit(moved_r, t_min, t_max) ?: return null
         rec.p += offset
@@ -99,7 +100,7 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
         }
     }
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val origin = Point3(
             cos_theta * r.origin.x - sin_theta * r.origin.z,
             r.origin.y,
@@ -134,7 +135,7 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
 
 class flip_face(val ptr: hittable): hittable {
 
-    override fun hit(r: Ray, t_min: Double, t_max: Double): hit_record? {
+    override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val rec = ptr.hit(r, t_min, t_max) ?: return null
         rec.front_face = !rec.front_face
         return rec
