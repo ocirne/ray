@@ -2,11 +2,11 @@ package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.canvas.BLACK
 import io.github.ocirne.ray.bewegt.canvas.RGBColor
-import io.github.ocirne.ray.bewegt.hittable.hittable_list
+import io.github.ocirne.ray.bewegt.hittable.HittableList
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
-import io.github.ocirne.ray.bewegt.hittable.sphere
+import io.github.ocirne.ray.bewegt.hittable.Sphere
 import io.github.ocirne.ray.bewegt.hittable.xz_rect
 
 /** Default values for a scene */
@@ -28,10 +28,10 @@ abstract class Scene(
 
     val imageHeight = (imageWidth / aspectRatio).toInt()
 
-    abstract fun buildWorld(): hittable_list
+    abstract fun buildWorld(): HittableList
 
-    open fun buildLights() = hittable_list.builder()
+    open fun buildLights() = HittableList.Builder()
         .add(xz_rect(213, 343, 227, 332, 554, Material()))
-        .add(sphere(Point3(190, 90, 190), 90, Material()))
+        .add(Sphere(Point3(190, 90, 190), 90, Material()))
         .build()
 }

@@ -6,10 +6,10 @@ import io.github.ocirne.ray.bewegt.math.Ray
 
 class box(val p0: Point3, val p1: Point3, mat: Material) : Hittable() {
 
-    val sides: hittable_list
+    val sides: HittableList
 
     init {
-        val objects = hittable_list.builder()
+        val objects = HittableList.Builder()
         objects.add(xy_rect(p0.x, p1.x, p0.y, p1.y, p1.z, mat))
         objects.add(xy_rect(p0.x, p1.x, p0.y, p1.y, p0.z, mat))
         objects.add(xz_rect(p0.x, p1.x, p0.z, p1.z, p1.y, mat))
@@ -23,7 +23,7 @@ class box(val p0: Point3, val p1: Point3, mat: Material) : Hittable() {
         return sides.hit(r, tMin, tMax)
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb {
-        return aabb(p0, p1)
+    override fun boundingBox(time0: Double, time1: Double): AABB {
+        return AABB(p0, p1)
     }
 }

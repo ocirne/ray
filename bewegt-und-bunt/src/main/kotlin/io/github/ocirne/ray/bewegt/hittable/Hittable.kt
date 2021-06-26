@@ -28,7 +28,7 @@ abstract class Hittable {
 
     abstract fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord?
 
-    abstract fun boundingBox(time0: Double, time1: Double): aabb?
+    abstract fun boundingBox(time0: Double, time1: Double): AABB?
 
     open fun pdfValue(origin: Point3, v: Vector3): Double {
         return 0.0
@@ -69,9 +69,9 @@ private class Translation(private val delegate: Hittable, private val offset: Ve
         }
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb? {
+    override fun boundingBox(time0: Double, time1: Double): AABB? {
         return delegate.boundingBox(time0, time1)?.let {
-            aabb(it.min() + offset, it.max() + offset)
+            AABB(it.minimum + offset, it.maximum + offset)
         }
     }
 }
@@ -80,7 +80,7 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
 
     val sinTheta: Double
     val cosTheta: Double
-    val bbox: aabb?
+    val bbox: AABB?
 
     init {
         val radians = angle.degreesToRadians()
@@ -93,9 +93,9 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
             for (i in 0..1) {
                 for (j in 0..1) {
                     for (k in 0..1) {
-                        val x = i * it.max().x + (1 - i) * it.min().x
-                        val y = j * it.max().y + (1 - j) * it.min().y
-                        val z = k * it.max().z + (1 - k) * it.min().z
+                        val x = i * it.maximum.x + (1 - i) * it.minimum.x
+                        val y = j * it.maximum.y + (1 - j) * it.minimum.y
+                        val z = k * it.maximum.z + (1 - k) * it.minimum.z
 
                         val newX = cosTheta * x + sinTheta * z
                         val newZ = -sinTheta * x + cosTheta * z
@@ -115,7 +115,7 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
                     }
                 }
             }
-            aabb(min, max)
+            AABB(min, max)
         }
     }
 
@@ -148,7 +148,7 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
         return rec
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb? {
+    override fun boundingBox(time0: Double, time1: Double): AABB? {
         return bbox
     }
 }
@@ -156,12 +156,12 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
 private class FlipFace(private val delegate: Hittable) : Hittable() {
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
-        val rec = delegate.hit(r, tMin, tMax) ?: return null
-        rec.frontFace = !rec.frontFace
-        return rec
+        return delegate.hit(r, tMin, tMax)?.let {
+            HitRecord(it.p, it.normal, it.mat, it.t, it.u, it.v, !it.frontFace)
+        }
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb? {
+    override fun boundingBox(time0: Double, time1: Double): AABB? {
         return delegate.boundingBox(time0, time1)
     }
 }

@@ -7,56 +7,56 @@ import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class sphere(val center: Point3, val radius: Double, val mat: Material): Hittable() {
+class Sphere(private val center: Point3, private val radius: Double, private val mat: Material) : Hittable() {
 
-    constructor(center: Point3, radius: Int, mat: Material): this(center, radius.toDouble(), mat)
+    constructor(center: Point3, radius: Int, mat: Material) : this(center, radius.toDouble(), mat)
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val oc = r.origin - center
         val a = r.direction.lengthSquared()
-        val half_b = oc.dot(r.direction)
-        val c = oc.lengthSquared() - radius*radius
+        val halfB = oc.dot(r.direction)
+        val c = oc.lengthSquared() - radius * radius
 
-        val discriminant = half_b*half_b - a*c
+        val discriminant = halfB * halfB - a * c
         if (discriminant < 0) return null
-        val sqrtd = sqrt(discriminant)
+        val sqrtDiscriminant = sqrt(discriminant)
 
         // Find the nearest root that lies in the acceptable range.
-        var root = (-half_b - sqrtd) / a
+        var root = (-halfB - sqrtDiscriminant) / a
         if (root < tMin || tMax < root) {
-            root = (-half_b + sqrtd) / a
+            root = (-halfB + sqrtDiscriminant) / a
             if (root < tMin || tMax < root)
                 return null
         }
         val p = r.at(root)
-        val outward_normal = (r.at(root) - center) / radius
-        val front_face = r.direction.dot(outward_normal) < 0
-        val normal = if (front_face) outward_normal else -outward_normal
-        val (u, v) = get_sphere_uv(outward_normal)
+        val outwardNormal = (r.at(root) - center) / radius
+        val frontFace = r.direction.dot(outwardNormal) < 0
+        val normal = if (frontFace) outwardNormal else -outwardNormal
+        val (u, v) = getSphereUv(outwardNormal)
 
-        return HitRecord(p, normal, mat, root, u, v, front_face)
+        return HitRecord(p, normal, mat, root, u, v, frontFace)
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb {
-        return aabb(center - Vector3(radius, radius, radius), center + Vector3(radius, radius, radius))
+    override fun boundingBox(time0: Double, time1: Double): AABB {
+        return AABB(center - Vector3(radius, radius, radius), center + Vector3(radius, radius, radius))
     }
 
     override fun pdfValue(origin: Point3, v: Vector3): Double {
         hit(Ray(origin, v), 0.001, infinity) ?: return 0.0
-        val cos_theta_max = sqrt(1 - radius*radius/(center-origin).lengthSquared())
-        val solid_angle = 2*PI*(1-cos_theta_max)
-        return 1.0 / solid_angle
+        val cosThetaMax = sqrt(1 - radius * radius / (center - origin).lengthSquared())
+        val solidAngle = 2 * PI * (1 - cosThetaMax)
+        return 1.0 / solidAngle
     }
 
     override fun random(origin: Vector3): Vector3 {
         val direction = center - origin
-        val distance_squared = direction.lengthSquared()
+        val distanceSquared = direction.lengthSquared()
         val uvw = ONB.buildFromW(direction)
-        return uvw.local(randomToSphere(radius, distance_squared))
+        return uvw.local(randomToSphere(radius, distanceSquared))
     }
 
     companion object {
-        fun get_sphere_uv(p: Point3): Pair<Double, Double> {
+        fun getSphereUv(p: Point3): Pair<Double, Double> {
             // p: a given point on the sphere of radius one, centered at the origin.
             // u: returned value [0,1] of angle around the Y axis from X=-1.
             // v: returned value [0,1] of angle from Y=-1 to Y=+1.
@@ -67,7 +67,7 @@ class sphere(val center: Point3, val radius: Double, val mat: Material): Hittabl
             val theta = acos(-p.y)
             val phi = atan2(-p.z, p.x) + PI
 
-            val u = phi / (2*PI)
+            val u = phi / (2 * PI)
             val v = theta / PI
             return Pair(u, v)
         }

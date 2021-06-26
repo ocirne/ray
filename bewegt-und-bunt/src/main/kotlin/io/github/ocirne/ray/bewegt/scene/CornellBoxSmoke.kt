@@ -18,8 +18,8 @@ class CornellBoxSmoke : Scene(
     lookAt = Point3(278, 278, 0),
 ) {
 
-    override fun buildWorld(): hittable_list {
-        val objects = hittable_list.builder()
+    override fun buildWorld(): HittableList {
+        val objects = HittableList.Builder()
 
         val red = Lambertian(RGBColor(.65, .05, .05))
         val white = Lambertian(RGBColor(.73, .73, .73))
@@ -46,7 +46,7 @@ class CornellBoxSmoke : Scene(
         return objects.build()
     }
 
-    override fun buildLights() = hittable_list.builder()
+    override fun buildLights() = HittableList.Builder()
         .add(xz_rect(213, 343, 227, 332, 554, Material()))
         .build()
 }

@@ -26,18 +26,18 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
         }
         val u = (x-x0)/(x1-x0)
         val v = (y-y0)/(y1-y0)
-        val outward_normal = Vector3(0, 0, 1)
-        val front_face = r.direction.dot(outward_normal) < 0
-        val normal = if (front_face) outward_normal else -outward_normal
+        val outwardNormal = Vector3(0, 0, 1)
+        val frontFace = r.direction.dot(outwardNormal) < 0
+        val normal = if (frontFace) outwardNormal else -outwardNormal
         val p = r.at(t)
 
-        return HitRecord(p, normal, mat, t, u, v, front_face)
+        return HitRecord(p, normal, mat, t, u, v, frontFace)
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): AABB {
         // The bounding box must have non-zero width in each dimension, so pad the Z
         // dimension a small amount.
-        return aabb(Point3(x0, y0, k-0.0001), Point3(x1, y1, k+0.0001))
+        return AABB(Point3(x0, y0, k-0.0001), Point3(x1, y1, k+0.0001))
     }
 }
 
@@ -59,33 +59,33 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
         }
         val u = (x-x0)/(x1-x0)
         val v = (z-z0)/(z1-z0)
-        val outward_normal = Vector3(0, 1, 0)
-        val front_face = r.direction.dot(outward_normal) < 0
-        val normal = if (front_face) outward_normal else -outward_normal
+        val outwardNormal = Vector3(0, 1, 0)
+        val frontFace = r.direction.dot(outwardNormal) < 0
+        val normal = if (frontFace) outwardNormal else -outwardNormal
         val p = r.at(t)
 
-        return HitRecord(p, normal, mat, t, u, v, front_face)
+        return HitRecord(p, normal, mat, t, u, v, frontFace)
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): AABB {
         // The bounding box must have non-zero width in each dimension, so pad the Y
         // dimension a small amount.
-        return aabb(Point3(x0, k-0.0001, z0), Point3(x1, k+0.0001, z1))
+        return AABB(Point3(x0, k-0.0001, z0), Point3(x1, k+0.0001, z1))
     }
 
     override fun pdfValue(origin: Point3, v: Vector3): Double {
         val rec = hit(Ray(origin, v), 0.001, infinity) ?: return 0.0
 
         val area = (x1-x0)*(z1-z0)
-        val distance_squared = rec.t * rec.t * v.lengthSquared()
+        val distanceSquared = rec.t * rec.t * v.lengthSquared()
         val cosine = abs(v.dot(rec.normal) / v.length())
 
-        return distance_squared / (cosine * area)
+        return distanceSquared / (cosine * area)
     }
 
     override fun random(origin: Vector3): Vector3 {
-        val random_point = Point3(Random.nextDouble(x0, x1), k, Random.nextDouble(z0, z1))
-        return random_point - origin
+        val randomPoint = Point3(Random.nextDouble(x0, x1), k, Random.nextDouble(z0, z1))
+        return randomPoint - origin
     }
 }
 
@@ -107,17 +107,17 @@ class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, va
         }
         val u = (y-y0)/(y1-y0)
         val v = (z-z0)/(z1-z0)
-        val outward_normal = Vector3(1, 0, 0)
-        val front_face = r.direction.dot(outward_normal) < 0
-        val normal = if (front_face) outward_normal else -outward_normal
+        val outwardNormal = Vector3(1, 0, 0)
+        val frontFace = r.direction.dot(outwardNormal) < 0
+        val normal = if (frontFace) outwardNormal else -outwardNormal
         val p = r.at(t)
 
-        return HitRecord(p, normal, mat, t, u, v, front_face)
+        return HitRecord(p, normal, mat, t, u, v, frontFace)
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): AABB {
         // The bounding box must have non-zero width in each dimension, so pad the X
         // dimension a small amount.
-        return aabb(Point3(k-0.0001, y0, z0), Point3(k+0.0001, y1, z1))
+        return AABB(Point3(k-0.0001, y0, z0), Point3(k+0.0001, y1, z1))
     }
 }

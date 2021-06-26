@@ -9,13 +9,13 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 class AnimatableCornellBox(private val angle: Double) : Scene(
     aspectRatio = 1.0,
     imageWidth = 200,
-    samplesPerPixel = 5,
+    samplesPerPixel = 10,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0)
 ) {
 
-    override fun buildWorld(): hittable_list {
-        val objects = hittable_list.builder()
+    override fun buildWorld(): HittableList {
+        val objects = HittableList.Builder()
 
         val red = Lambertian(RGBColor(.65, .05, .05))
         val white = Lambertian(RGBColor(.73, .73, .73))
@@ -44,17 +44,17 @@ class AnimatableCornellBox(private val angle: Double) : Scene(
             .rotate(1, angle)
             .translate(Vector3(265+82, 0, 295+82)))
 
-        objects.add(sphere(Point3(190, 90, 190), 90, glass))
-        objects.add(sphere(Point3(450, 30, 100), 30, diamond))
-        objects.add(sphere(Point3(330, 40, 60), 40, orange))
-        objects.add(sphere(Point3(50, 20, 80), 20, blue))
+        objects.add(Sphere(Point3(190, 90, 190), 90, glass))
+        objects.add(Sphere(Point3(450, 30, 100), 30, diamond))
+        objects.add(Sphere(Point3(330, 40, 60), 40, orange))
+        objects.add(Sphere(Point3(50, 20, 80), 20, blue))
 
         return objects.build()
     }
 
-    override fun buildLights() = hittable_list.builder()
+    override fun buildLights() = HittableList.Builder()
         .add(xz_rect(213, 343, 227, 332, 554, Material()))
-        .add(sphere(Point3(190, 90, 190), 90, Material()))
-        .add(sphere(Point3(400, 30, 100), 30, Material()))
+        .add(Sphere(Point3(190, 90, 190), 90, Material()))
+        .add(Sphere(Point3(400, 30, 100), 30, Material()))
         .build()
 }

@@ -3,12 +3,12 @@ package io.github.ocirne.ray.bewegt.hittable
 import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.random.Random
 
-class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.objects.size, time0: Double, time1: Double):
+class BVHNode(src_objects: HittableList, start: Int=0, end: Int=src_objects.objects.size, time0: Double, time1: Double):
     Hittable() {
 
-    var left: Hittable
-    var right: Hittable
-    var box: aabb
+    private var left: Hittable
+    private var right: Hittable
+    private var box: AABB
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         if (!box.hit(r, tMin, tMax)) {
@@ -21,7 +21,7 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
         return hit_right
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): AABB {
         return box
     }
 
@@ -30,9 +30,9 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
 
         val axis = Random.nextInt(0, 3)
         val comparator: Comparator<Hittable> = when (axis) {
-            0 -> box_x_compare()
-            1 -> box_y_compare()
-            else -> box_z_compare()
+            0 -> BoxCompareX()
+            1 -> BoxCompareY()
+            else -> BoxCompareZ()
         }
 
         val object_span = end - start
@@ -53,8 +53,8 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
             objects.objects.sortWith(comparator, start, end)
 
             val mid = start + object_span / 2
-            left = bvh_node(objects, start, mid, time0, time1)
-            right = bvh_node(objects, mid, end, time0, time1)
+            left = BVHNode(objects, start, mid, time0, time1)
+            right = BVHNode(objects, mid, end, time0, time1)
         }
 
         val box_left = left.boundingBox(time0, time1)
@@ -63,30 +63,30 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
         if (box_left == null || box_right == null) {
             System.err.println("No bounding box in bvh_node constructor.")
         }
-        box = surrounding_box(box_left!!, box_right!!)
+        box = surroundingBox(box_left!!, box_right!!)
     }
 }
 
-open class box_compare(val axis: Int) : Comparator<Hittable> {
+open class BoxCompare(private val axis: Int) : Comparator<Hittable> {
 
     override fun compare(a: Hittable, b: Hittable): Int {
-        val box_a = a.boundingBox(0.0, 0.0)
-        val box_b = b.boundingBox(0.0, 0.0)
+        val boxA = a.boundingBox(0.0, 0.0)
+        val boxB = b.boundingBox(0.0, 0.0)
 
-        if (box_a == null || box_b == null) {
+        if (boxA == null || boxB == null) {
             System.err.println("No bounding box in bvh_node constructor.")
         }
-        when (axis) {
-            (0) -> return box_a!!.min().x.compareTo(box_b!!.min().x)
-            (1) -> return box_a!!.min().y.compareTo(box_b!!.min().y)
-            (2) -> return box_a!!.min().z.compareTo(box_b!!.min().z)
+        return when (axis) {
+            (0) -> boxA!!.minimum.x.compareTo(boxB!!.minimum.x)
+            (1) -> boxA!!.minimum.y.compareTo(boxB!!.minimum.y)
+            (2) -> boxA!!.minimum.z.compareTo(boxB!!.minimum.z)
             else -> throw IllegalArgumentException()
         }
     }
 }
 
-class box_x_compare : box_compare(0)
+class BoxCompareX : BoxCompare(0)
 
-class box_y_compare : box_compare(1)
+class BoxCompareY : BoxCompare(1)
 
-class box_z_compare : box_compare(2)
+class BoxCompareZ : BoxCompare(2)

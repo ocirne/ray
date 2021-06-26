@@ -44,7 +44,7 @@ class ConstantMedium(private val boundary: Hittable, density: Double, texture: T
         return HitRecord(p, normal, phaseFunction, t, u ,v, frontFace)
     }
 
-    override fun boundingBox(time0: Double, time1: Double): aabb? {
+    override fun boundingBox(time0: Double, time1: Double): AABB? {
         return boundary.boundingBox(time0, time1)
     }
 }

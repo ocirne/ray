@@ -1,8 +1,8 @@
 package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.canvas.RGBColor
-import io.github.ocirne.ray.bewegt.hittable.hittable_list
-import io.github.ocirne.ray.bewegt.hittable.sphere
+import io.github.ocirne.ray.bewegt.hittable.HittableList
+import io.github.ocirne.ray.bewegt.hittable.Sphere
 import io.github.ocirne.ray.bewegt.hittable.xy_rect
 import io.github.ocirne.ray.bewegt.material.DiffuseLight
 import io.github.ocirne.ray.bewegt.material.Lambertian
@@ -15,12 +15,12 @@ class SimpleLight : Scene(
     vfov = 20.0
 ) {
 
-    override fun buildWorld(): hittable_list {
-        val objects = hittable_list.builder()
+    override fun buildWorld(): HittableList {
+        val objects = HittableList.Builder()
 
         val perlinTexture = NoiseTexture(4.0)
-        objects.add(sphere(Point3(0, -1000, 0), 1000, Lambertian(perlinTexture)))
-        objects.add(sphere(Point3(0, 2, 0), 2, Lambertian(perlinTexture)))
+        objects.add(Sphere(Point3(0, -1000, 0), 1000, Lambertian(perlinTexture)))
+        objects.add(Sphere(Point3(0, 2, 0), 2, Lambertian(perlinTexture)))
 
         val diffuseLight = DiffuseLight(RGBColor(4, 4, 4))
         objects.add(xy_rect(3, 5, 1, 3, -2, diffuseLight))

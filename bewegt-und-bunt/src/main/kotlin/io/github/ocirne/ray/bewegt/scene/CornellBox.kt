@@ -14,8 +14,8 @@ class CornellBox : Scene(
     lookAt = Point3(278, 278, 0),
 ) {
 
-    override fun buildWorld(): hittable_list {
-        val objects = hittable_list.builder()
+    override fun buildWorld(): HittableList {
+        val objects = HittableList.Builder()
 
         val red = Lambertian(RGBColor(.65, .05, .05))
         val white = Lambertian(RGBColor(.73, .73, .73))

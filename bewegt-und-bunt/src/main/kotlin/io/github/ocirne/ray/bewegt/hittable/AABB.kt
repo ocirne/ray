@@ -6,10 +6,7 @@ import kotlin.math.min as fmin
 import kotlin.math.max as fmax
 
 // TODO try optimized version
-class aabb(val minimum: Point3, val maximum: Point3) {
-
-    fun min(): Point3 { return minimum }
-    fun max(): Point3 { return maximum }
+class AABB(val minimum: Point3, val maximum: Point3) {
 
     fun hit(r: Ray, t_min: Double, t_max: Double): Boolean {
         val t_min2x = fmax(fmin(min_t0_x(r), max_t0_x(r)), t_min)
@@ -56,12 +53,12 @@ class aabb(val minimum: Point3, val maximum: Point3) {
 
 }
 
-fun surrounding_box(box0: aabb, box1: aabb): aabb {
-    val small = Point3(fmin(box0.min().x, box1.min().x),
-                       fmin(box0.min().y, box1.min().y),
-                       fmin(box0.min().z, box1.min().z))
-    val big = Point3(fmax(box0.max().x, box1.max().x),
-                     fmax(box0.max().y, box1.max().y),
-                     fmax(box0.max().z, box1.max().z))
-    return aabb(small, big)
+fun surroundingBox(box0: AABB, box1: AABB): AABB {
+    val small = Point3(fmin(box0.minimum.x, box1.minimum.x),
+                       fmin(box0.minimum.y, box1.minimum.y),
+                       fmin(box0.minimum.z, box1.minimum.z))
+    val big = Point3(fmax(box0.maximum.x, box1.maximum.x),
+                     fmax(box0.maximum.y, box1.maximum.y),
+                     fmax(box0.maximum.z, box1.maximum.z))
+    return AABB(small, big)
 }
