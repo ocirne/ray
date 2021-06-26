@@ -16,23 +16,23 @@ fun rayColor(r: Ray, background: RGBColor, world: Hittable, lights: Hittable, de
         return NO_COLOR
     }
     // If the ray hits nothing, return the background Color.
-    val rec = world.hit(r, 0.001, infinity) ?: return background
+    val hitRecord = world.hit(r, 0.001, infinity) ?: return background
 
-    val emitted = rec.mat.emitted(r, rec, rec.u, rec.v, rec.p)
-    val srec = rec.mat.scatter(r, rec) ?: return emitted
+    val emitted = hitRecord.material.emitted(r, hitRecord, hitRecord.u, hitRecord.v, hitRecord.p)
+    val scatterRecord = hitRecord.material.scatter(r, hitRecord) ?: return emitted
 
-    srec.specularRay?.let {
-        return srec.attenuation * rayColor(srec.specularRay, background, world, lights, depth - 1)
+    scatterRecord.specularRay?.let {
+        return scatterRecord.attenuation * rayColor(scatterRecord.specularRay, background, world, lights, depth - 1)
     }
-    val light_ptr = HittablePDF(lights, rec.p)
-    val p = MixturePDF(light_ptr, srec.pdf!!)
+    val light = HittablePDF(lights, hitRecord.p)
+    val p = MixturePDF(light, scatterRecord.pdf!!)
 
-    val scattered = Ray(rec.p, p.generate(), r.time)
-    val pdf_val = p.value(scattered.direction)
+    val scattered = Ray(hitRecord.p, p.generate(), r.time)
+    val pdfValue = p.value(scattered.direction)
 
-    return emitted + srec.attenuation *
-            rec.mat.scatteringPdf(r, rec, scattered) *
-            rayColor(scattered, background, world, lights, depth - 1) / pdf_val
+    return emitted + scatterRecord.attenuation *
+            hitRecord.material.scatteringPdf(r, hitRecord, scattered) *
+            rayColor(scattered, background, world, lights, depth - 1) / pdfValue
 }
 
 fun init_scene(sceneNo: Int): Scene {

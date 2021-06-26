@@ -39,14 +39,14 @@ class CosinePDF(w: Vector3) : PDF {
     }
 }
 
-class HittablePDF(private val ptr: Hittable, private val origin: Point3) : PDF {
+class HittablePDF(private val hittable: Hittable, private val origin: Point3) : PDF {
 
     override fun value(direction: Vector3): Double {
-        return ptr.pdfValue(origin, direction)
+        return hittable.pdfValue(origin, direction)
     }
 
     override fun generate(): Vector3 {
-        return ptr.random(origin)
+        return hittable.random(origin)
     }
 }
 

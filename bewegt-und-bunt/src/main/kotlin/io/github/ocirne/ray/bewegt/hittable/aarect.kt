@@ -8,11 +8,11 @@ import io.github.ocirne.ray.bewegt.math.infinity
 import kotlin.math.abs
 import kotlin.random.Random
 
-class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val mat: Material) :
+class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val material: Material) :
     Hittable() {
 
-    constructor(x0: Int, x1: Int, y0: Int, y1: Int, k: Int, mat: Material):
-            this(x0.toDouble(), x1.toDouble(), y0.toDouble(), y1.toDouble(), k.toDouble(), mat)
+    constructor(x0: Int, x1: Int, y0: Int, y1: Int, k: Int, material: Material):
+            this(x0.toDouble(), x1.toDouble(), y0.toDouble(), y1.toDouble(), k.toDouble(), material)
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val t = (k-r.origin.z) / r.direction.z
@@ -31,7 +31,7 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
         val normal = if (frontFace) outwardNormal else -outwardNormal
         val p = r.at(t)
 
-        return HitRecord(p, normal, mat, t, u, v, frontFace)
+        return HitRecord(p, normal, material, t, u, v, frontFace)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {
@@ -41,11 +41,11 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
     }
 }
 
-class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) :
+class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, val k: Double, val material: Material) :
     Hittable() {
 
-    constructor(x0: Int, x1: Int, z0: Int, z1: Int, k: Int, mat: Material):
-            this(x0.toDouble(), x1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)
+    constructor(x0: Int, x1: Int, z0: Int, z1: Int, k: Int, material: Material):
+            this(x0.toDouble(), x1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), material)
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val t = (k-r.origin.y) / r.direction.y
@@ -64,7 +64,7 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
         val normal = if (frontFace) outwardNormal else -outwardNormal
         val p = r.at(t)
 
-        return HitRecord(p, normal, mat, t, u, v, frontFace)
+        return HitRecord(p, normal, material, t, u, v, frontFace)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {
@@ -89,11 +89,11 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
     }
 }
 
-class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) :
+class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, val k: Double, val material: Material) :
     Hittable() {
 
-    constructor(y0: Int, y1: Int, z0: Int, z1: Int, k: Int, mat: Material):
-            this(y0.toDouble(), y1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)
+    constructor(y0: Int, y1: Int, z0: Int, z1: Int, k: Int, material: Material):
+            this(y0.toDouble(), y1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), material)
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val t = (k-r.origin.x) / r.direction.x
@@ -112,7 +112,7 @@ class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, va
         val normal = if (frontFace) outwardNormal else -outwardNormal
         val p = r.at(t)
 
-        return HitRecord(p, normal, mat, t, u, v, frontFace)
+        return HitRecord(p, normal, material, t, u, v, frontFace)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {

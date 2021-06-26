@@ -7,9 +7,9 @@ import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class Sphere(private val center: Point3, private val radius: Double, private val mat: Material) : Hittable() {
+class Sphere(private val center: Point3, private val radius: Double, private val material: Material) : Hittable() {
 
-    constructor(center: Point3, radius: Int, mat: Material) : this(center, radius.toDouble(), mat)
+    constructor(center: Point3, radius: Int, material: Material) : this(center, radius.toDouble(), material)
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val oc = r.origin - center
@@ -34,7 +34,7 @@ class Sphere(private val center: Point3, private val radius: Double, private val
         val normal = if (frontFace) outwardNormal else -outwardNormal
         val (u, v) = getSphereUv(outwardNormal)
 
-        return HitRecord(p, normal, mat, root, u, v, frontFace)
+        return HitRecord(p, normal, material, root, u, v, frontFace)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {

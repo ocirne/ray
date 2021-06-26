@@ -13,7 +13,7 @@ class MovingSphere(
     private val time0: Double,
     private val time1: Double,
     private val radius: Double,
-    private val mat: Material
+    private val material: Material
 ) : Hittable() {
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
@@ -39,7 +39,7 @@ class MovingSphere(
         val normal = if (frontFace) outwardNormal else -outwardNormal
         val (u, v) = Sphere.getSphereUv(outwardNormal)
 
-        return HitRecord(p, normal, mat, root, u, v, frontFace)
+        return HitRecord(p, normal, material, root, u, v, frontFace)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {

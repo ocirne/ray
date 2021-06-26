@@ -11,7 +11,7 @@ import kotlin.math.sin
 data class HitRecord(
     var p: Point3,
     var normal: Vector3,
-    val mat: Material,
+    val material: Material,
     var t: Double,
     val u: Double,
     val v: Double,
@@ -63,7 +63,7 @@ private class Translation(private val delegate: Hittable, private val offset: Ve
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val movedRay = Ray(r.origin - offset, r.direction, r.time)
         return delegate.hit(movedRay, tMin, tMax)?.let {
-            val x = HitRecord(it.p + offset, it.normal, it.mat, it.t, it.u, it.v, it.frontFace)
+            val x = HitRecord(it.p + offset, it.normal, it.material, it.t, it.u, it.v, it.frontFace)
             x.setFaceNormal(movedRay, it.normal)
             x
         }
@@ -157,7 +157,7 @@ private class FlipFace(private val delegate: Hittable) : Hittable() {
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         return delegate.hit(r, tMin, tMax)?.let {
-            HitRecord(it.p, it.normal, it.mat, it.t, it.u, it.v, !it.frontFace)
+            HitRecord(it.p, it.normal, it.material, it.t, it.u, it.v, !it.frontFace)
         }
     }
 
