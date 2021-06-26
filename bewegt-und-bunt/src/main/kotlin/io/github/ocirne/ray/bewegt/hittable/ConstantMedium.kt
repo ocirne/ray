@@ -10,7 +10,7 @@ import io.github.ocirne.ray.bewegt.texture.Texture
 import kotlin.math.ln
 import kotlin.random.Random
 
-class constant_medium(val boundary: Hittable, density: Double, a: Texture): Hittable {
+class ConstantMedium(private val boundary: Hittable, density: Double, a: Texture): Hittable() {
 
     val neg_inv_density = -1.0/density
     val phase_function = Isotropic(a)

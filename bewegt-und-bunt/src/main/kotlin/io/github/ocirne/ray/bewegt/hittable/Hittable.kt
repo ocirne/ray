@@ -1,7 +1,9 @@
 package io.github.ocirne.ray.bewegt.hittable
 
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.*
+import io.github.ocirne.ray.bewegt.texture.Texture
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
@@ -22,38 +24,61 @@ data class HitRecord(
     }
 }
 
-interface Hittable {
+abstract class Hittable {
 
-    fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord?
+    abstract fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord?
 
-    fun boundingBox(time0: Double, time1: Double): aabb?
+    abstract fun boundingBox(time0: Double, time1: Double): aabb?
 
-    fun pdfValue(origin: Point3, v: Vector3): Double {
+    open fun pdfValue(origin: Point3, v: Vector3): Double {
         return 0.0
     }
 
-    fun random(origin: Vector3): Vector3 {
+    open fun random(origin: Vector3): Vector3 {
         return Vector3(1, 0, 0)
+    }
+
+    fun translate(vector3: Vector3): Hittable {
+        return Translation(this, vector3)
+    }
+
+    fun rotate(axis: Int, angle: Double): Hittable {
+        return when (axis) {
+            1 -> RotationY(this, angle)
+            else -> throw NotImplementedError()
+        }
+    }
+
+    fun flipFace(): Hittable {
+        return FlipFace(this)
+    }
+
+    fun toConstantMedium(density: Double, texture: Texture): Hittable {
+        return ConstantMedium(this, density, texture)
+    }
+
+    fun toConstantMedium(density: Double, color: RGBColor): Hittable {
+        return ConstantMedium(this, density, color)
     }
 }
 
-class Translate(private val ptr: Hittable, private val offset: Vector3): Hittable {
+private class Translation(private val delegate: Hittable, private val offset: Vector3): Hittable() {
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val moved_r = Ray(r.origin - offset, r.direction, r.time)
-        val rec = ptr.hit(moved_r, t_min, t_max) ?: return null
+        val rec = delegate.hit(moved_r, t_min, t_max) ?: return null
         rec.p += offset
         rec.set_face_normal(moved_r, rec.normal)
         return rec
     }
 
     override fun boundingBox(time0: Double, time1: Double): aabb? {
-        val output_box = ptr.boundingBox(time0, time1) ?: return null
+        val output_box = delegate.boundingBox(time0, time1) ?: return null
         return aabb(output_box.min() + offset, output_box.max() + offset)
     }
 }
 
-class rotate_y(val ptr: Hittable, angle: Double): Hittable {
+private class RotationY(val delegate: Hittable, angle: Double): Hittable() {
 
     var sin_theta = 0.0
     var cos_theta = 0.0
@@ -63,7 +88,7 @@ class rotate_y(val ptr: Hittable, angle: Double): Hittable {
         val radians = angle.degreesToRadians()
         sin_theta = sin(radians)
         cos_theta = cos(radians)
-        bbox = ptr.boundingBox(0.0, 1.0)
+        bbox = delegate.boundingBox(0.0, 1.0)
         bbox?.let {
 
             var min = Point3(infinity, infinity, infinity)
@@ -110,7 +135,7 @@ class rotate_y(val ptr: Hittable, angle: Double): Hittable {
             sin_theta * r.direction.x + cos_theta * r.direction.z
         )
         val rotated_r = Ray(origin, direction, r.time)
-        val rec = ptr.hit(rotated_r, t_min, t_max) ?: return null
+        val rec = delegate.hit(rotated_r, t_min, t_max) ?: return null
         val p = Point3(
             cos_theta * rec.p.x + sin_theta * rec.p.z,
             rec.p.y,
@@ -131,15 +156,15 @@ class rotate_y(val ptr: Hittable, angle: Double): Hittable {
     }
 }
 
-class FlipFace(private val ptr: Hittable): Hittable {
+private class FlipFace(private val delegate: Hittable): Hittable() {
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
-        val rec = ptr.hit(r, t_min, t_max) ?: return null
+        val rec = delegate.hit(r, t_min, t_max) ?: return null
         rec.frontFace = !rec.frontFace
         return rec
     }
 
     override fun boundingBox(time0: Double, time1: Double): aabb? {
-        return ptr.boundingBox(time0, time1)
+        return delegate.boundingBox(time0, time1)
     }
 }

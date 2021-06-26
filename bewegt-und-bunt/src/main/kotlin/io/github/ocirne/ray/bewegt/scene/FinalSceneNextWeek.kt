@@ -60,9 +60,9 @@ class FinalSceneNextWeek : Scene(
 
         val boundary1 = sphere(Point3(360, 150, 145), 70, Dielectric(1.5))
         objects.add(boundary1)
-        objects.add(constant_medium(boundary1, 0.2, RGBColor(0.2, 0.4, 0.9)))
+        objects.add(ConstantMedium(boundary1, 0.2, RGBColor(0.2, 0.4, 0.9)))
         val boundary2 = sphere(Point3(0, 0, 0), 5000, Dielectric(1.5))
-        objects.add(constant_medium(boundary2, .0001, WHITE))
+        objects.add(ConstantMedium(boundary2, .0001, WHITE))
 
         val earthMaterial = Lambertian(ImageTexture("earthmap.jpg"))
         objects.add(sphere(Point3(400, 200, 400), 100, earthMaterial))
@@ -76,12 +76,9 @@ class FinalSceneNextWeek : Scene(
             boxes2.add(sphere(Point3.random(0.0, 165.0), 10, white))
         }
 
-        objects.add(
-            Translate(
-                rotate_y(bvh_node(boxes2.build(), time0 = 0.0, time1 = 1.0), 15.0),
-                Vector3(-100, 270, 395)
-            )
-        )
+        objects.add(bvh_node(boxes2.build(), time0 = 0.0, time1 = 1.0)
+            .rotate(1, 15.0)
+            .translate(Vector3(-100, 270, 395)))
 
         return objects.build()
     }

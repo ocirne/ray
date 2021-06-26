@@ -14,7 +14,7 @@ class moving_sphere(
     val time1: Double,
     val radius: Double,
     val mat: Material
-) : Hittable {
+) : Hittable() {
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val oc = r.origin - center(r.time)

@@ -5,7 +5,7 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.random.Random
 
-class hittable_list(val objects: Array<Hittable>): Hittable {
+class hittable_list(val objects: Array<Hittable>): Hittable() {
 
     operator fun get(i: Int): Hittable {
         return objects[i]

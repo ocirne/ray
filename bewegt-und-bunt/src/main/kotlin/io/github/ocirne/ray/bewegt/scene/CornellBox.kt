@@ -29,15 +29,13 @@ class CornellBox : Scene(
         objects.add(xz_rect(0, 555, 0, 555, 555, white))
         objects.add(xy_rect(0, 555, 0, 555, 555, white))
 
-        var box1: Hittable = box(Point3(0, 0, 0), Point3(165, 330, 165), white)
-        box1 = rotate_y(box1, 15.0)
-        box1 = Translate(box1, Vector3(265, 0, 295))
-        objects.add(box1)
+        objects.add(box(Point3(0, 0, 0), Point3(165, 330, 165), white)
+            .rotate(1, 15.0)
+            .translate(Vector3(265, 0, 295)))
 
-        var box2: Hittable = box(Point3(0, 0, 0), Point3(165, 165, 165), white)
-        box2 = rotate_y(box2, -18.0)
-        box2 = Translate(box2, Vector3(130, 0, 65))
-        objects.add(box2)
+        objects.add(box(Point3(0, 0, 0), Point3(165, 165, 165), white)
+            .rotate(1, -18.0)
+            .translate(Vector3(130, 0, 65)))
 
         return objects.build()
     }

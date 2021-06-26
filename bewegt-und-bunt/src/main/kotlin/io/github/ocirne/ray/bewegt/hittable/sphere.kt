@@ -7,7 +7,7 @@ import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class sphere(val center: Point3, val radius: Double, val mat: Material): Hittable {
+class sphere(val center: Point3, val radius: Double, val mat: Material): Hittable() {
 
     constructor(center: Point3, radius: Int, mat: Material): this(center, radius.toDouble(), mat)
 
