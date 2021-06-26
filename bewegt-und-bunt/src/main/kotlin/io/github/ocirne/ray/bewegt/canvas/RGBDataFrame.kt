@@ -1,15 +1,15 @@
 package io.github.ocirne.ray.bewegt.canvas
 
-import io.github.ocirne.ray.bewegt.clamp_and_stretch
+import io.github.ocirne.ray.bewegt.math.clampAndStretch
 import kotlin.math.sqrt
 
-class RgbDataFrame(val width: Int, val height: Int) {
+class RGBDataFrame(val width: Int, val height: Int) {
 
-    private val pixelData: Array<Array<RgbColor>> = Array(height) { Array(width) { NO_COLOR } }
+    private val pixelData: Array<Array<RGBColor>> = Array(height) { Array(width) { NO_COLOR } }
 
     private var samplesPerPixel: Int = 0
 
-    fun plus(x: Int, y: Int, color: RgbColor) {
+    fun plus(x: Int, y: Int, color: RGBColor) {
         pixelData[y][x] += color
     }
 
@@ -27,7 +27,7 @@ class RgbDataFrame(val width: Int, val height: Int) {
         return (r shl 16) + (g shl 8) + b
     }
 
-    private fun scaledColorTriple(pixelColor: RgbColor): Triple<Int, Int, Int> {
+    private fun scaledColorTriple(pixelColor: RGBColor): Triple<Int, Int, Int> {
         val scale = 1.0 / samplesPerPixel
         val r = scaled(pixelColor.x, scale)
         val g = scaled(pixelColor.y, scale)
@@ -38,6 +38,6 @@ class RgbDataFrame(val width: Int, val height: Int) {
     private fun scaled(channel: Double, scale: Double): Int {
         // Replace NaN components with zero. See explanation in Ray Tracing: The Rest of Your Life.
         val c = if (channel != channel) 0.0 else channel
-        return sqrt(c * scale).clamp_and_stretch()
+        return sqrt(c * scale).clampAndStretch()
     }
 }

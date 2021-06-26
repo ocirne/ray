@@ -4,7 +4,7 @@ import java.io.File
 
 class PPM(val filename: String) {
 
-    fun writeToFile(frame: RgbDataFrame) {
+    fun writeToFile(frame: RGBDataFrame) {
         File(filename).printWriter().use { out ->
             out.println("P3")
             out.println("${frame.width} ${frame.height}")

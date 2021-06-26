@@ -1,13 +1,13 @@
 package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.canvas.BLACK
-import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.hittable_list
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.hittable.sphere
-import io.github.ocirne.ray.bewegt.xz_rect
+import io.github.ocirne.ray.bewegt.hittable.xz_rect
 
 /** Default values for a scene */
 abstract class Scene(
@@ -21,7 +21,7 @@ abstract class Scene(
     val distanceToFocus: Double = 10.0,
     val vfov: Double = 40.0,
     val aperture: Double = 0.0,
-    val background: RgbColor = BLACK,
+    val background: RGBColor = BLACK,
     val time0: Double = 0.0,
     val time1: Double = 1.0
 ) {

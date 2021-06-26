@@ -43,12 +43,12 @@ class hittable_list(val objects: Array<hittable>): hittable {
         return output_box
     }
 
-    override fun pdf_value(origin: Point3, v: Vector3): Double {
+    override fun pdfValue(origin: Point3, v: Vector3): Double {
         val weight = 1.0 / objects.size
         var sum = 0.0
 
         for (obj in objects) {
-            sum += weight * obj.pdf_value(origin, v)
+            sum += weight * obj.pdfValue(origin, v)
         }
         return sum
     }

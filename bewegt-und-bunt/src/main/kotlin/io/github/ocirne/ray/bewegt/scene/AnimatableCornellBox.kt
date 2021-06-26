@@ -1,7 +1,6 @@
 package io.github.ocirne.ray.bewegt.scene
 
-import io.github.ocirne.ray.bewegt.*
-import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.material.*
 import io.github.ocirne.ray.bewegt.math.Point3
@@ -18,13 +17,13 @@ class AnimatableCornellBox(private val angle: Double) : Scene(
     override fun buildWorld(): hittable_list {
         val objects = hittable_list.builder()
 
-        val red = Lambertian(RgbColor(.65, .05, .05))
-        val white = Lambertian(RgbColor(.73, .73, .73))
-        val green = Lambertian(RgbColor(.12, .45, .15))
-        val orange = Lambertian(RgbColor(.55, .85, .12))
-        val blue = Lambertian(RgbColor(.12, .25, .76))
-        val light = DiffuseLight(RgbColor(15, 15, 15))
-        val aluminium = Metal(RgbColor(0.8, 0.85, 0.88), 0.0)
+        val red = Lambertian(RGBColor(.65, .05, .05))
+        val white = Lambertian(RGBColor(.73, .73, .73))
+        val green = Lambertian(RGBColor(.12, .45, .15))
+        val orange = Lambertian(RGBColor(.55, .85, .12))
+        val blue = Lambertian(RGBColor(.12, .25, .76))
+        val light = DiffuseLight(RGBColor(15, 15, 15))
+        val aluminium = Metal(RGBColor(0.8, 0.85, 0.88), 0.0)
         val glass = Dielectric(1.5)
         val diamond = Dielectric(2.14)
 

@@ -15,7 +15,7 @@ class Perlin {
     private val permutationY: Array<Int> = perlinGeneratePermutation()
     private val permutationZ: Array<Int> = perlinGeneratePermutation()
 
-    fun noise(p: Point3) : Double {
+    private fun noise(p: Point3) : Double {
         val u = p.x - floor(p.x)
         val v = p.y - floor(p.y)
         val w = p.z - floor(p.z)

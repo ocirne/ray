@@ -1,6 +1,6 @@
 package io.github.ocirne.ray.bewegt.scene
 
-import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.hittable_list
 import io.github.ocirne.ray.bewegt.hittable.moving_sphere
 import io.github.ocirne.ray.bewegt.hittable.sphere
@@ -13,7 +13,7 @@ import io.github.ocirne.ray.bewegt.texture.CheckerTexture
 import kotlin.random.Random
 
 class RandomSceneWeekend : Scene(
-    background = RgbColor(0.7, 0.8, 1.0),
+    background = RGBColor(0.7, 0.8, 1.0),
     vfov = 20.0,
     aperture = 0.1
 ) {
@@ -21,7 +21,7 @@ class RandomSceneWeekend : Scene(
     override fun buildWorld(): hittable_list {
         val builder = hittable_list.builder()
 
-        val checker = CheckerTexture(RgbColor(0.2, 0.3, 0.1), RgbColor(0.9, 0.9, 0.9))
+        val checker = CheckerTexture(RGBColor(0.2, 0.3, 0.1), RGBColor(0.9, 0.9, 0.9))
         builder.add(sphere(Point3(0, -1000, 0), 1000, Lambertian(checker)))
 
         for (a in -11..10) {
@@ -33,14 +33,14 @@ class RandomSceneWeekend : Scene(
                     when {
                         chooseMaterial < 0.8 -> {
                             // diffuse
-                            val albedo = RgbColor.random() * RgbColor.random()
+                            val albedo = RGBColor.random() * RGBColor.random()
                             val sphereMaterial = Lambertian(albedo)
                             val center2 = center + Vector3(0.0, Random.nextDouble(0.0, 0.5), 0.0)
                             builder.add(moving_sphere(center, center2, 0.0, 1.0, 0.2, sphereMaterial))
                         }
                         chooseMaterial < 0.95 -> {
                             // metal
-                            val albedo = RgbColor.random(0.5, 1.0)
+                            val albedo = RGBColor.random(0.5, 1.0)
                             val fuzz = Random.nextDouble(0.5)
                             val sphereMaterial = Metal(albedo, fuzz)
                             builder.add(sphere(center, 0.2, sphereMaterial))
@@ -58,10 +58,10 @@ class RandomSceneWeekend : Scene(
         val material1 = Dielectric(1.5)
         builder.add(sphere(Point3(0, 1, 0), 1, material1))
 
-        val material2 = Lambertian(RgbColor(0.4, 0.2, 0.1))
+        val material2 = Lambertian(RGBColor(0.4, 0.2, 0.1))
         builder.add(sphere(Point3(-4, 1, 0), 1, material2))
 
-        val material3 = Metal(RgbColor(0.7, 0.6, 0.5), 0)
+        val material3 = Metal(RGBColor(0.7, 0.6, 0.5), 0)
         builder.add(sphere(Point3(4, 1, 0), 1, material3))
 
         return builder.build()

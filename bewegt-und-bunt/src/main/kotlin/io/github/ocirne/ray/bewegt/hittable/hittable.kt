@@ -1,11 +1,7 @@
 package io.github.ocirne.ray.bewegt.hittable
 
-import io.github.ocirne.ray.bewegt.degrees_to_radians
-import io.github.ocirne.ray.bewegt.infinity
 import io.github.ocirne.ray.bewegt.material.Material
-import io.github.ocirne.ray.bewegt.math.Point3
-import io.github.ocirne.ray.bewegt.math.Vector3
-import io.github.ocirne.ray.bewegt.math.Ray
+import io.github.ocirne.ray.bewegt.math.*
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.min
@@ -32,7 +28,7 @@ interface hittable {
 
     fun bounding_box(time0: Double, time1: Double): aabb?
 
-    fun pdf_value(origin: Point3, v: Vector3): Double {
+    fun pdfValue(origin: Point3, v: Vector3): Double {
         return 0.0
     }
 
@@ -64,7 +60,7 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
     var bbox: aabb?
 
     init {
-        val radians = angle.degrees_to_radians()
+        val radians = angle.degreesToRadians()
         sin_theta = sin(radians)
         cos_theta = cos(radians)
         bbox = ptr.bounding_box(0.0, 1.0)

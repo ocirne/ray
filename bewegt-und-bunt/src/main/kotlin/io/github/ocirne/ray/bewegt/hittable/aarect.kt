@@ -1,12 +1,10 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.hittable
 
-import io.github.ocirne.ray.bewegt.hittable.HitRecord
-import io.github.ocirne.ray.bewegt.hittable.aabb
-import io.github.ocirne.ray.bewegt.hittable.hittable
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Ray
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.infinity
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -75,7 +73,7 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
         return aabb(Point3(x0, k-0.0001, z0), Point3(x1, k+0.0001, z1))
     }
 
-    override fun pdf_value(origin: Point3, v: Vector3): Double {
+    override fun pdfValue(origin: Point3, v: Vector3): Double {
         val rec = hit(Ray(origin, v), 0.001, infinity) ?: return 0.0
 
         val area = (x1-x0)*(z1-z0)

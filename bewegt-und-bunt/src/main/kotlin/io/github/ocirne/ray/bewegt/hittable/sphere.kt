@@ -1,12 +1,7 @@
 package io.github.ocirne.ray.bewegt.hittable
 
-import io.github.ocirne.ray.bewegt.infinity
 import io.github.ocirne.ray.bewegt.material.Material
-import io.github.ocirne.ray.bewegt.math.Point3
-import io.github.ocirne.ray.bewegt.math.Vector3
-import io.github.ocirne.ray.bewegt.math.Ray
-import io.github.ocirne.ray.bewegt.math.onb
-import io.github.ocirne.ray.bewegt.random_to_sphere
+import io.github.ocirne.ray.bewegt.math.*
 import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.atan2
@@ -46,7 +41,7 @@ class sphere(val center: Point3, val radius: Double, val mat: Material): hittabl
         return aabb(center - Vector3(radius, radius, radius), center + Vector3(radius, radius, radius))
     }
 
-    override fun pdf_value(origin: Point3, v: Vector3): Double {
+    override fun pdfValue(origin: Point3, v: Vector3): Double {
         hit(Ray(origin, v), 0.001, infinity) ?: return 0.0
         val cos_theta_max = sqrt(1 - radius*radius/(center-origin).lengthSquared())
         val solid_angle = 2*PI*(1-cos_theta_max)
@@ -56,8 +51,8 @@ class sphere(val center: Point3, val radius: Double, val mat: Material): hittabl
     override fun random(origin: Vector3): Vector3 {
         val direction = center - origin
         val distance_squared = direction.lengthSquared()
-        val uvw = onb.build_from_w(direction)
-        return uvw.local(random_to_sphere(radius, distance_squared))
+        val uvw = ONB.buildFromW(direction)
+        return uvw.local(randomToSphere(radius, distance_squared))
     }
 
     companion object {

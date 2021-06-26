@@ -3,13 +3,16 @@ package io.github.ocirne.ray.bewegt
 import io.github.ocirne.ray.bewegt.camera.Camera
 import io.github.ocirne.ray.bewegt.canvas.*
 import io.github.ocirne.ray.bewegt.hittable.hittable
+import io.github.ocirne.ray.bewegt.math.HittablePDF
+import io.github.ocirne.ray.bewegt.math.MixturePDF
 import io.github.ocirne.ray.bewegt.math.Ray
+import io.github.ocirne.ray.bewegt.math.infinity
 import io.github.ocirne.ray.bewegt.scene.*
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 
-fun rayColor(r: Ray, background: RgbColor, world: hittable, lights: hittable, depth: Int): RgbColor {
+fun rayColor(r: Ray, background: RGBColor, world: hittable, lights: hittable, depth: Int): RGBColor {
     if (depth <= 0) {
         return NO_COLOR
     }
@@ -22,8 +25,8 @@ fun rayColor(r: Ray, background: RgbColor, world: hittable, lights: hittable, de
     srec.specularRay?.let {
         return srec.attenuation * rayColor(srec.specularRay, background, world, lights, depth - 1)
     }
-    val light_ptr = hittable_pdf(lights, rec.p)
-    val p = mixture_pdf(light_ptr, srec.pdf!!)
+    val light_ptr = HittablePDF(lights, rec.p)
+    val p = MixturePDF(light_ptr, srec.pdf!!)
 
     val scattered = Ray(rec.p, p.generate(), r.time)
     val pdf_val = p.value(scattered.direction)
@@ -50,10 +53,10 @@ fun init_scene(sceneNo: Int): Scene {
     return scene
 }
 
-fun renderFrame(scene: Scene): RgbDataFrame {
+fun renderFrame(scene: Scene): RGBDataFrame {
     // Camera
     val camera = Camera(scene)
-    val frame = RgbDataFrame(scene.imageWidth, scene.imageHeight)
+    val frame = RGBDataFrame(scene.imageWidth, scene.imageHeight)
 
     val world = scene.buildWorld()
     val lights = scene.buildLights()

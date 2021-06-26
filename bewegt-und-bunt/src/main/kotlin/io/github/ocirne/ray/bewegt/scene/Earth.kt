@@ -1,6 +1,6 @@
 package io.github.ocirne.ray.bewegt.scene
 
-import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.hittable_list
 import io.github.ocirne.ray.bewegt.texture.ImageTexture
 import io.github.ocirne.ray.bewegt.material.Lambertian
@@ -8,7 +8,7 @@ import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.hittable.sphere
 
 class Earth : Scene(
-    background = RgbColor(0.7, 0.8, 1.0),
+    background = RGBColor(0.7, 0.8, 1.0),
     vfov = 20.0
 ) {
 

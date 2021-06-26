@@ -1,6 +1,6 @@
 package io.github.ocirne.ray.bewegt.camera
 
-import io.github.ocirne.ray.bewegt.degrees_to_radians
+import io.github.ocirne.ray.bewegt.math.degreesToRadians
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
 import io.github.ocirne.ray.bewegt.math.Ray
@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 class Camera(val scene: Scene) {
 
-    private val theta = scene.vfov.degrees_to_radians()
+    private val theta = scene.vfov.degreesToRadians()
     private val h = tan(theta / 2.0)
     private val viewportHeight = 2.0 * h
     private val viewportWidth = scene.aspectRatio * viewportHeight

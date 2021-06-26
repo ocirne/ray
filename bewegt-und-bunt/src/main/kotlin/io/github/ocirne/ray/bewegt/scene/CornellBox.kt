@@ -1,7 +1,6 @@
 package io.github.ocirne.ray.bewegt.scene
 
-import io.github.ocirne.ray.bewegt.*
-import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.material.DiffuseLight
 import io.github.ocirne.ray.bewegt.material.Lambertian
@@ -18,10 +17,10 @@ class CornellBox : Scene(
     override fun buildWorld(): hittable_list {
         val objects = hittable_list.builder()
 
-        val red = Lambertian(RgbColor(.65, .05, .05))
-        val white = Lambertian(RgbColor(.73, .73, .73))
-        val green = Lambertian(RgbColor(.12, .45, .15))
-        val light = DiffuseLight(RgbColor(15, 15, 15))
+        val red = Lambertian(RGBColor(.65, .05, .05))
+        val white = Lambertian(RGBColor(.73, .73, .73))
+        val green = Lambertian(RGBColor(.12, .45, .15))
+        val light = DiffuseLight(RGBColor(15, 15, 15))
 
         objects.add(yz_rect(0, 555, 0, 555, 555, green))
         objects.add(yz_rect(0, 555, 0, 555, 0, red))

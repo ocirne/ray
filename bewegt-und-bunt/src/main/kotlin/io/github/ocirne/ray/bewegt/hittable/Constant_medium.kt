@@ -1,10 +1,10 @@
 package io.github.ocirne.ray.bewegt.hittable
 
-import io.github.ocirne.ray.bewegt.*
-import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.material.Isotropic
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
+import io.github.ocirne.ray.bewegt.math.infinity
 import io.github.ocirne.ray.bewegt.texture.SolidColor
 import io.github.ocirne.ray.bewegt.texture.Texture
 import kotlin.math.ln
@@ -15,7 +15,7 @@ class constant_medium(val boundary: hittable, density: Double, a: Texture): hitt
     val neg_inv_density = -1.0/density
     val phase_function = Isotropic(a)
 
-    constructor(boundary: hittable, density: Double, c: RgbColor): this(boundary, density, SolidColor(c))
+    constructor(boundary: hittable, density: Double, c: RGBColor): this(boundary, density, SolidColor(c))
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         // Print occasional samples when debugging. To enable, set enableDebug true.

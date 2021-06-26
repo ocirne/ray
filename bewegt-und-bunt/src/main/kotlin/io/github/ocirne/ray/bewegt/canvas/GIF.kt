@@ -10,7 +10,7 @@ class GIF(filename: String, private val width: Int, private val height: Int) {
     private val options = ImageOptions()
     private val gifEncoder = GifEncoder(outputStream, width, height, 0)
 
-    fun addDataFrame(rgbDataFrame: RgbDataFrame) {
+    fun addDataFrame(rgbDataFrame: RGBDataFrame) {
         require(rgbDataFrame.width == width)
         require(rgbDataFrame.height == height)
         val gifDataFrame = Array(rgbDataFrame.height) { IntArray(rgbDataFrame.width) { 0 } }

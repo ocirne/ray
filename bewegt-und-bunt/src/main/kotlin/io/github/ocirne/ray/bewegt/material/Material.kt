@@ -1,14 +1,11 @@
 package io.github.ocirne.ray.bewegt.material
 
-import io.github.ocirne.ray.bewegt.*
-import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.canvas.NO_COLOR
 import io.github.ocirne.ray.bewegt.canvas.WHITE
 import io.github.ocirne.ray.bewegt.hittable.HitRecord
-import io.github.ocirne.ray.bewegt.math.Point3
-import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.math.*
 import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
-import io.github.ocirne.ray.bewegt.math.Ray
 import io.github.ocirne.ray.bewegt.texture.SolidColor
 import io.github.ocirne.ray.bewegt.texture.Texture
 import kotlin.math.PI
@@ -19,8 +16,8 @@ import kotlin.random.Random
 
 data class ScatterRecord(
     val specularRay: Ray?,
-    val attenuation: RgbColor,
-    val pdf: ProbabilityDensityFunction?
+    val attenuation: RGBColor,
+    val pdf: PDF?
 ) {
     init {
         require((specularRay == null) xor (pdf == null))
@@ -42,7 +39,7 @@ open class Material {
         return 0.0
     }
 
-    open fun emitted(rayIn: Ray, rec: HitRecord, u: Double, v: Double, p: Point3): RgbColor {
+    open fun emitted(rayIn: Ray, rec: HitRecord, u: Double, v: Double, p: Point3): RGBColor {
         return NO_COLOR
     }
 }
@@ -50,13 +47,13 @@ open class Material {
 /** "Matte" material */
 class Lambertian(private val albedo: Texture): Material() {
 
-    constructor(c: RgbColor): this(SolidColor(c))
+    constructor(c: RGBColor): this(SolidColor(c))
 
     override fun scatter(rayIn: Ray, rec: HitRecord): ScatterRecord {
         return ScatterRecord(
             specularRay = null,
             attenuation = albedo.value(rec.u, rec.v, rec.p),
-            pdf = cosine_pdf(rec.normal)
+            pdf = CosinePDF(rec.normal)
         )
     }
 
@@ -66,9 +63,9 @@ class Lambertian(private val albedo: Texture): Material() {
     }
 }
 
-class Metal(private val albedo: RgbColor, fuzz: Double): Material() {
+class Metal(private val albedo: RGBColor, fuzz: Double): Material() {
 
-    constructor(albedo: RgbColor, fuzz: Int): this(albedo, fuzz.toDouble())
+    constructor(albedo: RGBColor, fuzz: Int): this(albedo, fuzz.toDouble())
 
     private val fuzz = min(fuzz, 1.0)
 
@@ -111,20 +108,20 @@ class Dielectric(private val indexOfRefraction: Double): Material() {
 
 class DiffuseLight(private val emit: Texture): Material() {
 
-    constructor(c: RgbColor) : this(SolidColor(c))
+    constructor(c: RGBColor) : this(SolidColor(c))
 
     override fun scatter(rayIn: Ray, rec: HitRecord): ScatterRecord? {
         return null
     }
 
-    override fun emitted(rayIn: Ray, rec: HitRecord, u: Double, v: Double, p: Point3): RgbColor {
+    override fun emitted(rayIn: Ray, rec: HitRecord, u: Double, v: Double, p: Point3): RGBColor {
         return if (rec.front_face) emit.value(u, v, p) else NO_COLOR
     }
 }
 
 class Isotropic(private val albedo: Texture): Material() {
 
-    constructor(c: RgbColor): this(SolidColor(c))
+    constructor(c: RGBColor): this(SolidColor(c))
 
     override fun scatter(rayIn: Ray, rec: HitRecord): ScatterRecord? {
         val scattered = Ray(rec.p, Vector3.randomInUnitSphere(), rayIn.time)
