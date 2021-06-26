@@ -10,12 +10,12 @@ import io.github.ocirne.ray.bewegt.texture.Texture
 import kotlin.math.ln
 import kotlin.random.Random
 
-class constant_medium(val boundary: hittable, density: Double, a: Texture): hittable {
+class constant_medium(val boundary: Hittable, density: Double, a: Texture): Hittable {
 
     val neg_inv_density = -1.0/density
     val phase_function = Isotropic(a)
 
-    constructor(boundary: hittable, density: Double, c: RGBColor): this(boundary, density, SolidColor(c))
+    constructor(boundary: Hittable, density: Double, c: RGBColor): this(boundary, density, SolidColor(c))
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         // Print occasional samples when debugging. To enable, set enableDebug true.
@@ -57,7 +57,7 @@ class constant_medium(val boundary: hittable, density: Double, a: Texture): hitt
         return HitRecord(p, normal, phase_function, t, u ,v, front_face)
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb? {
-        return boundary.bounding_box(time0, time1)
+    override fun boundingBox(time0: Double, time1: Double): aabb? {
+        return boundary.boundingBox(time0, time1)
     }
 }

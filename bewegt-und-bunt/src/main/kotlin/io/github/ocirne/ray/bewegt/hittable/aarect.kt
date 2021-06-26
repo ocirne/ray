@@ -9,7 +9,7 @@ import kotlin.math.abs
 import kotlin.random.Random
 
 class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val mat: Material) :
-    hittable {
+    Hittable {
 
     constructor(x0: Int, x1: Int, y0: Int, y1: Int, k: Int, mat: Material):
             this(x0.toDouble(), x1.toDouble(), y0.toDouble(), y1.toDouble(), k.toDouble(), mat)
@@ -34,7 +34,7 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
         return HitRecord(p, normal, mat, t, u, v, front_face)
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): aabb {
         // The bounding box must have non-zero width in each dimension, so pad the Z
         // dimension a small amount.
         return aabb(Point3(x0, y0, k-0.0001), Point3(x1, y1, k+0.0001))
@@ -42,7 +42,7 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
 }
 
 class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) :
-    hittable {
+    Hittable {
 
     constructor(x0: Int, x1: Int, z0: Int, z1: Int, k: Int, mat: Material):
             this(x0.toDouble(), x1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)
@@ -67,7 +67,7 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
         return HitRecord(p, normal, mat, t, u, v, front_face)
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): aabb {
         // The bounding box must have non-zero width in each dimension, so pad the Y
         // dimension a small amount.
         return aabb(Point3(x0, k-0.0001, z0), Point3(x1, k+0.0001, z1))
@@ -90,7 +90,7 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
 }
 
 class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) :
-    hittable {
+    Hittable {
 
     constructor(y0: Int, y1: Int, z0: Int, z1: Int, k: Int, mat: Material):
             this(y0.toDouble(), y1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)
@@ -115,7 +115,7 @@ class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, va
         return HitRecord(p, normal, mat, t, u, v, front_face)
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): aabb {
         // The bounding box must have non-zero width in each dimension, so pad the X
         // dimension a small amount.
         return aabb(Point3(k-0.0001, y0, z0), Point3(k+0.0001, y1, z1))

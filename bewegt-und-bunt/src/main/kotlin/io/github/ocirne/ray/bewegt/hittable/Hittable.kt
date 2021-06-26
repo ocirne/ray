@@ -14,19 +14,19 @@ data class HitRecord(
     var t: Double,
     val u: Double,
     val v: Double,
-    var front_face: Boolean) {
+    var frontFace: Boolean) {
 
     fun set_face_normal(r: Ray, outward_normal: Vector3) {
-        front_face = r.direction.dot(outward_normal) < 0
-        normal = if (front_face) outward_normal else -outward_normal
+        frontFace = r.direction.dot(outward_normal) < 0
+        normal = if (frontFace) outward_normal else -outward_normal
     }
 }
 
-interface hittable {
+interface Hittable {
 
     fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord?
 
-    fun bounding_box(time0: Double, time1: Double): aabb?
+    fun boundingBox(time0: Double, time1: Double): aabb?
 
     fun pdfValue(origin: Point3, v: Vector3): Double {
         return 0.0
@@ -37,7 +37,7 @@ interface hittable {
     }
 }
 
-class translate(val ptr: hittable, val offset: Vector3): hittable {
+class Translate(private val ptr: Hittable, private val offset: Vector3): Hittable {
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val moved_r = Ray(r.origin - offset, r.direction, r.time)
@@ -47,13 +47,13 @@ class translate(val ptr: hittable, val offset: Vector3): hittable {
         return rec
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb? {
-        val output_box = ptr.bounding_box(time0, time1) ?: return null
+    override fun boundingBox(time0: Double, time1: Double): aabb? {
+        val output_box = ptr.boundingBox(time0, time1) ?: return null
         return aabb(output_box.min() + offset, output_box.max() + offset)
     }
 }
 
-class rotate_y(val ptr: hittable, angle: Double): hittable {
+class rotate_y(val ptr: Hittable, angle: Double): Hittable {
 
     var sin_theta = 0.0
     var cos_theta = 0.0
@@ -63,7 +63,7 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
         val radians = angle.degreesToRadians()
         sin_theta = sin(radians)
         cos_theta = cos(radians)
-        bbox = ptr.bounding_box(0.0, 1.0)
+        bbox = ptr.boundingBox(0.0, 1.0)
         bbox?.let {
 
             var min = Point3(infinity, infinity, infinity)
@@ -126,20 +126,20 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
         return rec
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb? {
+    override fun boundingBox(time0: Double, time1: Double): aabb? {
         return bbox
     }
 }
 
-class flip_face(val ptr: hittable): hittable {
+class FlipFace(private val ptr: Hittable): Hittable {
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val rec = ptr.hit(r, t_min, t_max) ?: return null
-        rec.front_face = !rec.front_face
+        rec.frontFace = !rec.frontFace
         return rec
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb? {
-        return ptr.bounding_box(time0, time1)
+    override fun boundingBox(time0: Double, time1: Double): aabb? {
+        return ptr.boundingBox(time0, time1)
     }
 }

@@ -4,7 +4,7 @@ import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Ray
 
-class box(val p0: Point3, val p1: Point3, mat: Material) : hittable {
+class box(val p0: Point3, val p1: Point3, mat: Material) : Hittable {
 
     val sides: hittable_list
 
@@ -23,7 +23,7 @@ class box(val p0: Point3, val p1: Point3, mat: Material) : hittable {
         return sides.hit(r, t_min, t_max)
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): aabb {
         return aabb(p0, p1)
     }
 }

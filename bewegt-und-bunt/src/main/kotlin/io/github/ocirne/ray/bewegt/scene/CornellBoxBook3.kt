@@ -28,14 +28,14 @@ class CornellBoxBook3 : Scene(
 
         objects.add(yz_rect(0, 555, 0, 555, 555, green))
         objects.add(yz_rect(0, 555, 0, 555, 0, red))
-        objects.add(flip_face(xz_rect(213, 343, 227, 332, 554, light)))
+        objects.add(FlipFace(xz_rect(213, 343, 227, 332, 554, light)))
         objects.add(xz_rect(0, 555, 0, 555, 555, white))
         objects.add(xz_rect(0, 555, 0, 555, 0, white))
         objects.add(xy_rect(0, 555, 0, 555, 555, white))
 
-        var box1: hittable = box(Point3(0, 0, 0), Point3(165, 330, 165), white)
+        var box1: Hittable = box(Point3(0, 0, 0), Point3(165, 330, 165), white)
         box1 = rotate_y(box1, 15.0)
-        box1 = translate(box1, Vector3(265, 0, 295))
+        box1 = Translate(box1, Vector3(265, 0, 295))
         objects.add(box1)
 
         objects.add(sphere(Point3(190, 90, 190), 90, glass))

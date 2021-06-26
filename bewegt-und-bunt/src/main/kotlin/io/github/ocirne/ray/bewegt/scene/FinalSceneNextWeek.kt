@@ -77,7 +77,7 @@ class FinalSceneNextWeek : Scene(
         }
 
         objects.add(
-            translate(
+            Translate(
                 rotate_y(bvh_node(boxes2.build(), time0 = 0.0, time1 = 1.0), 15.0),
                 Vector3(-100, 270, 395)
             )

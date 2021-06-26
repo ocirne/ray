@@ -1,14 +1,13 @@
 package io.github.ocirne.ray.bewegt.hittable
 
-import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.random.Random
 
 class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.objects.size, time0: Double, time1: Double):
-    hittable {
+    Hittable {
 
-    var left: hittable
-    var right: hittable
+    var left: Hittable
+    var right: Hittable
     var box: aabb
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
@@ -22,7 +21,7 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
         return hit_right
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): aabb {
         return box
     }
 
@@ -30,7 +29,7 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
         val objects = src_objects // Create a modifiable array of the source scene objects
 
         val axis = Random.nextInt(0, 3)
-        val comparator: Comparator<hittable> = when (axis) {
+        val comparator: Comparator<Hittable> = when (axis) {
             0 -> box_x_compare()
             1 -> box_y_compare()
             else -> box_z_compare()
@@ -58,8 +57,8 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
             right = bvh_node(objects, mid, end, time0, time1)
         }
 
-        val box_left = left.bounding_box(time0, time1)
-        val box_right = right.bounding_box(time0, time1)
+        val box_left = left.boundingBox(time0, time1)
+        val box_right = right.boundingBox(time0, time1)
 
         if (box_left == null || box_right == null) {
             System.err.println("No bounding box in bvh_node constructor.")
@@ -68,11 +67,11 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
     }
 }
 
-open class box_compare(val axis: Int) : Comparator<hittable> {
+open class box_compare(val axis: Int) : Comparator<Hittable> {
 
-    override fun compare(a: hittable, b: hittable): Int {
-        val box_a = a.bounding_box(0.0, 0.0)
-        val box_b = b.bounding_box(0.0, 0.0)
+    override fun compare(a: Hittable, b: Hittable): Int {
+        val box_a = a.boundingBox(0.0, 0.0)
+        val box_b = b.boundingBox(0.0, 0.0)
 
         if (box_a == null || box_b == null) {
             System.err.println("No bounding box in bvh_node constructor.")

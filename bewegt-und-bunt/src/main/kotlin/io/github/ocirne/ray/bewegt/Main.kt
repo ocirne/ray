@@ -2,7 +2,7 @@ package io.github.ocirne.ray.bewegt
 
 import io.github.ocirne.ray.bewegt.camera.Camera
 import io.github.ocirne.ray.bewegt.canvas.*
-import io.github.ocirne.ray.bewegt.hittable.hittable
+import io.github.ocirne.ray.bewegt.hittable.Hittable
 import io.github.ocirne.ray.bewegt.math.HittablePDF
 import io.github.ocirne.ray.bewegt.math.MixturePDF
 import io.github.ocirne.ray.bewegt.math.Ray
@@ -12,7 +12,7 @@ import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
 
-fun rayColor(r: Ray, background: RGBColor, world: hittable, lights: hittable, depth: Int): RGBColor {
+fun rayColor(r: Ray, background: RGBColor, world: Hittable, lights: Hittable, depth: Int): RGBColor {
     if (depth <= 0) {
         return NO_COLOR
     }

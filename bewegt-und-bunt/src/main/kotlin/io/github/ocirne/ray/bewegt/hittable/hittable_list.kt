@@ -5,9 +5,9 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.random.Random
 
-class hittable_list(val objects: Array<hittable>): hittable {
+class hittable_list(val objects: Array<Hittable>): Hittable {
 
-    operator fun get(i: Int): hittable {
+    operator fun get(i: Int): Hittable {
         return objects[i]
     }
 
@@ -25,7 +25,7 @@ class hittable_list(val objects: Array<hittable>): hittable {
         return result
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb? {
+    override fun boundingBox(time0: Double, time1: Double): aabb? {
         if (objects.isEmpty()) {
             return null
         }
@@ -33,7 +33,7 @@ class hittable_list(val objects: Array<hittable>): hittable {
         var output_box : aabb? = null
         var first_box = true
         for (obj in objects) {
-            temp_box = obj.bounding_box(time0, time1)
+            temp_box = obj.boundingBox(time0, time1)
             if (temp_box == null) {
                 return null
             }
@@ -60,11 +60,11 @@ class hittable_list(val objects: Array<hittable>): hittable {
 
     class builder {
 
-        val objects: ArrayList<hittable> = ArrayList()
+        val objects: ArrayList<Hittable> = ArrayList()
 
         fun clear() { objects.clear() }
 
-        fun add(obj: hittable): builder {
+        fun add(obj: Hittable): builder {
             objects.add(obj)
             return this
         }

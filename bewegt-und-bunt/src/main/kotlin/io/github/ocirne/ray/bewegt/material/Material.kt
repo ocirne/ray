@@ -83,7 +83,7 @@ class Dielectric(private val indexOfRefraction: Double): Material() {
 
     override fun scatter(rayIn: Ray, rec: HitRecord): ScatterRecord {
         val attenuation = WHITE
-        val refractionRatio = if (rec.front_face) 1.0/indexOfRefraction else indexOfRefraction
+        val refractionRatio = if (rec.frontFace) 1.0/indexOfRefraction else indexOfRefraction
         val unitDirection = rayIn.direction.unitVector()
         val cosTheta: Double = min((-unitDirection).dot(rec.normal), 1.0)
         val sinTheta: Double = sqrt(1.0 - cosTheta * cosTheta)
@@ -115,7 +115,7 @@ class DiffuseLight(private val emit: Texture): Material() {
     }
 
     override fun emitted(rayIn: Ray, rec: HitRecord, u: Double, v: Double, p: Point3): RGBColor {
-        return if (rec.front_face) emit.value(u, v, p) else NO_COLOR
+        return if (rec.frontFace) emit.value(u, v, p) else NO_COLOR
     }
 }
 

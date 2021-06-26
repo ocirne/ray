@@ -14,7 +14,7 @@ class moving_sphere(
     val time1: Double,
     val radius: Double,
     val mat: Material
-) : hittable {
+) : Hittable {
 
     override fun hit(r: Ray, t_min: Double, t_max: Double): HitRecord? {
         val oc = r.origin - center(r.time)
@@ -42,7 +42,7 @@ class moving_sphere(
         return HitRecord(p, normal, mat, root, u, v, front_face)
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): aabb {
         val box0 = aabb(
             center(time0) - Vector3(radius, radius, radius),
             center(time0) + Vector3(radius, radius, radius),

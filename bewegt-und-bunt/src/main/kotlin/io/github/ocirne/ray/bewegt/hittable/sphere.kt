@@ -7,7 +7,7 @@ import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
-class sphere(val center: Point3, val radius: Double, val mat: Material): hittable {
+class sphere(val center: Point3, val radius: Double, val mat: Material): Hittable {
 
     constructor(center: Point3, radius: Int, mat: Material): this(center, radius.toDouble(), mat)
 
@@ -37,7 +37,7 @@ class sphere(val center: Point3, val radius: Double, val mat: Material): hittabl
         return HitRecord(p, normal, mat, root, u, v, front_face)
     }
 
-    override fun bounding_box(time0: Double, time1: Double): aabb {
+    override fun boundingBox(time0: Double, time1: Double): aabb {
         return aabb(center - Vector3(radius, radius, radius), center + Vector3(radius, radius, radius))
     }
 

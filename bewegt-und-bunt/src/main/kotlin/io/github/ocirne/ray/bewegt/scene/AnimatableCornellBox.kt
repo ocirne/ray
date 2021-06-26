@@ -29,21 +29,21 @@ class AnimatableCornellBox(private val angle: Double) : Scene(
 
         objects.add(yz_rect(0, 555, 0, 555, 555, green))
         objects.add(yz_rect(0, 555, 0, 555, 0, red))
-        objects.add(flip_face(xz_rect(213, 343, 227, 332, 554, light)))
+        objects.add(FlipFace(xz_rect(213, 343, 227, 332, 554, light)))
         objects.add(xz_rect(0, 555, 0, 555, 555, white))
         objects.add(xz_rect(0, 555, 0, 555, 0, white))
         objects.add(xy_rect(0, 555, 0, 555, 555, white))
 
-        var box1: hittable = box(Point3(0, 5, 0), Point3(164, 440, 164), aluminium)
-        box1 = translate(box1, Vector3(-82, 0, -82))
+        var box1: Hittable = box(Point3(0, 5, 0), Point3(164, 440, 164), aluminium)
+        box1 = Translate(box1, Vector3(-82, 0, -82))
         box1 = rotate_y(box1, angle)
-        box1 = translate(box1, Vector3(265+82, 0, 295+82))
+        box1 = Translate(box1, Vector3(265+82, 0, 295+82))
         objects.add(box1)
 
-        var box2: hittable = box(Point3(0, 440, 0), Point3(164, 441, 164), white)
-        box2 = translate(box2, Vector3(-82, 0, -82))
+        var box2: Hittable = box(Point3(0, 440, 0), Point3(164, 441, 164), white)
+        box2 = Translate(box2, Vector3(-82, 0, -82))
         box2 = rotate_y(box2, angle)
-        box2 = translate(box2, Vector3(265+82, 0, 295+82))
+        box2 = Translate(box2, Vector3(265+82, 0, 295+82))
         objects.add(box2)
 
         objects.add(sphere(Point3(190, 90, 190), 90, glass))

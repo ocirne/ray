@@ -1,6 +1,6 @@
 package io.github.ocirne.ray.bewegt.math
 
-import io.github.ocirne.ray.bewegt.hittable.hittable
+import io.github.ocirne.ray.bewegt.hittable.Hittable
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -38,7 +38,7 @@ class CosinePDF(w: Vector3) : PDF {
     }
 }
 
-class HittablePDF(private val ptr: hittable, private val origin: Point3) : PDF {
+class HittablePDF(private val ptr: Hittable, private val origin: Point3) : PDF {
 
     override fun value(direction: Vector3): Double {
         return ptr.pdfValue(origin, direction)
