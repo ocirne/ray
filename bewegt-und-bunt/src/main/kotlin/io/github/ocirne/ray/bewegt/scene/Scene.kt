@@ -32,6 +32,6 @@ abstract class Scene(
 
     open fun lights() = hittable_list.builder()
         .add(xz_rect(213, 343, 227, 332, 554, Material()))
-        .add(sphere(Point3(190, 90, 190), 90, Material()))
+//        .add(sphere(Point3(190, 90, 190), 90, Material()))
         .build()
 }

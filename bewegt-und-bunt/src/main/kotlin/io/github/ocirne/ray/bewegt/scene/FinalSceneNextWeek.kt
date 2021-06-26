@@ -10,8 +10,8 @@ import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.material.Metal
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
-import io.github.ocirne.ray.bewegt.texture.image_texture
-import io.github.ocirne.ray.bewegt.texture.noise_texture
+import io.github.ocirne.ray.bewegt.texture.ImageTexture
+import io.github.ocirne.ray.bewegt.texture.NoiseTexture
 import kotlin.random.Random
 
 class FinalSceneNextWeek : Scene(
@@ -65,9 +65,9 @@ class FinalSceneNextWeek : Scene(
         val boundary2 = sphere(Point3(0, 0, 0), 5000, Dielectric(1.5))
         objects.add(constant_medium(boundary2, .0001, WHITE))
 
-        val earthMaterial = Lambertian(image_texture("earthmap.jpg"))
+        val earthMaterial = Lambertian(ImageTexture("earthmap.jpg"))
         objects.add(sphere(Point3(400, 200, 400), 100, earthMaterial))
-        val perlinTexture = noise_texture(0.1)
+        val perlinTexture = NoiseTexture(0.1)
         objects.add(sphere(Point3(220, 280, 300), 80, Lambertian(perlinTexture)))
 
         val boxes2 = hittable_list.builder()

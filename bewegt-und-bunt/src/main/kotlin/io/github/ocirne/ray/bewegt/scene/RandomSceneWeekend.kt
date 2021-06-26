@@ -1,6 +1,5 @@
 package io.github.ocirne.ray.bewegt.scene
 
-import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.hittable.hittable_list
 import io.github.ocirne.ray.bewegt.hittable.moving_sphere
@@ -10,7 +9,7 @@ import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.material.Metal
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
-import io.github.ocirne.ray.bewegt.texture.checker_texture
+import io.github.ocirne.ray.bewegt.texture.CheckerTexture
 import kotlin.random.Random
 
 class RandomSceneWeekend : Scene(
@@ -22,7 +21,7 @@ class RandomSceneWeekend : Scene(
     override fun world(): hittable_list {
         val builder = hittable_list.builder()
 
-        val checker = checker_texture(RgbColor(0.2, 0.3, 0.1), RgbColor(0.9, 0.9, 0.9))
+        val checker = CheckerTexture(RgbColor(0.2, 0.3, 0.1), RgbColor(0.9, 0.9, 0.9))
         builder.add(sphere(Point3(0, -1000, 0), 1000, Lambertian(checker)))
 
         for (a in -11..10) {
