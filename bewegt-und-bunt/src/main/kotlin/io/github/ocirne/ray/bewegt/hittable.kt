@@ -65,7 +65,7 @@ class rotate_y(val ptr: hittable, angle: Double): hittable {
         sin_theta = sin(radians)
         cos_theta = cos(radians)
         bbox = ptr.bounding_box(0.0, 1.0)
-        if (bbox != null) {
+        bbox?.let {
 
             var min = Point3(infinity, infinity, infinity)
             var max = Point3(-infinity, -infinity, -infinity)

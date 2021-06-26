@@ -14,11 +14,9 @@ class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.ob
             return null
         }
         val hit_left = left.hit(r, t_min, t_max)
-        val hit_right = right.hit(r, t_min, if (hit_left != null) hit_left.t else t_max)
+        val hit_right = right.hit(r, t_min, hit_left?.t ?: t_max)
 
-        if (hit_left != null) {
-            return hit_left
-        }
+        hit_left?. let { return hit_left }
         return hit_right
     }
 

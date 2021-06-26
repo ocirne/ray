@@ -17,7 +17,7 @@ class hittable_list(val objects: Array<hittable>): hittable {
 
         for (obj in objects) {
             val temp_rec = obj.hit(r, t_min, closest_so_far)
-            if (temp_rec != null) {
+            temp_rec?.let {
                 closest_so_far = temp_rec.t
                 result = temp_rec
             }
