@@ -2,6 +2,7 @@ package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.material.Dielectric
 import io.github.ocirne.ray.bewegt.material.DiffuseLight
 import io.github.ocirne.ray.bewegt.material.Lambertian

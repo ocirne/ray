@@ -1,4 +1,4 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.texture
 
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.math.Point3

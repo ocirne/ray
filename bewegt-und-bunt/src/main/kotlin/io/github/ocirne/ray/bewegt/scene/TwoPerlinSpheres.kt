@@ -2,8 +2,11 @@ package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.hittable.hittable_list
+import io.github.ocirne.ray.bewegt.hittable.sphere
 import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.math.Point3
+import io.github.ocirne.ray.bewegt.texture.noise_texture
 
 class TwoPerlinSpheres : Scene(
     background = RgbColor(0.7, 0.8, 1.0),

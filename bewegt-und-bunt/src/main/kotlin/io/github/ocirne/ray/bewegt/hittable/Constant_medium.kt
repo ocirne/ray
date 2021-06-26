@@ -1,9 +1,12 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.hittable
 
+import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.material.Isotropic
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
+import io.github.ocirne.ray.bewegt.texture.solidColor
+import io.github.ocirne.ray.bewegt.texture.texture
 import kotlin.math.ln
 import kotlin.random.Random
 

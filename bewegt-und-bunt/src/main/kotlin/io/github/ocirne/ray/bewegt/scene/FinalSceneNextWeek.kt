@@ -3,12 +3,15 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.canvas.WHITE
+import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.material.Dielectric
 import io.github.ocirne.ray.bewegt.material.DiffuseLight
 import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.material.Metal
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.texture.image_texture
+import io.github.ocirne.ray.bewegt.texture.noise_texture
 import kotlin.random.Random
 
 class FinalSceneNextWeek : Scene(

@@ -1,4 +1,4 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.hittable
 
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3

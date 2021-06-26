@@ -1,5 +1,8 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.hittable.HitRecord
+import io.github.ocirne.ray.bewegt.hittable.aabb
+import io.github.ocirne.ray.bewegt.hittable.hittable
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Ray
@@ -7,7 +10,8 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 import kotlin.math.abs
 import kotlin.random.Random
 
-class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val mat: Material) : hittable {
+class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val mat: Material) :
+    hittable {
 
     constructor(x0: Int, x1: Int, y0: Int, y1: Int, k: Int, mat: Material):
             this(x0.toDouble(), x1.toDouble(), y0.toDouble(), y1.toDouble(), k.toDouble(), mat)
@@ -39,7 +43,8 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
     }
 }
 
-class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) : hittable {
+class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) :
+    hittable {
 
     constructor(x0: Int, x1: Int, z0: Int, z1: Int, k: Int, mat: Material):
             this(x0.toDouble(), x1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)
@@ -86,7 +91,8 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
     }
 }
 
-class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) : hittable {
+class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, val k: Double, val mat: Material) :
+    hittable {
 
     constructor(y0: Int, y1: Int, z0: Int, z1: Int, k: Int, mat: Material):
             this(y0.toDouble(), y1.toDouble(), z0.toDouble(), z1.toDouble(), k.toDouble(), mat)

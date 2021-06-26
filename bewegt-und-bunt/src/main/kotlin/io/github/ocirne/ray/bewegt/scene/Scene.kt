@@ -2,11 +2,11 @@ package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.canvas.BLACK
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
-import io.github.ocirne.ray.bewegt.hittable_list
+import io.github.ocirne.ray.bewegt.hittable.hittable_list
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
-import io.github.ocirne.ray.bewegt.sphere
+import io.github.ocirne.ray.bewegt.hittable.sphere
 import io.github.ocirne.ray.bewegt.xz_rect
 
 /** Default values for a scene */

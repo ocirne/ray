@@ -1,9 +1,12 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.hittable
 
+import io.github.ocirne.ray.bewegt.infinity
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
+import io.github.ocirne.ray.bewegt.math.onb
+import io.github.ocirne.ray.bewegt.random_to_sphere
 import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.atan2

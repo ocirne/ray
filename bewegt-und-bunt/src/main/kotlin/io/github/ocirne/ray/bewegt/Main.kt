@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.camera.Camera
 import io.github.ocirne.ray.bewegt.canvas.*
 import io.github.ocirne.ray.bewegt.math.Ray
 import io.github.ocirne.ray.bewegt.scene.*

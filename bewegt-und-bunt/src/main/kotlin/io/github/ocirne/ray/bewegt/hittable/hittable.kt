@@ -1,5 +1,7 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.hittable
 
+import io.github.ocirne.ray.bewegt.degrees_to_radians
+import io.github.ocirne.ray.bewegt.infinity
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3

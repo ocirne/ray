@@ -4,10 +4,13 @@ import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.canvas.NO_COLOR
 import io.github.ocirne.ray.bewegt.canvas.WHITE
+import io.github.ocirne.ray.bewegt.hittable.HitRecord
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
 import io.github.ocirne.ray.bewegt.math.Ray
+import io.github.ocirne.ray.bewegt.texture.solidColor
+import io.github.ocirne.ray.bewegt.texture.texture
 import kotlin.math.PI
 import kotlin.math.min
 import kotlin.math.pow

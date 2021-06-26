@@ -4,6 +4,7 @@ import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.BLACK
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.canvas.WHITE
+import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.material.DiffuseLight
 import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.math.Point3

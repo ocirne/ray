@@ -1,6 +1,5 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.math
 
-import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Vector3.Companion.times
 import kotlin.math.abs
 

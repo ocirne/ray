@@ -1,8 +1,11 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.hittable
 
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Ray
+import io.github.ocirne.ray.bewegt.xy_rect
+import io.github.ocirne.ray.bewegt.xz_rect
+import io.github.ocirne.ray.bewegt.yz_rect
 
 class box(val p0: Point3, val p1: Point3, mat: Material) : hittable {
 

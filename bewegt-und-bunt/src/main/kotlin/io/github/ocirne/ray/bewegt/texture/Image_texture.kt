@@ -1,11 +1,12 @@
-package io.github.ocirne.ray.bewegt
+package io.github.ocirne.ray.bewegt.texture
 
+import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.CYAN
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
 import io.github.ocirne.ray.bewegt.math.Vector3
 import javax.imageio.ImageIO
 
-class image_texture(filename: String) :  texture {
+class image_texture(filename: String) : texture {
 
     val file_stream = image_texture::class.java.classLoader.getResourceAsStream(filename)
     val data = if (file_stream != null) ImageIO.read(file_stream) else null

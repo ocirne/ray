@@ -1,9 +1,11 @@
 package io.github.ocirne.ray.bewegt
 
+import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.math.Ray
 import kotlin.random.Random
 
-class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.objects.size, time0: Double, time1: Double): hittable {
+class bvh_node(src_objects: hittable_list, start: Int=0, end: Int=src_objects.objects.size, time0: Double, time1: Double):
+    hittable {
 
     var left: hittable
     var right: hittable

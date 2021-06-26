@@ -2,11 +2,15 @@ package io.github.ocirne.ray.bewegt.scene
 
 import io.github.ocirne.ray.bewegt.*
 import io.github.ocirne.ray.bewegt.canvas.RgbColor
+import io.github.ocirne.ray.bewegt.hittable.hittable_list
+import io.github.ocirne.ray.bewegt.hittable.moving_sphere
+import io.github.ocirne.ray.bewegt.hittable.sphere
 import io.github.ocirne.ray.bewegt.material.Dielectric
 import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.material.Metal
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
+import io.github.ocirne.ray.bewegt.texture.checker_texture
 import kotlin.random.Random
 
 class RandomSceneWeekend : Scene(
