@@ -4,6 +4,7 @@ import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.*
 import io.github.ocirne.ray.bewegt.material.DiffuseLight
 import io.github.ocirne.ray.bewegt.material.Lambertian
+import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 
@@ -11,7 +12,7 @@ class CornellBox : Scene(
     aspectRatio = 1.0,
     samplesPerPixel = 200,
     lookFrom = Point3(278, 278, -800),
-    lookAt = Point3(278, 278, 0),
+    lookAt = Point3(278, 278, 0)
 ) {
 
     override fun buildWorld(): HittableList {
@@ -24,7 +25,7 @@ class CornellBox : Scene(
 
         objects.add(YZRect(0, 555, 0, 555, 555, green))
         objects.add(YZRect(0, 555, 0, 555, 0, red))
-        objects.add(XZRect(213, 343, 227, 332, 554, light))
+        objects.add(XZRect(213, 343, 227, 332, 554, light).flipFace())
         objects.add(XZRect(0, 555, 0, 555, 0, white))
         objects.add(XZRect(0, 555, 0, 555, 555, white))
         objects.add(XYRect(0, 555, 0, 555, 555, white))
@@ -39,4 +40,8 @@ class CornellBox : Scene(
 
         return objects.build()
     }
+
+    override fun buildLights() = HittableList.Builder()
+        .add(XZRect(213, 343, 227, 332, 554, Material()))
+        .build()
 }

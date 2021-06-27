@@ -11,7 +11,7 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 
 class CornellBoxBook3 : Scene(
     aspectRatio = 1.0,
-    samplesPerPixel = 5,
+    samplesPerPixel = 20,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0)
 ) {

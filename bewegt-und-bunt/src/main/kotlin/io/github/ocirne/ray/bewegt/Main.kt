@@ -111,5 +111,8 @@ fun renderScene(sceneNo: Int) {
 
 fun main() {
     renderAnimatedCornellBox()
-    // renderScene(9)
+    for (i in 1..10) {
+        renderScene(i)
+    }
+    renderScene(6)
 }

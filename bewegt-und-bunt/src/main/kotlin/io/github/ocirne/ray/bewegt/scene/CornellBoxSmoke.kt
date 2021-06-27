@@ -12,8 +12,8 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 
 class CornellBoxSmoke : Scene(
     aspectRatio = 1.0,
-    imageWidth = 200, // 600
-    samplesPerPixel = 100,
+    imageWidth = 600,
+    samplesPerPixel = 20,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0),
 ) {
