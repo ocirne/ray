@@ -96,6 +96,23 @@ fun renderAnimatedCornellBox() {
     println("rendering $timeInMillisRendering ms")
 }
 
+fun renderAnimatedEarth() {
+    val timeInMillisRendering = measureTimeMillis {
+        val nullScene = Earth(0.0)
+        val filename = "output/image${nullScene.javaClass.simpleName}_${nullScene.samplesPerPixel}_spf"
+
+        val gif = GIF("$filename.gif", nullScene.imageWidth, nullScene.imageHeight)
+        for (i in 1..30) {
+            print("Frame $i: ")
+            val scene = Earth(15.0 + 3*i)
+            val frame = renderFrame(scene)
+            gif.addDataFrame(frame)
+        }
+        gif.writeToFile()
+    }
+    println("rendering $timeInMillisRendering ms")
+}
+
 fun renderScene(sceneNo: Int) {
     val timeInMillisRendering = measureTimeMillis {
         val nullScene = initScene(sceneNo)
@@ -115,5 +132,6 @@ fun main() {
 //    for (i in 1..10) {
 //        renderScene(i)
 //    }
-    renderScene(11)
+//    renderScene(11)
+    renderAnimatedEarth()
 }
