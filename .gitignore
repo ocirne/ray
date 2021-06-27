@@ -24,7 +24,8 @@ hs_err_pid*
 
 .idea
 output/
-/ray-tracing-in-one-weekend/src/main/resources/
+ray-tracing-in-one-weekend/src/main/resources/
+bewegt-und-bunt/src/main/resources/textures/
 
 .gradle
 build/

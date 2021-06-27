@@ -15,7 +15,7 @@ class Earth : Scene(
     override fun buildWorld(): HittableList {
         val objects = HittableList.Builder()
 
-        val earthTexture = ImageTexture("earthmap.jpg")
+        val earthTexture = ImageTexture("textures/earthmap.jpg")
         val earthSurface = Lambertian(earthTexture)
         val globe = Sphere(Point3(0, 0, 0), 2, earthSurface)
         objects.add(globe)
