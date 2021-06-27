@@ -47,6 +47,7 @@ fun initScene(sceneNo: Int): Scene {
         (8) -> FinalSceneNextWeek()
         (9) -> CornellBoxBook3()
         (10) -> AnimatableCornellBox(0.0)
+        (11) -> SolarEclipse()
         else -> throw UnsupportedOperationException()
     }
 }
@@ -111,7 +112,8 @@ fun renderScene(sceneNo: Int) {
 
 fun main() {
 //    renderAnimatedCornellBox()
-    for (i in 1..10) {
-        renderScene(i)
-    }
+//    for (i in 1..10) {
+//        renderScene(i)
+//    }
+    renderScene(11)
 }
