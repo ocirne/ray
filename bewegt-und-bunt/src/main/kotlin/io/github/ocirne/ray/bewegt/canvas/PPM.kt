@@ -2,7 +2,7 @@ package io.github.ocirne.ray.bewegt.canvas
 
 import java.io.File
 
-class PPM(val filename: String) {
+class PPM(private val filename: String) {
 
     fun writeToFile(frame: RGBDataFrame) {
         File(filename).printWriter().use { out ->

@@ -27,19 +27,19 @@ class AnimatableCornellBox(private val angle: Double) : Scene(
         val glass = Dielectric(1.5)
         val diamond = Dielectric(2.14)
 
-        objects.add(yz_rect(0, 555, 0, 555, 555, green))
-        objects.add(yz_rect(0, 555, 0, 555, 0, red))
-        objects.add(xz_rect(213, 343, 227, 332, 554, light).flipFace())
-        objects.add(xz_rect(0, 555, 0, 555, 555, white))
-        objects.add(xz_rect(0, 555, 0, 555, 0, white))
-        objects.add(xy_rect(0, 555, 0, 555, 555, white))
+        objects.add(YZRect(0, 555, 0, 555, 555, green))
+        objects.add(YZRect(0, 555, 0, 555, 0, red))
+        objects.add(XZRect(213, 343, 227, 332, 554, light).flipFace())
+        objects.add(XZRect(0, 555, 0, 555, 555, white))
+        objects.add(XZRect(0, 555, 0, 555, 0, white))
+        objects.add(XYRect(0, 555, 0, 555, 555, white))
 
-        objects.add(box(Point3(0, 5, 0), Point3(164, 440, 164), aluminium)
+        objects.add(Box(Point3(0, 5, 0), Point3(164, 440, 164), aluminium)
             .translate(Vector3(-82, 0, -82))
             .rotate(1, angle)
             .translate(Vector3(265+82, 0, 295+82)))
 
-        objects.add(box(Point3(0, 440, 0), Point3(164, 441, 164), white)
+        objects.add(Box(Point3(0, 440, 0), Point3(164, 441, 164), white)
             .translate(Vector3(-82, 0, -82))
             .rotate(1, angle)
             .translate(Vector3(265+82, 0, 295+82)))
@@ -53,7 +53,7 @@ class AnimatableCornellBox(private val angle: Double) : Scene(
     }
 
     override fun buildLights() = HittableList.Builder()
-        .add(xz_rect(213, 343, 227, 332, 554, Material()))
+        .add(XZRect(213, 343, 227, 332, 554, Material()))
         .add(Sphere(Point3(190, 90, 190), 90, Material()))
         .add(Sphere(Point3(400, 30, 100), 30, Material()))
         .build()

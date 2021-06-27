@@ -33,7 +33,7 @@ class FinalSceneNextWeek : Scene(
                 val y1 = Random.nextDouble(1.0, 101.0)
                 val z1 = z0 + w
 
-                boxes1.add(box(Point3(x0, y0, z0), Point3(x1, y1, z1), ground))
+                boxes1.add(Box(Point3(x0, y0, z0), Point3(x1, y1, z1), ground))
             }
         }
         val objects = HittableList.Builder()
@@ -41,7 +41,7 @@ class FinalSceneNextWeek : Scene(
         objects.add(BVHNode(boxes1.build(), time0 = 0.0, time1 = 1.0))
 
         val light = DiffuseLight(RGBColor(7, 7, 7))
-        objects.add(xz_rect(123, 423, 147, 412, 554, light).flipFace())
+        objects.add(XZRect(123, 423, 147, 412, 554, light).flipFace())
 
         val center1 = Point3(400, 400, 200)
         val center2 = center1 + Vector3(30, 0, 0)
@@ -81,6 +81,6 @@ class FinalSceneNextWeek : Scene(
     }
 
     override fun buildLights() = HittableList.Builder()
-        .add(xz_rect(123, 423, 147, 412, 554, Material()))
+        .add(XZRect(123, 423, 147, 412, 554, Material()))
         .build()
 }

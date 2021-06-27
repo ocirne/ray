@@ -13,13 +13,13 @@ class HittableList(val objects: Array<Hittable>): Hittable() {
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         var result: HitRecord? = null
-        var closest_so_far = tMax
+        var closestSoFar = tMax
 
         for (obj in objects) {
-            val temp_rec = obj.hit(r, tMin, closest_so_far)
-            temp_rec?.let {
-                closest_so_far = temp_rec.t
-                result = temp_rec
+            val tempRec = obj.hit(r, tMin, closestSoFar)
+            tempRec?.let {
+                closestSoFar = tempRec.t
+                result = tempRec
             }
         }
         return result
@@ -29,18 +29,18 @@ class HittableList(val objects: Array<Hittable>): Hittable() {
         if (objects.isEmpty()) {
             return null
         }
-        var temp_box : AABB?
-        var output_box : AABB? = null
-        var first_box = true
+        var tempBox : AABB?
+        var outputBox : AABB? = null
+        var firstBox = true
         for (obj in objects) {
-            temp_box = obj.boundingBox(time0, time1)
-            if (temp_box == null) {
+            tempBox = obj.boundingBox(time0, time1)
+            if (tempBox == null) {
                 return null
             }
-            output_box = if (first_box) temp_box else surroundingBox(output_box!!, temp_box)
-            first_box = false
+            outputBox = if (firstBox) tempBox else surroundingBox(outputBox!!, tempBox)
+            firstBox = false
         }
-        return output_box
+        return outputBox
     }
 
     override fun pdfValue(origin: Point3, v: Vector3): Double {

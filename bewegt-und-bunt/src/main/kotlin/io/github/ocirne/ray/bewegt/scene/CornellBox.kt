@@ -22,18 +22,18 @@ class CornellBox : Scene(
         val green = Lambertian(RGBColor(.12, .45, .15))
         val light = DiffuseLight(RGBColor(15, 15, 15))
 
-        objects.add(yz_rect(0, 555, 0, 555, 555, green))
-        objects.add(yz_rect(0, 555, 0, 555, 0, red))
-        objects.add(xz_rect(213, 343, 227, 332, 554, light))
-        objects.add(xz_rect(0, 555, 0, 555, 0, white))
-        objects.add(xz_rect(0, 555, 0, 555, 555, white))
-        objects.add(xy_rect(0, 555, 0, 555, 555, white))
+        objects.add(YZRect(0, 555, 0, 555, 555, green))
+        objects.add(YZRect(0, 555, 0, 555, 0, red))
+        objects.add(XZRect(213, 343, 227, 332, 554, light))
+        objects.add(XZRect(0, 555, 0, 555, 0, white))
+        objects.add(XZRect(0, 555, 0, 555, 555, white))
+        objects.add(XYRect(0, 555, 0, 555, 555, white))
 
-        objects.add(box(Point3(0, 0, 0), Point3(165, 330, 165), white)
+        objects.add(Box(Point3(0, 0, 0), Point3(165, 330, 165), white)
             .rotate(1, 15.0)
             .translate(Vector3(265, 0, 295)))
 
-        objects.add(box(Point3(0, 0, 0), Point3(165, 165, 165), white)
+        objects.add(Box(Point3(0, 0, 0), Point3(165, 165, 165), white)
             .rotate(1, -18.0)
             .translate(Vector3(130, 0, 65)))
 

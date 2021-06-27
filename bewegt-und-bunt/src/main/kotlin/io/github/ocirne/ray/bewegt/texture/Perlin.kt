@@ -54,13 +54,13 @@ class Perlin {
 
     fun turbulence(p: Point3, depth: Int = 7): Double {
         var accum = 0.0
-        var temp_p = p
+        var tempP = p
         var weight = 1.0
 
         for (i in 0 until depth) {
-            accum += weight * noise(temp_p)
+            accum += weight * noise(tempP)
             weight *= 0.5
-            temp_p *= 2.0
+            tempP *= 2.0
         }
 
         return abs(accum)

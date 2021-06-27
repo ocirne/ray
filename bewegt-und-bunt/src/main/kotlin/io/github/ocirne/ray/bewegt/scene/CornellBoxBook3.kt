@@ -26,14 +26,14 @@ class CornellBoxBook3 : Scene(
         val aluminium = Metal(RGBColor(0.8, 0.85, 0.88), 0.0)
         val glass = Dielectric(1.5)
 
-        objects.add(yz_rect(0, 555, 0, 555, 555, green))
-        objects.add(yz_rect(0, 555, 0, 555, 0, red))
-        objects.add(xz_rect(213, 343, 227, 332, 554, light).flipFace())
-        objects.add(xz_rect(0, 555, 0, 555, 555, white))
-        objects.add(xz_rect(0, 555, 0, 555, 0, white))
-        objects.add(xy_rect(0, 555, 0, 555, 555, white))
+        objects.add(YZRect(0, 555, 0, 555, 555, green))
+        objects.add(YZRect(0, 555, 0, 555, 0, red))
+        objects.add(XZRect(213, 343, 227, 332, 554, light).flipFace())
+        objects.add(XZRect(0, 555, 0, 555, 555, white))
+        objects.add(XZRect(0, 555, 0, 555, 0, white))
+        objects.add(XYRect(0, 555, 0, 555, 555, white))
 
-        objects.add(box(Point3(0, 0, 0), Point3(165, 330, 165), white)
+        objects.add(Box(Point3(0, 0, 0), Point3(165, 330, 165), white)
             .rotate(1, 15.0)
             .translate(Vector3(265, 0, 295)))
 

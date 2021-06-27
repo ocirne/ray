@@ -8,7 +8,12 @@ import io.github.ocirne.ray.bewegt.math.infinity
 import kotlin.math.abs
 import kotlin.random.Random
 
-class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, val k: Double, val material: Material) :
+class XYRect(private val x0: Double,
+             private val x1: Double,
+             private val y0: Double,
+             private val y1: Double,
+             private val k: Double,
+             private val material: Material) :
     Hittable() {
 
     constructor(x0: Int, x1: Int, y0: Int, y1: Int, k: Int, material: Material):
@@ -38,7 +43,12 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
     }
 }
 
-class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, val k: Double, val material: Material) :
+class XZRect(private val x0: Double,
+             private val x1: Double,
+             private val z0: Double,
+             private val z1: Double,
+             private val k: Double,
+             private val material: Material) :
     Hittable() {
 
     constructor(x0: Int, x1: Int, z0: Int, z1: Int, k: Int, material: Material):
@@ -83,7 +93,12 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
     }
 }
 
-class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, val k: Double, val material: Material) :
+class YZRect(private val y0: Double,
+             private val y1: Double,
+             private val z0: Double,
+             private val z1: Double,
+             private val k: Double,
+             private val material: Material) :
     Hittable() {
 
     constructor(y0: Int, y1: Int, z0: Int, z1: Int, k: Int, material: Material):

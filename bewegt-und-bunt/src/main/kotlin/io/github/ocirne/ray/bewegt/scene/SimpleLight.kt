@@ -3,7 +3,7 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.HittableList
 import io.github.ocirne.ray.bewegt.hittable.Sphere
-import io.github.ocirne.ray.bewegt.hittable.xy_rect
+import io.github.ocirne.ray.bewegt.hittable.XYRect
 import io.github.ocirne.ray.bewegt.material.DiffuseLight
 import io.github.ocirne.ray.bewegt.material.Lambertian
 import io.github.ocirne.ray.bewegt.math.Point3
@@ -23,7 +23,7 @@ class SimpleLight : Scene(
         objects.add(Sphere(Point3(0, 2, 0), 2, Lambertian(perlinTexture)))
 
         val diffuseLight = DiffuseLight(RGBColor(4, 4, 4))
-        objects.add(xy_rect(3, 5, 1, 3, -2, diffuseLight))
+        objects.add(XYRect(3, 5, 1, 3, -2, diffuseLight))
 
         return objects.build()
     }

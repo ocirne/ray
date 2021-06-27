@@ -35,8 +35,8 @@ fun rayColor(r: Ray, background: RGBColor, world: Hittable, lights: Hittable, de
             rayColor(scattered, background, world, lights, depth - 1) / pdfValue
 }
 
-fun init_scene(sceneNo: Int): Scene {
-    val scene: Scene = when (sceneNo) {
+fun initScene(sceneNo: Int): Scene {
+    return when (sceneNo) {
         (1) -> RandomSceneWeekend()
         (2) -> TwoSpheres()
         (3) -> TwoPerlinSpheres()
@@ -49,7 +49,6 @@ fun init_scene(sceneNo: Int): Scene {
         (10) -> AnimatableCornellBox(0.0)
         else -> throw UnsupportedOperationException()
     }
-    return scene
 }
 
 fun renderFrame(scene: Scene): RGBDataFrame {
@@ -98,11 +97,11 @@ fun renderAnimatedCornellBox() {
 
 fun renderScene(sceneNo: Int) {
     val timeInMillisRendering = measureTimeMillis {
-        val nullScene = init_scene(sceneNo)
+        val nullScene = initScene(sceneNo)
         val filename = "output/image${nullScene.javaClass.simpleName}_${nullScene.samplesPerPixel}_spf"
 
         val gif = GIF("$filename.gif", nullScene.imageWidth, nullScene.imageHeight)
-        val scene = init_scene(sceneNo)
+        val scene = initScene(sceneNo)
         val frame = renderFrame(scene)
         gif.addDataFrame(frame)
         gif.writeToFile()

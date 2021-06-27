@@ -7,7 +7,7 @@ import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.hittable.Sphere
-import io.github.ocirne.ray.bewegt.hittable.xz_rect
+import io.github.ocirne.ray.bewegt.hittable.XZRect
 
 /** Default values for a scene */
 abstract class Scene(
@@ -31,7 +31,7 @@ abstract class Scene(
     abstract fun buildWorld(): HittableList
 
     open fun buildLights() = HittableList.Builder()
-        .add(xz_rect(213, 343, 227, 332, 554, Material()))
+        .add(XZRect(213, 343, 227, 332, 554, Material()))
         .add(Sphere(Point3(190, 90, 190), 90, Material()))
         .build()
 }
