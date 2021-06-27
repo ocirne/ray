@@ -13,7 +13,6 @@ import kotlin.random.Random
 class FinalSceneNextWeek : Scene(
     aspectRatio = 1.0,
     imageWidth = 200, // 800
-    samplesPerPixel = 20,  // 10000
     lookFrom = Point3(478, 278, -600),
     lookAt = Point3(278, 278, 0)
 ) {

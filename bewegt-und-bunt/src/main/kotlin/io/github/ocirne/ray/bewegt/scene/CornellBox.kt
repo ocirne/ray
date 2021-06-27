@@ -10,7 +10,6 @@ import io.github.ocirne.ray.bewegt.math.Vector3
 
 class CornellBox : Scene(
     aspectRatio = 1.0,
-    samplesPerPixel = 200,
     lookFrom = Point3(278, 278, -800),
     lookAt = Point3(278, 278, 0)
 ) {

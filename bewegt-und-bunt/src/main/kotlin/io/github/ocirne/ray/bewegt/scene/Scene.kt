@@ -3,11 +3,11 @@ package io.github.ocirne.ray.bewegt.scene
 import io.github.ocirne.ray.bewegt.canvas.BLACK
 import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.hittable.HittableList
+import io.github.ocirne.ray.bewegt.hittable.Sphere
+import io.github.ocirne.ray.bewegt.hittable.XZRect
 import io.github.ocirne.ray.bewegt.material.Material
 import io.github.ocirne.ray.bewegt.math.Point3
 import io.github.ocirne.ray.bewegt.math.Vector3
-import io.github.ocirne.ray.bewegt.hittable.Sphere
-import io.github.ocirne.ray.bewegt.hittable.XZRect
 
 /** Default values for a scene */
 abstract class Scene(
@@ -30,6 +30,7 @@ abstract class Scene(
 
     abstract fun buildWorld(): HittableList
 
+    // TODO Alibi lights
     open fun buildLights() = HittableList.Builder()
         .add(XZRect(213, 343, 227, 332, 554, Material()))
         .add(Sphere(Point3(190, 90, 190), 90, Material()))
