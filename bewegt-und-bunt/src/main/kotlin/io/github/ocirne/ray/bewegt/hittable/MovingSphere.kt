@@ -33,13 +33,10 @@ class MovingSphere(
             if (root < tMin || tMax < root)
                 return null
         }
-        val p = r.at(root)
         val outwardNormal = (r.at(root) - center(r.time)) / radius
-        val frontFace = r.direction.dot(outwardNormal) < 0
-        val normal = if (frontFace) outwardNormal else -outwardNormal
         val (u, v) = Sphere.getSphereUv(outwardNormal)
 
-        return HitRecord(p, normal, material, root, u, v, frontFace)
+        return directHit(r, material, root, u, v, outwardNormal)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {

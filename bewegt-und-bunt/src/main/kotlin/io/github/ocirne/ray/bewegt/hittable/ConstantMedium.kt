@@ -2,7 +2,6 @@ package io.github.ocirne.ray.bewegt.hittable
 
 import io.github.ocirne.ray.bewegt.canvas.RGBColor
 import io.github.ocirne.ray.bewegt.material.Isotropic
-import io.github.ocirne.ray.bewegt.math.Vector3
 import io.github.ocirne.ray.bewegt.math.Ray
 import io.github.ocirne.ray.bewegt.math.infinity
 import io.github.ocirne.ray.bewegt.texture.SolidColor
@@ -35,13 +34,8 @@ class ConstantMedium(private val boundary: Hittable, density: Double, texture: T
             return null
         }
         val t = t1 + hitDistance / rayLength
-        val p = r.at(t)
-        val u = 0.0
-        val v = 0.0
-        val normal = Vector3(1,0,0)  // arbitrary
-        val frontFace = true     // also arbitrary
 
-        return HitRecord(p, normal, phaseFunction, t, u ,v, frontFace)
+        return bouncingHit(r, phaseFunction, t)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB? {

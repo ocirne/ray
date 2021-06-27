@@ -27,11 +27,8 @@ class xy_rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double, va
         val u = (x-x0)/(x1-x0)
         val v = (y-y0)/(y1-y0)
         val outwardNormal = Vector3(0, 0, 1)
-        val frontFace = r.direction.dot(outwardNormal) < 0
-        val normal = if (frontFace) outwardNormal else -outwardNormal
-        val p = r.at(t)
 
-        return HitRecord(p, normal, material, t, u, v, frontFace)
+        return directHit(r, material, t, u, v, outwardNormal)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {
@@ -60,11 +57,8 @@ class xz_rect(val x0: Double, val x1: Double, val z0: Double, val z1: Double, va
         val u = (x-x0)/(x1-x0)
         val v = (z-z0)/(z1-z0)
         val outwardNormal = Vector3(0, 1, 0)
-        val frontFace = r.direction.dot(outwardNormal) < 0
-        val normal = if (frontFace) outwardNormal else -outwardNormal
-        val p = r.at(t)
 
-        return HitRecord(p, normal, material, t, u, v, frontFace)
+        return directHit(r, material, t, u, v, outwardNormal)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {
@@ -108,11 +102,8 @@ class yz_rect(val y0: Double, val y1: Double, val z0: Double, val z1: Double, va
         val u = (y-y0)/(y1-y0)
         val v = (z-z0)/(z1-z0)
         val outwardNormal = Vector3(1, 0, 0)
-        val frontFace = r.direction.dot(outwardNormal) < 0
-        val normal = if (frontFace) outwardNormal else -outwardNormal
-        val p = r.at(t)
 
-        return HitRecord(p, normal, material, t, u, v, frontFace)
+        return directHit(r, material, t, u, v, outwardNormal)
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB {

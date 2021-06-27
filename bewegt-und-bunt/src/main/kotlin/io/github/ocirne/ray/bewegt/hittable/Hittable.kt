@@ -9,19 +9,43 @@ import kotlin.math.min
 import kotlin.math.sin
 
 data class HitRecord(
-    var p: Point3,
-    var normal: Vector3,
+    val p: Point3,
+    val normal: Vector3,
     val material: Material,
-    var t: Double,
+    val t: Double,
     val u: Double,
     val v: Double,
-    var frontFace: Boolean
+    val frontFace: Boolean,
 ) {
 
-    fun setFaceNormal(r: Ray, outward_normal: Vector3) {
-        frontFace = r.direction.dot(outward_normal) < 0
-        normal = if (frontFace) outward_normal else -outward_normal
+    fun flippedFrontFace(): HitRecord {
+        return HitRecord(p, normal, material, t, u, v, !frontFace)
     }
+
+    fun moved(p: Point3, r: Ray, outward_normal: Vector3): HitRecord {
+        val frontFace = r.direction.dot(outward_normal) < 0
+        val normal = if (frontFace) outward_normal else -outward_normal
+
+        return HitRecord(p, normal, this.material, this.t, this.u, this.v, frontFace)
+    }
+}
+
+fun directHit(r: Ray, material: Material, t: Double, u: Double, v: Double, outward_normal: Vector3): HitRecord {
+    val p = r.at(t)
+    val frontFace = r.direction.dot(outward_normal) < 0
+    val normal = if (frontFace) outward_normal else -outward_normal
+
+    return HitRecord(p, normal, material, t, u, v, frontFace)
+}
+
+fun bouncingHit(r: Ray, phaseFunction: Material, t: Double): HitRecord {
+    val p = r.at(t)
+    val u = 0.0
+    val v = 0.0
+    val normal = Vector3(1,0,0)  // arbitrary
+    val frontFace = true     // also arbitrary
+
+    return HitRecord(p, normal, phaseFunction, t, u, v, frontFace)
 }
 
 abstract class Hittable {
@@ -61,11 +85,9 @@ abstract class Hittable {
 private class Translation(private val delegate: Hittable, private val offset: Vector3) : Hittable() {
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
-        val movedRay = Ray(r.origin - offset, r.direction, r.time)
-        return delegate.hit(movedRay, tMin, tMax)?.let {
-            val x = HitRecord(it.p + offset, it.normal, it.material, it.t, it.u, it.v, it.frontFace)
-            x.setFaceNormal(movedRay, it.normal)
-            x
+        val translatedRay = Ray(r.origin - offset, r.direction, r.time)
+        return delegate.hit(translatedRay, tMin, tMax)?.let {
+            it.moved(it.p + offset, translatedRay, it.normal)
         }
     }
 
@@ -132,20 +154,19 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
             sinTheta * r.direction.x + cosTheta * r.direction.z
         )
         val rotatedRay = Ray(origin, direction, r.time)
-        val rec = delegate.hit(rotatedRay, tMin, tMax) ?: return null
-        val p = Point3(
-            cosTheta * rec.p.x + sinTheta * rec.p.z,
-            rec.p.y,
-            -sinTheta * rec.p.x + cosTheta * rec.p.z
-        )
-        val normal = Vector3(
-            cosTheta * rec.normal.x + sinTheta * rec.normal.z,
-            rec.normal.y,
-            -sinTheta * rec.normal.x + cosTheta * rec.normal.z
-        )
-        rec.p = p
-        rec.setFaceNormal(rotatedRay, normal)
-        return rec
+        return delegate.hit(rotatedRay, tMin, tMax)?. let {
+            val p = Point3(
+                cosTheta * it.p.x + sinTheta * it.p.z,
+                it.p.y,
+                -sinTheta * it.p.x + cosTheta * it.p.z
+            )
+            val normal = Vector3(
+                cosTheta * it.normal.x + sinTheta * it.normal.z,
+                it.normal.y,
+                -sinTheta * it.normal.x + cosTheta * it.normal.z
+            )
+            it.moved(p, rotatedRay, normal)
+        }
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB? {
@@ -156,9 +177,7 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
 private class FlipFace(private val delegate: Hittable) : Hittable() {
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
-        return delegate.hit(r, tMin, tMax)?.let {
-            HitRecord(it.p, it.normal, it.material, it.t, it.u, it.v, !it.frontFace)
-        }
+        return delegate.hit(r, tMin, tMax)?.flippedFrontFace()
     }
 
     override fun boundingBox(time0: Double, time1: Double): AABB? {
