@@ -5,7 +5,7 @@ import kotlin.math.sqrt
 
 open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
 
-    constructor(x: Int, y: Int, z: Int, w: Int): this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
+    constructor(x: Int, y: Int, z: Int, w: Int) : this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
 
     val epsilon = 0.00001
 
@@ -19,14 +19,18 @@ open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
         return w.equalsDelta(0.0)
     }
 
+    override fun toString(): String {
+        return "tuple[$x $y $z $w]"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false
         other as Tuple
         return x.equalsDelta(other.x) &&
-               y.equalsDelta(other.y) &&
-               z.equalsDelta(other.z) &&
-               w.equalsDelta(other.w)
+                y.equalsDelta(other.y) &&
+                z.equalsDelta(other.z) &&
+                w.equalsDelta(other.w)
     }
 
     operator fun plus(t: Tuple): Tuple {
@@ -42,15 +46,23 @@ open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
     }
 
     operator fun times(s: Double): Tuple {
-        return Tuple(x*s, y*s, z*s, w*s)
+        return Tuple(x * s, y * s, z * s, w * s)
+    }
+
+    operator fun times(s: Int): Tuple {
+        return this * s.toDouble()
     }
 
     operator fun div(s: Double): Tuple {
-        return Tuple(x/s, y/s, z/s, w/s)
+        return Tuple(x / s, y / s, z / s, w / s)
+    }
+
+    operator fun div(s: Int): Tuple {
+        return this / s.toDouble()
     }
 
     fun magnitude(): Double {
-        return sqrt(x*x + y*y + z*z + w*w)
+        return sqrt(x * x + y * y + z * z + w * w)
     }
 
     fun normalize(): Tuple {
@@ -74,7 +86,7 @@ fun point(x: Double, y: Double, z: Double): Tuple {
     return Tuple(x, y, z, 1.0)
 }
 
-fun point(x: Int, y: Int, z: Int) : Tuple {
+fun point(x: Int, y: Int, z: Int): Tuple {
     return Tuple(x, y, z, 1)
 }
 

@@ -40,6 +40,7 @@ internal class TupleTest {
         val v = vector(4, -4, 3)
         v shouldBe Tuple(4, -4, 3, 0)
     }
+
     @Test
     fun `Scenario Adding two tuples`() {
         val a1 = Tuple(3, -2, 5, 1)
@@ -95,25 +96,25 @@ internal class TupleTest {
 
     @Test
     fun `Scenario Dividing a tuple by a scalar`() {
-        val a = Tuple (1, -2, 3, -4)
-        a / 2.0 shouldBe Tuple(0.5, -1.0, 1.5, -2.0)
+        val a = Tuple(1, -2, 3, -4)
+        a / 2 shouldBe Tuple(0.5, -1.0, 1.5, -2.0)
     }
 
     @Test
     fun `Scenario Computing the magnitude of vector(1, 0, 0)`() {
-        val v = vector (1, 0, 0)
+        val v = vector(1, 0, 0)
         v.magnitude() shouldBe 1
     }
 
     @Test
     fun `Scenario Computing the magnitude of vector(0, 1, 0)`() {
-        val v = vector (0, 1, 0)
+        val v = vector(0, 1, 0)
         v.magnitude() shouldBe 1
     }
 
     @Test
     fun `Scenario Computing the magnitude of vector(0, 0, 1)`() {
-        val v = vector (0, 0, 1)
+        val v = vector(0, 0, 1)
         v.magnitude() shouldBe 1
     }
 
@@ -158,39 +159,49 @@ internal class TupleTest {
 
     @Test
     fun `Scenario The cross product of two vectors`() {
-        val a = vector (1, 2, 3)
-        val b = vector (2, 3, 4)
+        val a = vector(1, 2, 3)
+        val b = vector(2, 3, 4)
         a.cross(b) shouldBe vector(-1, 2, -1)
         b.cross(a) shouldBe vector(1, -2, 1)
     }
+
+    @Test
+    fun `Scenario Colors are (red, green, blue) tuples`() {
+        val c = color(-0.5, 0.4, 1.7)
+        c.red shouldBe -0.5
+        c.green shouldBe 0.4
+        c.blue shouldBe 1.7
+    }
+
+    @Test
+    fun `Scenario Adding colors`() {
+        val c1 = color(0.9, 0.6, 0.75)
+        val c2 = color(0.7, 0.1, 0.25)
+        c1 + c2 shouldBe color(1.6, 0.7, 1.0)
+    }
+
+    @Test
+    fun `Scenario Subtracting colors`() {
+        val c1 = color(0.9, 0.6, 0.75)
+        val c2 = color(0.7, 0.1, 0.25)
+        c1 - c2 shouldBe color(0.2, 0.5, 0.5)
+    }
+
+    @Test
+    fun `Scenario Multiplying a color by a scalar`() {
+        val c = color(0.2, 0.3, 0.4)
+        c * 2 shouldBe color(0.4, 0.6, 0.8)
+    }
+
+    @Test
+    fun `Scenario Multiplying colors`() {
+        val c1 = color(1.0, 0.2, 0.4)
+        val c2 = color(0.9, 1.0, 0.1)
+        c1 * c2 shouldBe color(0.9, 0.2, 0.04)
+    }
 }
+
 /*
-
-Scenario Colors are (red, green, blue) tuples
-  val c = color(-0.5, 0.4, 1.7)
-  Then c.red = -0.5
-    And c.green = 0.4
-    And c.blue = 1.7
-
-Scenario Adding colors
-  val c1 = color(0.9, 0.6, 0.75)
-    And c2 = color(0.7, 0.1, 0.25)
-   Then c1 + c2 = color(1.6, 0.7, 1.0)
-
-Scenario Subtracting colors
-  val c1 = color(0.9, 0.6, 0.75)
-    And c2 = color(0.7, 0.1, 0.25)
-   Then c1 - c2 = color(0.2, 0.5, 0.5)
-
-Scenario Multiplying a color by a scalar
-  val c = color(0.2, 0.3, 0.4)
-  Then c * 2 = color(0.4, 0.6, 0.8)
-
-Scenario Multiplying colors
-  val c1 = color(1, 0.2, 0.4)
-    And c2 = color(0.9, 1, 0.1)
-   Then c1 * c2 = color(0.9, 0.2, 0.04)
-
 Scenario Reflecting a Vector approaching at 45°
   val v = Vector(1, -1, 0)
     And n = Vector(0, 1, 0)
