@@ -85,3 +85,6 @@ fun vector(x: Double, y: Double, z: Double): Tuple {
 fun vector(x: Int, y: Int, z: Int): Tuple {
     return Tuple(x, y, z, 0)
 }
+
+typealias Point = Tuple
+typealias Vector = Tuple
