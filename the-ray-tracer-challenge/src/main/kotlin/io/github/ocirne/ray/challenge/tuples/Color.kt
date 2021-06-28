@@ -65,3 +65,6 @@ fun color(red: Double, green: Double, blue: Double): Color {
 fun color(red: Int, green: Int, blue: Int): Color {
     return Color(red, green, blue)
 }
+
+val BLACK = Color(0, 0, 0)
+val WHITE = Color(1, 1, 1)
