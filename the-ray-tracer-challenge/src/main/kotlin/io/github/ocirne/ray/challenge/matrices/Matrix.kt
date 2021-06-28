@@ -23,7 +23,7 @@ class Matrix(private val size: Int, vararg values: Double) {
     }
 
     override fun toString(): String {
-        return "$size x $size"
+        return "$size x $size " + (0 until size).map { elements[it].joinToString() }
     }
 
     operator fun get(row: Int, col: Int): Double {
@@ -80,27 +80,54 @@ class Matrix(private val size: Int, vararg values: Double) {
     }
 
     fun submatrix(dr: Int, dc: Int): Matrix {
-        TODO("Not yet implemented")
+        val m = Matrix(size - 1, 0)
+        for (row in 0 until size) {
+            for (col in 0 until size) {
+                if (row == dr) continue
+                if (col == dc) continue
+                val effRow = if (row > dr) row - 1 else row
+                val effCol = if (col > dc) col - 1 else col
+                m.elements[effRow][effCol] = elements[row][col]
+            }
+        }
+        return m
     }
 
     fun determinant(): Double {
-        TODO("Not yet implemented")
+        if (size == 2) {
+            return elements[0][0] * elements[1][1] - elements[0][1] * elements[1][0]
+        }
+        return (0 until size).sumOf { elements[0][it] * cofactor(0, it) }
     }
 
     fun isInvertible(): Boolean {
-        TODO("Not yet implemented")
+        return !determinant().equalsDelta(0.0)
     }
 
     fun inverse(): Matrix {
-        TODO("Not yet implemented")
+        if (!isInvertible()) {
+            throw IllegalStateException()
+        }
+        val m = Matrix(size, 0)
+        for (row in 0 until size) {
+            for (col in 0 until size) {
+                val c = cofactor(row, col)
+                m.elements[col][row] = c / determinant()
+            }
+        }
+        return m
     }
 
     fun minor(i: Int, j: Int): Double {
-        TODO("Not yet implemented")
+        return submatrix(i,j).determinant()
     }
 
-    fun cofactor(i: Int, j: Int): Double {
-        TODO("Not yet implemented")
+    fun cofactor(row: Int, col: Int): Double {
+        val m = minor(row, col)
+        if ((row xor col) and 1 == 0) {
+            return m
+        }
+        return -m
     }
 }
 
