@@ -128,10 +128,10 @@ fun renderScene(sceneNo: Int) {
 }
 
 fun main() {
-//    renderAnimatedCornellBox()
+    renderAnimatedCornellBox()
 //    for (i in 1..10) {
 //        renderScene(i)
 //    }
 //    renderScene(11)
-    renderAnimatedEarth()
+//    renderAnimatedEarth()
 }

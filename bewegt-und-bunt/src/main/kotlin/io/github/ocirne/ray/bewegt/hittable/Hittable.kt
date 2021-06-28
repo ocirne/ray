@@ -22,11 +22,15 @@ data class HitRecord(
         return HitRecord(p, normal, material, t, u, v, !frontFace)
     }
 
-    fun moved(p: Point3, r: Ray, outward_normal: Vector3): HitRecord {
-        val frontFace = r.direction.dot(outward_normal) < 0
-        val normal = if (frontFace) outward_normal else -outward_normal
+    fun translated(offset: Vector3, r: Ray): HitRecord {
+        val frontFace = r.direction.dot(this.normal) < 0
+        val normal = if (frontFace) this.normal else -this.normal
+        return HitRecord(this.p + offset, normal, this.material, this.t, this.u, this.v, true)
+    }
 
-        return HitRecord(p, normal, this.material, this.t, this.u, this.v, frontFace)
+    fun rotated(p: Point3, r: Ray, outward_normal: Vector3): HitRecord {
+        val frontFace = r.direction.dot(outward_normal) < 0
+        return HitRecord(p, outward_normal, this.material, this.t, this.u, this.v, frontFace)
     }
 }
 
@@ -87,7 +91,7 @@ private class Translation(private val delegate: Hittable, private val offset: Ve
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val translatedRay = Ray(r.origin - offset, r.direction, r.time)
         return delegate.hit(translatedRay, tMin, tMax)?.let {
-            it.moved(it.p + offset, translatedRay, it.normal)
+            it.translated(offset, translatedRay)
         }
     }
 
@@ -165,7 +169,7 @@ private class RotationY(val delegate: Hittable, angle: Double) : Hittable() {
                 it.normal.y,
                 -sinTheta * it.normal.x + cosTheta * it.normal.z
             )
-            it.moved(p, rotatedRay, normal)
+            it.rotated(p, rotatedRay, normal)
         }
     }
 

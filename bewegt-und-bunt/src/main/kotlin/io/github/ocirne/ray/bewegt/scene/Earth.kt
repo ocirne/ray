@@ -10,7 +10,7 @@ import io.github.ocirne.ray.bewegt.hittable.Sphere
 class Earth(private val angle: Double=0.0) : Scene(
     background = RGBColor(0.7, 0.8, 1.0),
     vfov = 20.0,
-    samplesPerPixel = 10
+    samplesPerPixel = 2
 ) {
 
     override fun buildWorld(): HittableList {
