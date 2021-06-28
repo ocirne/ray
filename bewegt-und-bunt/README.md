@@ -1,7 +1,7 @@
 
 # Bewegt und Bunt!
 
-A refactoring of [ray-tracing in one weekend](../ray-tracing-in-one-weekend). Plus animations!
+A refactoring of [ray-tracing in one weekend](../ray-tracing-in-one-weekend) (Version 3.2.3). Plus animations!
 
 # Animations
 

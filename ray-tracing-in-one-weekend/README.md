@@ -1,8 +1,8 @@
 
 # Ray Tracing in One Weekend in Kotlin
 
-This is a direkt C++ to Kotlin translation from the Books on [Ray Tracing](https://raytracing.github.io/) with minimal changes.
-This is most probably not good Kotlin code.
+This is a direkt C++ to Kotlin translation from the Books on [Ray Tracing](https://raytracing.github.io/) (Version 3.2.3) with minimal changes.
+This is not good Kotlin code.
 
 
 ## Notes on optimization
