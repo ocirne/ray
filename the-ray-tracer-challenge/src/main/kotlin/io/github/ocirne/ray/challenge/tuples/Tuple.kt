@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.challenge.tuples
 
 import kotlin.math.abs
+import kotlin.math.sqrt
 
 open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
 
@@ -26,6 +27,46 @@ open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
                y.equalsDelta(other.y) &&
                z.equalsDelta(other.z) &&
                w.equalsDelta(other.w)
+    }
+
+    operator fun plus(t: Tuple): Tuple {
+        return Tuple(x + t.x, y + t.y, z + t.z, w + t.w)
+    }
+
+    operator fun minus(t: Tuple): Tuple {
+        return Tuple(x - t.x, y - t.y, z - t.z, w - t.w)
+    }
+
+    operator fun unaryMinus(): Tuple {
+        return Tuple(-x, -y, -z, -w)
+    }
+
+    operator fun times(s: Double): Tuple {
+        return Tuple(x*s, y*s, z*s, w*s)
+    }
+
+    operator fun div(s: Double): Tuple {
+        return Tuple(x/s, y/s, z/s, w/s)
+    }
+
+    fun magnitude(): Double {
+        return sqrt(x*x + y*y + z*z + w*w)
+    }
+
+    fun normalize(): Tuple {
+        return Tuple(x, y, z, w) / magnitude()
+    }
+
+    fun dot(b: Tuple): Double {
+        return x * b.x + y * b.y + z * b.z + w * b.w
+    }
+
+    fun cross(b: Tuple): Tuple {
+        return vector(
+            y * b.z - z * b.y,
+            z * b.x - x * b.z,
+            x * b.y - y * b.x
+        )
     }
 }
 
