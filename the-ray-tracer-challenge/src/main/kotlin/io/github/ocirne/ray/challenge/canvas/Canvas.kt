@@ -36,6 +36,7 @@ class Canvas(val width: Int, val height: Int, initialColor: Color=BLACK) {
         return "$r $g $b"
     }
 
+    // Note: In "weekend" there is an additionally sqrt
     private fun scaleAndClamp(channel: Double): Int {
         return clamp((channel * scale).toInt())
     }
