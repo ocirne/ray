@@ -1,4 +1,9 @@
-package io.github.ocirne.ray.challenge.tuples
+package io.github.ocirne.ray.challenge.tasks
+
+import io.github.ocirne.ray.challenge.tuples.Point
+import io.github.ocirne.ray.challenge.tuples.Vector
+import io.github.ocirne.ray.challenge.tuples.point
+import io.github.ocirne.ray.challenge.tuples.vector
 
 class Projectile(val position: Point, var velocity: Vector)
 

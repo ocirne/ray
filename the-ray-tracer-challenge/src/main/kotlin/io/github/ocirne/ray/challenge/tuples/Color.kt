@@ -68,3 +68,4 @@ fun color(red: Int, green: Int, blue: Int): Color {
 
 val BLACK = Color(0, 0, 0)
 val WHITE = Color(1, 1, 1)
+val RED = Color(1, 0, 0)
