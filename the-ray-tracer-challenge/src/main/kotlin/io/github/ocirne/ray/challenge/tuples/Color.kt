@@ -1,15 +1,12 @@
 package io.github.ocirne.ray.challenge.tuples
 
+import io.github.ocirne.ray.challenge.math.equalsDelta
 import kotlin.math.abs
 
 /** TODO Prüfen, ob mit Color zusammenführbar. Allerdings: Unterschiedliche Größe und Semantik. */
 open class Color(val red: Double, val green: Double, val blue: Double) {
 
     constructor(red: Int, green: Int, blue: Int) : this(red.toDouble(), green.toDouble(), blue.toDouble())
-
-    val epsilon = 0.00001
-
-    private fun Double.equalsDelta(other: Double) = abs(this - other) < epsilon
 
     override fun toString(): String {
         return "color[$red $green $blue]"

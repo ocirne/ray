@@ -1,15 +1,12 @@
 package io.github.ocirne.ray.challenge.tuples
 
-import kotlin.math.abs
 import kotlin.math.sqrt
+import io.github.ocirne.ray.challenge.math.equalsDelta
 
 open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
 
     constructor(x: Int, y: Int, z: Int, w: Int) : this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
 
-    val epsilon = 0.00001
-
-    private fun Double.equalsDelta(other: Double) = abs(this - other) < epsilon
 
     fun isPoint(): Boolean {
         return w.equalsDelta(1.0)
