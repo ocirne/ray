@@ -80,6 +80,10 @@ open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
             x * b.y - y * b.x
         )
     }
+
+    fun reflect(normal: Tuple): Tuple {
+        return this - normal * 2 * dot(normal)
+    }
 }
 
 fun point(x: Double, y: Double, z: Double): Tuple {

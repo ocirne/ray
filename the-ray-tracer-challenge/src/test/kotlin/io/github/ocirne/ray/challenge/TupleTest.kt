@@ -7,6 +7,8 @@ import kotlin.math.sqrt
 
 internal class TupleTest {
 
+    private val magic2 = sqrt(2.0) / 2.0
+
     @Test
     fun `Scenario A tuple with w eq 0 dot 1 is a point`() {
         val a = Tuple(4.3, -4.2, 3.1, 1.0)
@@ -199,18 +201,20 @@ internal class TupleTest {
         val c2 = color(0.9, 1.0, 0.1)
         c1 * c2 shouldBe color(0.9, 0.2, 0.04)
     }
+
+    @Test
+    fun `Scenario Reflecting a Vector approaching at 45 deg`() {
+        val v = vector(1, -1, 0)
+        val n = vector(0, 1, 0)
+        val r = v.reflect(n)
+        r shouldBe vector(1, 1, 0)
+    }
+
+    @Test
+    fun `Scenario Reflecting a Vector off a slanted surface`() {
+        val v = vector(0, -1, 0)
+        val n = vector(magic2, magic2, 0.0)
+        val r = v.reflect(n)
+        r shouldBe vector(1, 0, 0)
+    }
 }
-
-/*
-Scenario Reflecting a Vector approaching at 45°
-  val v = Vector(1, -1, 0)
-    And n = Vector(0, 1, 0)
-  When r = reflect(v, n)
-  Then r = Vector(1, 1, 0)
-
-Scenario Reflecting a Vector off a slanted surface
-  val v = Vector(0, -1, 0)
-    And n = Vector(√2/2, √2/2, 0)
-  When r = reflect(v, n)
-  Then r = Vector(1, 0, 0)
-*/
