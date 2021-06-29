@@ -13,4 +13,8 @@ class Intersections(vararg intersections: Intersection) {
     operator fun get(index: Int): Intersection {
         return elements[index]
     }
+
+    fun hit(): Intersection? {
+        return elements.filter { i -> i.t > 0 }.minByOrNull { it.t }
+    }
 }
