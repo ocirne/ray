@@ -7,7 +7,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 
-internal class MatricesTest {
+internal class MatrixTest {
 
     @Test
     fun `Scenario Constructing and inspecting a 4x4 matrix`() {

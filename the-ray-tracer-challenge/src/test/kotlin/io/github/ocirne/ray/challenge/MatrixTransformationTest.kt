@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import kotlin.math.PI
 import kotlin.math.sqrt as sqrt
 
-internal class MatrixTransformationsTest {
+internal class MatrixTransformationTest {
 
     private val sqrt2 = sqrt(2.0)
 
