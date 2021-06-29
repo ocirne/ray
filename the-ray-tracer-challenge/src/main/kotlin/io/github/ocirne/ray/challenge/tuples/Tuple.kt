@@ -7,13 +7,16 @@ open class Tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
 
     constructor(x: Int, y: Int, z: Int, w: Int) : this(x.toDouble(), y.toDouble(), z.toDouble(), w.toDouble())
 
-
     fun isPoint(): Boolean {
         return w.equalsDelta(1.0)
     }
 
     fun isVector(): Boolean {
         return w.equalsDelta(0.0)
+    }
+
+    fun ensureVector(): Vector {
+        return Tuple(x, y, z, 0.0)
     }
 
     override fun toString(): String {

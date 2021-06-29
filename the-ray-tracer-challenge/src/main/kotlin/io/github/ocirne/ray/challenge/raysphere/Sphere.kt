@@ -2,6 +2,9 @@ package io.github.ocirne.ray.challenge.raysphere
 
 import io.github.ocirne.ray.challenge.matrices.Matrix
 import io.github.ocirne.ray.challenge.matrices.identityMatrix
+import io.github.ocirne.ray.challenge.tuples.Point
+import io.github.ocirne.ray.challenge.tuples.Tuple
+import io.github.ocirne.ray.challenge.tuples.Vector
 import io.github.ocirne.ray.challenge.tuples.point
 import kotlin.math.sqrt
 
@@ -27,5 +30,12 @@ class Sphere(val transform: Matrix = identityMatrix) {
 
     fun withTransform(t: Matrix): Sphere {
         return Sphere(t)
+    }
+
+    fun normalAt(worldPoint: Point): Vector {
+        val objectPoint = transform.inverse() * worldPoint
+        val objectNormal = objectPoint - point(0, 0, 0)
+        val worldNormal = transform.inverse().transpose() * objectNormal
+        return worldNormal.ensureVector().normalize()
     }
 }
