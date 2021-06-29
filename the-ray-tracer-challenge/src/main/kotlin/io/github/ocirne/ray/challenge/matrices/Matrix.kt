@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.challenge.matrices
 
 import io.github.ocirne.ray.challenge.math.equalsDelta
+import io.github.ocirne.ray.challenge.transformations.*
 import io.github.ocirne.ray.challenge.tuples.Tuple
 
 /** No tests für m x n matrices with m != n. */
@@ -50,9 +51,9 @@ class Matrix(private val size: Int, vararg values: Double) {
         for (row in 0 until size) {
             for (col in 0 until size) {
                 m.elements[row][col] = elements[row][0] * b.elements[0][col] +
-                                       elements[row][1] * b.elements[1][col] +
-                                       elements[row][2] * b.elements[2][col] +
-                                       elements[row][3] * b.elements[3][col]
+                        elements[row][1] * b.elements[1][col] +
+                        elements[row][2] * b.elements[2][col] +
+                        elements[row][3] * b.elements[3][col]
             }
         }
         return m
@@ -62,9 +63,9 @@ class Matrix(private val size: Int, vararg values: Double) {
         val r = DoubleArray(4)
         for (row in 0 until size) {
             r[row] = elements[row][0] * b.x +
-                     elements[row][1] * b.y +
-                     elements[row][2] * b.z +
-                     elements[row][3] * b.w
+                    elements[row][1] * b.y +
+                    elements[row][2] * b.z +
+                    elements[row][3] * b.w
         }
         return Tuple(r[0], r[1], r[2], r[3])
     }
@@ -119,7 +120,7 @@ class Matrix(private val size: Int, vararg values: Double) {
     }
 
     fun minor(i: Int, j: Int): Double {
-        return submatrix(i,j).determinant()
+        return submatrix(i, j).determinant()
     }
 
     fun cofactor(row: Int, col: Int): Double {
@@ -128,6 +129,30 @@ class Matrix(private val size: Int, vararg values: Double) {
             return m
         }
         return -m
+    }
+
+    fun translate(x: Double, y: Double, z: Double): Matrix {
+        return translation(x, y, z) * this
+    }
+
+    fun scale(x: Double, y: Double, z: Double): Matrix {
+        return scaling(x, y, z) * this
+    }
+
+    fun rotateX(r: Double): Matrix {
+        return rotationX(r) * this
+    }
+
+    fun rotateY(r: Double): Matrix {
+        return rotationY(r) * this
+    }
+
+    fun rotateZ(r: Double): Matrix {
+        return rotationZ(r) * this
+    }
+
+    fun shear(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Double): Matrix {
+        return shearing(xy, xz, yx, yz, zx, zy) * this
     }
 }
 

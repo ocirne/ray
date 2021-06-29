@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.challenge.transformations
 
 import io.github.ocirne.ray.challenge.matrices.Matrix
+import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -74,4 +75,8 @@ fun shearing(xy: Double, xz: Double, yx: Double, yz: Double, zx: Double, zy: Dou
 
 fun shearing(xy: Int, xz: Int, yx: Int, yz: Int, zx: Int, zy: Int): Matrix {
     return shearing(xy.toDouble(), xz.toDouble(), yx.toDouble(), yz.toDouble(), zx.toDouble(), zy.toDouble())
+}
+
+fun identity(): Matrix {
+    return identityMatrix
 }

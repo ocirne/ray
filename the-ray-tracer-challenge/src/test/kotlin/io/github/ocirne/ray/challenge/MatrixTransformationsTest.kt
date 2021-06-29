@@ -167,6 +167,16 @@ internal class MatrixTransformationsTest {
         t * p shouldBe point(15, 0, 7)
     }
 
+    @Test
+    fun `Scenario Fluent Api for transformations`() {
+        val p = point(1, 0, 1)
+        val t = identity()
+            .rotateX(PI / 2)
+            .scale(5.0, 5.0, 5.0)
+            .translate(10.0, 5.0, 7.0)
+        t * p shouldBe point(15, 0, 7)
+    }
+
     /*
   @Test
   fun `Scenario The transformation matrix for the default orientation`() {
