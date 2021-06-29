@@ -1,7 +1,10 @@
 package io.github.ocirne.ray.challenge
 
+import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.raysphere.Sphere
+import io.github.ocirne.ray.challenge.transformations.scaling
+import io.github.ocirne.ray.challenge.transformations.translation
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
@@ -65,41 +68,42 @@ internal class SphereTest {
         xs[0].obj shouldBe s
         xs[1].obj shouldBe s
       }
-/*
-  @Test
-  fun `Scenario A sphere's default transformation`() {
-  val s = Sphere()
-   s.transform shouldBe identity_matrix
-  }
 
-  @Test
-  fun `Scenario Changing a sphere's transformation`() {
-  val s = Sphere()
-    And t = translation(2, 3, 4)
-  val set_transform(s, t)
-   s.transform shouldBe t
-  }
+      @Test
+      fun `Scenario A sphere's default transformation`() {
+        val s = Sphere()
+        s.transform shouldBe identityMatrix
+      }
+
+      @Test
+      fun `Scenario Changing a sphere's transformation`() {
+        val s = Sphere()
+        val t = translation(2, 3, 4)
+        val sm = s.withTransform(t)
+         sm.transform shouldBe t
+      }
 
   @Test
   fun `Scenario Intersecting a scaled sphere with a ray`() {
   val r = Ray(point(0, 0, -5), vector(0, 0, 1))
-    And s = Sphere()
-  val set_transform(s, scaling(2, 2, 2))
-    And xs = intersect(s, r)
-   xs.count shouldBe 2
-    And xs[0].t shouldBe 3
-    And xs[1].t shouldBe 7
+    val s = Sphere()
+  val sm = s.withTransform(scaling(2, 2, 2))
+    val xs = sm.intersect(r)
+   xs.size shouldBe 2
+     xs[0].t shouldBe 3
+     xs[1].t shouldBe 7
   }
 
   @Test
   fun `Scenario Intersecting a translated sphere with a ray`() {
   val r = Ray(point(0, 0, -5), vector(0, 0, 1))
-    And s = Sphere()
-  val set_transform(s, translation(5, 0, 0))
-    And xs = intersect(s, r)
-   xs.count shouldBe 0
+    val s = Sphere()
+  val sm = s.withTransform(translation(5, 0, 0))
+    val xs = sm.intersect(r)
+   xs.size shouldBe 0
   }
 
+    /*
   @Test
   fun `Scenario The normal on a sphere at a point on the x axis`() {
   val s = Sphere()
