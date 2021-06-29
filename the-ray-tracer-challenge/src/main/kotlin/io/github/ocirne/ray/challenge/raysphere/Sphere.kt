@@ -1,14 +1,14 @@
 package io.github.ocirne.ray.challenge.raysphere
 
+import io.github.ocirne.ray.challenge.lights.Material
 import io.github.ocirne.ray.challenge.matrices.Matrix
 import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.tuples.Point
-import io.github.ocirne.ray.challenge.tuples.Tuple
 import io.github.ocirne.ray.challenge.tuples.Vector
 import io.github.ocirne.ray.challenge.tuples.point
 import kotlin.math.sqrt
 
-class Sphere(val transform: Matrix = identityMatrix) {
+class Sphere(val transform: Matrix = identityMatrix, val material: Material = Material()) {
 
     fun intersect(ray: Ray): Array<Intersection> {
         val ray2 = ray.transform(transform.inverse())
@@ -30,6 +30,10 @@ class Sphere(val transform: Matrix = identityMatrix) {
 
     fun withTransform(t: Matrix): Sphere {
         return Sphere(t)
+    }
+
+    fun withMaterial(m: Material): Sphere {
+        return Sphere(material = m)
     }
 
     fun normalAt(worldPoint: Point): Vector {

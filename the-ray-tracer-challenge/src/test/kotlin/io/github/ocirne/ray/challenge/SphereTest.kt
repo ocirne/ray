@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.challenge
 
+import io.github.ocirne.ray.challenge.lights.Material
 import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.raysphere.Sphere
@@ -158,23 +159,21 @@ internal class SphereTest {
         n shouldBe vector(0.0, 0.97014, -0.24254)
     }
 
+    @Test
+    fun `Scenario A sphere has a default material`() {
+        val s = Sphere()
+        s.material shouldBe Material()
+    }
+
+    @Test
+    fun `Scenario A sphere may be assigned a material`() {
+        val s = Sphere()
+        val m = Material(ambient = 1.0)
+        val sm = s.withMaterial(m)
+        sm.material shouldBe m
+    }
+
 /*
-  @Test
-  fun `Scenario A sphere has a default material`() {
-  val s = Sphere()
-  val m = s.material
-   m shouldBe material()
-  }
-
-  @Test
-  fun `Scenario A sphere may be assigned a material`() {
-  val s = Sphere()
-    val m = material()
-    val m.ambient = 1
-  val s.material = m
-   s.material shouldBe m
-  }
-
   @Test
   fun `Scenario A helper for producing a sphere with a glassy material`() {
   val s = glass_Sphere()
