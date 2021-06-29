@@ -14,8 +14,8 @@ internal class SphereTest {
         val s = Sphere()
         val xs = s.intersect(r)
         xs.size shouldBe 2
-        xs[0] shouldBe 4.0
-        xs[1] shouldBe 6.0
+        xs[0].t shouldBe 4.0
+        xs[1].t shouldBe 6.0
     }
 
     @Test
@@ -24,8 +24,8 @@ internal class SphereTest {
         val s = Sphere()
         val xs = s.intersect(r)
         xs.size shouldBe 2
-        xs[0] shouldBe 5.0
-        xs[1] shouldBe 5.0
+        xs[0].t shouldBe 5.0
+        xs[1].t shouldBe 5.0
     }
 
     @Test
@@ -42,8 +42,8 @@ internal class SphereTest {
         val s = Sphere()
         val xs = s.intersect(r)
         xs.size shouldBe 2
-        xs[0] shouldBe -1.0
-        xs[1] shouldBe 1.0
+        xs[0].t shouldBe -1.0
+        xs[1].t shouldBe 1.0
     }
 
     @Test
@@ -52,21 +52,20 @@ internal class SphereTest {
         val s = Sphere()
         val xs = s.intersect(r)
         xs.size shouldBe 2
-        xs[0] shouldBe -6.0
-        xs[1] shouldBe -4.0
+        xs[0].t shouldBe -6.0
+        xs[1].t shouldBe -4.0
     }
 
-    /*
-  @Test
-  fun `Scenario Intersect sets the object on the intersection`() {
-  val r = Ray(point(0, 0, -5), vector(0, 0, 1))
-    val s = Sphere()
-  val xs = s.intersect(r)
-   xs.size shouldBe 2
-    xs[0].object shouldBe s
-    xs[1].object shouldBe s
-  }
-
+      @Test
+      fun `Scenario Intersect sets the object on the intersection`() {
+      val r = Ray(point(0, 0, -5), vector(0, 0, 1))
+        val s = Sphere()
+      val xs = s.intersect(r)
+       xs.size shouldBe 2
+        xs[0].obj shouldBe s
+        xs[1].obj shouldBe s
+      }
+/*
   @Test
   fun `Scenario A sphere's default transformation`() {
   val s = Sphere()

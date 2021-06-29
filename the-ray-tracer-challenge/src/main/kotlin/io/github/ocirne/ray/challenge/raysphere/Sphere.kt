@@ -5,7 +5,7 @@ import kotlin.math.sqrt
 
 class Sphere {
 
-    fun intersect(ray: Ray): DoubleArray {
+    fun intersect(ray: Ray): Array<Intersection> {
         // the vector from the sphere's center, to the ray origin
         // remember: the sphere is centered at the world origin
         val sphereToRay = ray.origin - point(0, 0, 0)
@@ -14,10 +14,10 @@ class Sphere {
         val c = sphereToRay.dot(sphereToRay) - 1
         val discriminant = b*b - 4 * a * c
         if (discriminant < 0) {
-            return doubleArrayOf()
+            return arrayOf()
         }
         val t1 = (-b - sqrt(discriminant)) / (2 * a)
         val t2 = (-b + sqrt(discriminant)) / (2 * a)
-        return doubleArrayOf(t1, t2)
+        return arrayOf(Intersection(t1, this), Intersection(t2, this))
     }
 }
