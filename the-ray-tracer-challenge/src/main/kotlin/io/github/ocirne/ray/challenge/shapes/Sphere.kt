@@ -10,9 +10,10 @@ import io.github.ocirne.ray.challenge.tuples.Vector
 import io.github.ocirne.ray.challenge.tuples.point
 import kotlin.math.sqrt
 
-data class Sphere(override val transform: Matrix = identityMatrix,
-                  override val material: Material = Material()):
-    Shape(transform, material) {
+data class Sphere(
+    override val transform: Matrix = identityMatrix,
+    override val material: Material = Material()
+) : Shape(transform, material) {
 
     override fun localIntersect(ray: Ray): List<Intersection> {
         // the vector from the sphere's center, to the ray origin

@@ -1,13 +1,13 @@
 package io.github.ocirne.ray.challenge.raysphere
 
 import io.github.ocirne.ray.challenge.math.epsilon
-import io.github.ocirne.ray.challenge.shapes.Sphere
+import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
 
 data class Computation(
     val t: Double,
-    val obj: Sphere,
+    val obj: Shape,
     val point: Point,
     val eyeV: Vector,
     val preNormalV: Vector) {
@@ -28,9 +28,9 @@ data class Computation(
     }
 }
 
-class Intersection(val t: Double, val obj: Sphere) {
+class Intersection(val t: Double, val obj: Shape) {
 
-    constructor(t: Int, obj: Sphere) : this(t.toDouble(), obj)
+    constructor(t: Int, obj: Shape) : this(t.toDouble(), obj)
 
     fun prepareComputations(ray: Ray): Computation {
         val point = ray.position(t)

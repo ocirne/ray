@@ -168,7 +168,7 @@ internal class WorldTest {
     @Test
     fun `Scenario The reflected color for a reflective material`() {
     val w = defaultWorld ()
-    val  shape = plane () with :
+    val  shape = Plane () with :
     | material.reflective | 0.5                   |
     | transform           | translation(0, -1, 0) |
     val  shape is added to w
@@ -182,7 +182,7 @@ internal class WorldTest {
     @Test
     fun `Scenario shadeHit() with a reflective material`() {
     val w = defaultWorld ()
-    val  shape = plane () with :
+    val  shape = Plane () with :
     | material.reflective | 0.5                   |
     | transform           | translation(0, -1, 0) |
     val  shape is added to w
@@ -197,11 +197,11 @@ internal class WorldTest {
     fun `Scenario colorAt() with mutually reflective surfaces`() {
     val w = world ()
     val  w . light = point_light (point(0, 0, 0), color(1, 1, 1))
-    val  lower = plane () with :
+    val  lower = Plane () with :
     | material.reflective | 1                     |
     | transform           | translation(0, -1, 0) |
     val  lower is added to w
-            val  upper = plane () with :
+            val  upper = Plane () with :
     | material.reflective | 1                    |
     | transform           | translation(0, 1, 0) |
     val  upper is added to w
@@ -212,7 +212,7 @@ internal class WorldTest {
     @Test
     fun `Scenario The reflected color at the maximum recursive depth`() {
     val w = defaultWorld ()
-    val  shape = plane () with :
+    val  shape = Plane () with :
     | material.reflective | 0.5                   |
     | transform           | translation(0, -1, 0) |
     val  shape is added to w
@@ -285,7 +285,7 @@ internal class WorldTest {
     @Test
     fun `Scenario shadeHit() with a transparent material`() {
     val w = defaultWorld ()
-    val  floor = plane () with :
+    val  floor = Plane () with :
     | transform                 | translation(0, -1, 0) |
     | material.transparency     | 0.5                   |
     | material.refractive_index | 1.5                   |
@@ -306,7 +306,7 @@ internal class WorldTest {
     fun `Scenario shadeHit() with a reflective, transparent material`() {
     val w = defaultWorld ()
     val  r = Ray (point(0, 0, -3), vector(0, -√2/2, √2/2))
-    val  floor = plane () with :
+    val  floor = Plane () with :
     | transform                 | translation(0, -1, 0) |
     | material.reflective       | 0.5                   |
     | material.transparency     | 0.5                   |
