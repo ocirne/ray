@@ -11,10 +11,13 @@ data class Material(
     val specular: Double = 0.9,
     val shininess: Double = 200.0
 ) {
-    fun lighting(light: PointLight, point: Point, eyev: Vector, normalv: Vector): Color {
+    fun lighting(light: PointLight, point: Point, eyev: Vector, normalv: Vector, inShadow: Boolean=false): Color {
         val effectiveColor = color * light.intensity
         val lightv = (light.position - point).normalize()
         val effectiveAmbient = effectiveColor * ambient
+        if (inShadow) {
+            return effectiveAmbient
+        }
         val lightDotNormal = lightv.dot(normalv)
         var effectiveDiffuse = BLACK
         var effectiveSpecular = BLACK

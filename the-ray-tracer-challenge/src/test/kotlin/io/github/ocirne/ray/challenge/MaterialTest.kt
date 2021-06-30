@@ -69,17 +69,16 @@ internal class MaterialTest {
         result shouldBe color(0.1, 0.1, 0.1)
     }
 
-    /*
       @Test
       fun `Scenario Lighting with the surface in shadow`() {
-        val eyev = vector (0, 0, -1)
-        val normalv = vector (0, 0, -1)
-        val light = point_light (point(0, 0, -10), color(1, 1, 1))
-        val in_shadow = true
-        val result = lighting (m, light, position, eyev, normalv, in_shadow)
+        val eyeV = vector (0, 0, -1)
+        val normalV = vector (0, 0, -1)
+        val light = PointLight(point(0, 0, -10), color(1, 1, 1))
+        val inShadow = true
+        val result = m.lighting(light, position, eyeV, normalV, inShadow)
         result shouldBe color (0.1, 0.1, 0.1)
 }
-
+/*
         @Test
         fun `Scenario Lighting with a pattern applied`() {
           val m . pattern = stripe_pattern (color(1, 1, 1), color(0, 0, 0))
