@@ -8,9 +8,9 @@ import io.github.ocirne.ray.challenge.tuples.Vector
 import io.github.ocirne.ray.challenge.tuples.point
 import kotlin.math.sqrt
 
-class Sphere(val transform: Matrix = identityMatrix, val material: Material = Material()) {
+data class Sphere(val transform: Matrix = identityMatrix, val material: Material = Material()) {
 
-    fun intersect(ray: Ray): Array<Intersection> {
+    fun intersect(ray: Ray): List<Intersection> {
         val ray2 = ray.transform(transform.inverse())
 
         // the vector from the sphere's center, to the ray origin
@@ -21,11 +21,11 @@ class Sphere(val transform: Matrix = identityMatrix, val material: Material = Ma
         val c = sphereToRay.dot(sphereToRay) - 1
         val discriminant = b * b - 4 * a * c
         if (discriminant < 0) {
-            return arrayOf()
+            return listOf()
         }
         val t1 = (-b - sqrt(discriminant)) / (2 * a)
         val t2 = (-b + sqrt(discriminant)) / (2 * a)
-        return arrayOf(Intersection(t1, this), Intersection(t2, this))
+        return listOf(Intersection(t1, this), Intersection(t2, this))
     }
 
     fun withTransform(t: Matrix): Sphere {
