@@ -56,5 +56,5 @@ fun main() {
         }
     }
 
-    File("output/silhouette.ppm").printWriter().use(canvas::toPPM)
+    File("output/silhouette3D.ppm").printWriter().use(canvas::toPPM)
 }
