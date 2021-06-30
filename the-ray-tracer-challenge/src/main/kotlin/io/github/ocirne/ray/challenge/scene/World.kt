@@ -7,6 +7,7 @@ import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.raysphere.Sphere
 import io.github.ocirne.ray.challenge.tuples.BLACK
 import io.github.ocirne.ray.challenge.tuples.Color
+import io.github.ocirne.ray.challenge.tuples.Point
 
 class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> = listOf()) {
 
@@ -39,5 +40,15 @@ class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> =
         }
         val comps = hits.first().prepareComputations(ray)
         return shadeHit(comps)
+    }
+
+    fun isShadowed(point: Point): Boolean {
+        val light = lights.first()
+        val v = light.position - point
+        val distance = v.magnitude()
+        val direction = v.normalize()
+        val r = Ray(point, direction)
+        val intersections = intersect(r)
+        return intersections.isNotEmpty() && intersections.first().t < distance
     }
 }

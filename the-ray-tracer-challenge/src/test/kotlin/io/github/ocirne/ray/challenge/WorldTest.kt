@@ -110,35 +110,35 @@ internal class WorldTest {
         val c = w.colorAt(r)
         c shouldBe inner.material.color
     }
-    /*
+
             @Test
             fun `Scenario There is no shadow when nothing is collinear with point and light`() {
             val w = defaultWorld ()
     val  p = point (0, 10, 0)
-    is_shadowed (w, p) is false
+    w.isShadowed (p) shouldBe false
   }
 
     @Test
     fun `Scenario The shadow when an object is between the point and the light`() {
     val w = defaultWorld ()
     val  p = point (10, -10, 10)
-    is_shadowed (w, p) is true
+    w.isShadowed (p) shouldBe true
   }
 
     @Test
     fun `Scenario There is no shadow when an object is behind the light`() {
     val w = defaultWorld ()
     val  p = point (-20, 20, -20)
-    is_shadowed (w, p) is false
+    w.isShadowed (p) shouldBe false
   }
 
     @Test
     fun `Scenario There is no shadow when an object is behind the point`() {
     val w = defaultWorld ()
     val  p = point (-2, 2, -2)
-    is_shadowed (w, p) is false
+    w.isShadowed (p) shouldBe false
   }
-
+/*
     @Test
     fun `Scenario shadeHit() is given an intersection in shadow`() {
     val w = world ()
