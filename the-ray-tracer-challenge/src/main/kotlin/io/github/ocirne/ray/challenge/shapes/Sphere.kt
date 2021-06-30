@@ -10,7 +10,9 @@ import io.github.ocirne.ray.challenge.tuples.Vector
 import io.github.ocirne.ray.challenge.tuples.point
 import kotlin.math.sqrt
 
-data class Sphere(val transform: Matrix = identityMatrix, val material: Material = Material()) {
+data class Sphere(override val transform: Matrix = identityMatrix,
+                  override val material: Material = Material()):
+    Shape(transform, material) {
 
     fun intersect(ray: Ray): List<Intersection> {
         val ray2 = ray.transform(transform.inverse())

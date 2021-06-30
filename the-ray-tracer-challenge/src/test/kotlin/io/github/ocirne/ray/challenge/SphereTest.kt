@@ -177,7 +177,7 @@ internal class SphereTest {
   @Test
   fun `Scenario A helper for producing a sphere with a glassy material`() {
   val s = glass_Sphere()
-   s.transform shouldBe identity_matrix
+   s.transform shouldBe identityMatrix
     s.material.transparency shouldBe 1.0
     s.material.refractive_index shouldBe 1.5
   }
