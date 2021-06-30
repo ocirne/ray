@@ -4,7 +4,7 @@ import io.github.ocirne.ray.challenge.math.epsilon
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Intersections
 import io.github.ocirne.ray.challenge.raysphere.Ray
-import io.github.ocirne.ray.challenge.raysphere.Sphere
+import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.transformations.translation
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.doubles.shouldBeGreaterThan

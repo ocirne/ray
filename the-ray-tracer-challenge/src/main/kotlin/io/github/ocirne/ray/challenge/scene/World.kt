@@ -4,7 +4,7 @@ import io.github.ocirne.ray.challenge.lights.PointLight
 import io.github.ocirne.ray.challenge.raysphere.Computation
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
-import io.github.ocirne.ray.challenge.raysphere.Sphere
+import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.tuples.BLACK
 import io.github.ocirne.ray.challenge.tuples.Color
 import io.github.ocirne.ray.challenge.tuples.Point

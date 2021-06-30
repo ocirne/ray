@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.challenge.raysphere
 
 import io.github.ocirne.ray.challenge.math.epsilon
+import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
 

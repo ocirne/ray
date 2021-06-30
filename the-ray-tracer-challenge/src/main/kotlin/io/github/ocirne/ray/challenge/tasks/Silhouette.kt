@@ -2,7 +2,7 @@ package io.github.ocirne.ray.challenge.tasks
 
 import io.github.ocirne.ray.challenge.canvas.Canvas
 import io.github.ocirne.ray.challenge.raysphere.Ray
-import io.github.ocirne.ray.challenge.raysphere.Sphere
+import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.transformations.rotationZ
 import io.github.ocirne.ray.challenge.transformations.scaling
 import io.github.ocirne.ray.challenge.transformations.shearing

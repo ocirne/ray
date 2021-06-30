@@ -4,7 +4,7 @@ import io.github.ocirne.ray.challenge.lights.Material
 import io.github.ocirne.ray.challenge.lights.PointLight
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
-import io.github.ocirne.ray.challenge.raysphere.Sphere
+import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.scene.World
 import io.github.ocirne.ray.challenge.transformations.scaling
 import io.github.ocirne.ray.challenge.transformations.translation
