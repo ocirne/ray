@@ -14,6 +14,16 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import kotlin.math.sqrt
 
+fun defaultWorld(): World {
+    val  light = PointLight (point(-10, 10, -10), color(1, 1, 1))
+    val  s1 = Sphere(material = Material(
+        color = Color(0.8, 1.0, 0.6),
+        diffuse = 0.7,
+        specular = 0.2))
+    val s2 = Sphere(transform = scaling(0.5, 0.5, 0.5))
+    return World (objects = listOf(s1, s2), lights = listOf(light))
+}
+
 internal class WorldTest {
 
   private val magic2 = sqrt(2.0)/2.0
@@ -24,16 +34,6 @@ internal class WorldTest {
     w.objects shouldHaveSize  0
     w.lights shouldHaveSize  0
   }
-
-    private fun defaultWorld(): World {
-        val  light = PointLight (point(-10, 10, -10), color(1, 1, 1))
-        val  s1 = Sphere(material = Material(
-            color = Color(0.8, 1.0, 0.6),
-            diffuse = 0.7,
-            specular = 0.2))
-        val s2 = Sphere(transform = scaling(0.5, 0.5, 0.5))
-        return World (objects = listOf(s1, s2), lights = listOf(light))
-    }
 
   @Test
   fun `Scenario The default world`() {
