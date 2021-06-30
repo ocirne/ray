@@ -14,14 +14,12 @@ data class Sphere(override val transform: Matrix = identityMatrix,
                   override val material: Material = Material()):
     Shape(transform, material) {
 
-    fun intersect(ray: Ray): List<Intersection> {
-        val ray2 = ray.transform(transform.inverse())
-
+    override fun localIntersect(ray: Ray): List<Intersection> {
         // the vector from the sphere's center, to the ray origin
         // remember: the sphere is centered at the world origin
-        val sphereToRay = ray2.origin - point(0, 0, 0)
-        val a = ray2.direction.dot(ray2.direction)
-        val b = 2 * ray2.direction.dot(sphereToRay)
+        val sphereToRay = ray.origin - point(0, 0, 0)
+        val a = ray.direction.dot(ray.direction)
+        val b = 2 * ray.direction.dot(sphereToRay)
         val c = sphereToRay.dot(sphereToRay) - 1
         val discriminant = b * b - 4 * a * c
         if (discriminant < 0) {
@@ -40,10 +38,7 @@ data class Sphere(override val transform: Matrix = identityMatrix,
         return Sphere(material = m)
     }
 
-    fun normalAt(worldPoint: Point): Vector {
-        val objectPoint = transform.inverse() * worldPoint
-        val objectNormal = objectPoint - point(0, 0, 0)
-        val worldNormal = transform.inverse().transpose() * objectNormal
-        return worldNormal.ensureVector().normalize()
+    override fun localNormalAt(localPoint: Point): Vector {
+        return localPoint - point(0, 0, 0)
     }
 }

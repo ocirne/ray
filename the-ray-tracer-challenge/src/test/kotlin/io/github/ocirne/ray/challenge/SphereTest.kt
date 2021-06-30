@@ -1,7 +1,5 @@
 package io.github.ocirne.ray.challenge
 
-import io.github.ocirne.ray.challenge.lights.Material
-import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.transformations.rotationZ
@@ -77,20 +75,6 @@ internal class SphereTest {
     }
 
     @Test
-    fun `Scenario A sphere's default transformation`() {
-        val s = Sphere()
-        s.transform shouldBe identityMatrix
-    }
-
-    @Test
-    fun `Scenario Changing a sphere's transformation`() {
-        val s = Sphere()
-        val t = translation(2, 3, 4)
-        val sm = s.withTransform(t)
-        sm.transform shouldBe t
-    }
-
-    @Test
     fun `Scenario Intersecting a scaled sphere with a ray`() {
         val r = Ray(point(0, 0, -5), vector(0, 0, 1))
         val s = Sphere()
@@ -157,20 +141,6 @@ internal class SphereTest {
         val s = Sphere(rotationZ(PI / 5).scale(1.0, 0.5, 1.0))
         val n = s.normalAt(point(0.0, magic2, -magic2))
         n shouldBe vector(0.0, 0.97014, -0.24254)
-    }
-
-    @Test
-    fun `Scenario A sphere has a default material`() {
-        val s = Sphere()
-        s.material shouldBe Material()
-    }
-
-    @Test
-    fun `Scenario A sphere may be assigned a material`() {
-        val s = Sphere()
-        val m = Material(ambient = 1.0)
-        val sm = s.withMaterial(m)
-        sm.material shouldBe m
     }
 
 /*
