@@ -2,6 +2,7 @@ package io.github.ocirne.ray.challenge
 
 import io.github.ocirne.ray.challenge.lights.Material
 import io.github.ocirne.ray.challenge.lights.PointLight
+import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.raysphere.Sphere
 import io.github.ocirne.ray.challenge.scene.World
@@ -59,30 +60,30 @@ internal class WorldTest {
       xs [2].t shouldBe 5.5
       xs [3].t shouldBe 6
   }
-/*
+
     @Test
     fun `Scenario Shading an intersection`() {
     val w = defaultWorld ()
     val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
-    val  shape = the first object in w
-    val  i = intersection (4, shape)
-    val comps = prepare_computations (i, r)
-    val  c = shade_hit (w, comps)
+    val  shape = w.objects.first()
+    val  i = Intersection (4, shape)
+    val comps = i.prepareComputations (r)
+    val  c = w.shadeHit(comps)
     c shouldBe color (0.38066, 0.47583, 0.2855)
   }
 
     @Test
     fun `Scenario Shading an intersection from the inside`() {
-    val w = defaultWorld ()
-    val  w . light = point_light (point(0, 0.25, 0), color(1, 1, 1))
+    val w = defaultWorld ().withLight(PointLight(point(0.0, 0.25, 0.0), color(1, 1, 1)))
     val  r = Ray (point(0, 0, 0), vector(0, 0, 1))
-    val  shape = the second object in w
-    val  i = intersection (0.5, shape)
-    val comps = prepare_computations (i, r)
-    val  c = shade_hit (w, comps)
+    val  shape = w.objects.get(1)
+    val  i = Intersection(0.5, shape)
+    val comps = i.prepareComputations (r)
+    val  c = w.shadeHit( comps)
     c shouldBe color (0.90498, 0.90498, 0.90498)
   }
 
+/*
     @Test
     fun `Scenario The color when a ray misses`() {
     val w = defaultWorld ()
@@ -139,7 +140,7 @@ internal class WorldTest {
   }
 
     @Test
-    fun `Scenario shade_hit() is given an intersection in shadow`() {
+    fun `Scenario shadeHit() is given an intersection in shadow`() {
     val w = world ()
     val  w . light = point_light (point(0, 0, -10), color(1, 1, 1))
     val  s1 = Sphere ()
@@ -148,9 +149,9 @@ internal class WorldTest {
     | transform | translation(0, 0, 10) |
     val  s2 is added to w
             val  r = Ray (point(0, 0, 5), vector(0, 0, 1))
-    val  i = intersection (4, s2)
-    val comps = prepare_computations (i, r)
-    val  c = shade_hit (w, comps)
+    val  i = Intersection(4, s2)
+    val comps = prepareComputations (i, r)
+    val  c = shadeHit (w, comps)
     c shouldBe color (0.1, 0.1, 0.1)
   }
 
@@ -160,8 +161,8 @@ internal class WorldTest {
     val  r = Ray (point(0, 0, 0), vector(0, 0, 1))
     val  shape = the second object in w
     val  shape . material . ambient = 1
-    val  i = intersection (1, shape)
-    val comps = prepare_computations (i, r)
+    val  i = Intersection(1, shape)
+    val comps = prepareComputations (i, r)
     val  color = reflected_color (w, comps)
     color shouldBe color (0, 0, 0)
   }
@@ -174,23 +175,23 @@ internal class WorldTest {
     | transform           | translation(0, -1, 0) |
     val  shape is added to w
             val  r = Ray (point(0, 0, -3), vector(0, -√2/2, √2/2))
-    val  i = intersection (√2, shape)
-    val comps = prepare_computations (i, r)
+    val  i = Intersection(√2, shape)
+    val comps = prepareComputations (i, r)
     val  color = reflected_color (w, comps)
     color shouldBe color (0.19032, 0.2379, 0.14274)
   }
 
     @Test
-    fun `Scenario shade_hit() with a reflective material`() {
+    fun `Scenario shadeHit() with a reflective material`() {
     val w = defaultWorld ()
     val  shape = plane () with :
     | material.reflective | 0.5                   |
     | transform           | translation(0, -1, 0) |
     val  shape is added to w
             val  r = Ray (point(0, 0, -3), vector(0, -√2/2, √2/2))
-    val  i = intersection (√2, shape)
-    val comps = prepare_computations (i, r)
-    val  color = shade_hit (w, comps)
+    val  i = Intersection(√2, shape)
+    val comps = prepareComputations (i, r)
+    val  color = shadeHit (w, comps)
     color shouldBe color (0.87677, 0.92436, 0.82918)
   }
 
@@ -218,8 +219,8 @@ internal class WorldTest {
     | transform           | translation(0, -1, 0) |
     val  shape is added to w
             val  r = Ray (point(0, 0, -3), vector(0, -√2/2, √2/2))
-    val  i = intersection (√2, shape)
-    val comps = prepare_computations (i, r)
+    val  i = Intersection(√2, shape)
+    val comps = prepareComputations (i, r)
     val  color = reflected_color (w, comps, 0)
     color shouldBe color (0, 0, 0)
   }
@@ -230,7 +231,7 @@ internal class WorldTest {
     val  shape = the first object in w
     val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
     val  xs = intersections (4:shape, 6:shape)
-    val comps = prepare_computations (xs[0], r, xs)
+    val comps = prepareComputations (xs[0], r, xs)
     val  c = refracted_color (w, comps, 5)
     c shouldBe color (0, 0, 0)
   }
@@ -244,7 +245,7 @@ internal class WorldTest {
     | material.refractive_index | 1.5 |
     val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
     val  xs = intersections (4:shape, 6:shape)
-    val comps = prepare_computations (xs[0], r, xs)
+    val comps = prepareComputations (xs[0], r, xs)
     val  c = refracted_color (w, comps, 0)
     c shouldBe color (0, 0, 0)
   }
@@ -260,7 +261,7 @@ internal class WorldTest {
     val  xs = intersections (-√2/2:shape, √2/2:shape)
     # NOTE: this time you're inside the sphere, so you need
     # to look at the second intersection, xs[1], not xs[0]
-    val comps = prepare_computations (xs[1], r, xs)
+    val comps = prepareComputations (xs[1], r, xs)
     val  c = refracted_color (w, comps, 5)
     c shouldBe color (0, 0, 0)
   }
@@ -278,13 +279,13 @@ internal class WorldTest {
     | material.refractive_index | 1.5 |
     val  r = Ray (point(0, 0, 0.1), vector(0, 1, 0))
     val  xs = intersections (-0.9899:A, -0.4899:B, 0.4899:B, 0.9899:A)
-    val comps = prepare_computations (xs[2], r, xs)
+    val comps = prepareComputations (xs[2], r, xs)
     val  c = refracted_color (w, comps, 5)
     c shouldBe color (0, 0.99888, 0.04725)
   }
 
     @Test
-    fun `Scenario shade_hit() with a transparent material`() {
+    fun `Scenario shadeHit() with a transparent material`() {
     val w = defaultWorld ()
     val  floor = plane () with :
     | transform                 | translation(0, -1, 0) |
@@ -298,13 +299,13 @@ internal class WorldTest {
     val  ball is added to w
             val  r = Ray (point(0, 0, -3), vector(0, -√2/2, √2/2))
     val  xs = intersections (√2:floor)
-    val comps = prepare_computations (xs[0], r, xs)
-    val  color = shade_hit (w, comps, 5)
+    val comps = prepareComputations (xs[0], r, xs)
+    val  color = shadeHit (w, comps, 5)
     color shouldBe color (0.93642, 0.68642, 0.68642)
   }
 
     @Test
-    fun `Scenario shade_hit() with a reflective, transparent material`() {
+    fun `Scenario shadeHit() with a reflective, transparent material`() {
     val w = defaultWorld ()
     val  r = Ray (point(0, 0, -3), vector(0, -√2/2, √2/2))
     val  floor = plane () with :
@@ -319,8 +320,8 @@ internal class WorldTest {
     | transform          | translation(0, -3.5, -0.5) |
     val  ball is added to w
             val  xs = intersections (√2:floor)
-    val comps = prepare_computations (xs[0], r, xs)
-    val  color = shade_hit (w, comps, 5)
+    val comps = prepareComputations (xs[0], r, xs)
+    val  color = shadeHit (w, comps, 5)
     color shouldBe color (0.93391, 0.69643, 0.69243)
   }
       */
