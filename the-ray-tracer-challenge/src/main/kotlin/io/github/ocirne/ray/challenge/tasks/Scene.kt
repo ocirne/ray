@@ -7,12 +7,10 @@ import io.github.ocirne.ray.challenge.lights.PointLight
 import io.github.ocirne.ray.challenge.raysphere.Sphere
 import io.github.ocirne.ray.challenge.scene.World
 import io.github.ocirne.ray.challenge.transformations.*
-import io.github.ocirne.ray.challenge.tuples.WHITE
-import io.github.ocirne.ray.challenge.tuples.color
-import io.github.ocirne.ray.challenge.tuples.point
-import io.github.ocirne.ray.challenge.tuples.vector
+import io.github.ocirne.ray.challenge.tuples.*
 import java.io.File
 import kotlin.math.PI
+import kotlin.random.Random
 
 fun scene(): Canvas {
     val floorMaterial = Material(
@@ -62,11 +60,26 @@ fun scene(): Canvas {
         )
     )
 
+    val additionalSpheres = (0..10).map {
+    val tx = Random.nextDouble(-2.0, 2.0)
+    val ty = Random.nextDouble(1.0, 3.0)
+    val tz = Random.nextDouble(-2.0, 2.0)
+    val scale = Random.nextDouble(0.2, 1.0)
+    Sphere(
+        transform = translation(tx, ty, tz) * scaling(scale, scale, scale),
+        material = Material(
+            color = color(),
+            diffuse = Random.nextDouble(0.0, 1.0),
+            specular = Random.nextDouble(0.0, 1.0)
+        )
+    )
+    }
+
     val lightSource = PointLight(point(-10, 10, -10), WHITE)
-    val world = World(listOf(floor, leftWall, rightWall, middle, right, left), listOf(lightSource))
+    val world = World(listOf(floor, leftWall, rightWall, middle, right, left) + additionalSpheres, listOf(lightSource))
 
     val transform = viewTransform(point(0.0, 1.5, -5.0), point(0, 1, 0), vector(0, 1, 0))
-    val camera = Camera(100, 50, PI / 3, transform)
+    val camera = Camera(200, 200, PI / 2, transform)
     // render the result to a canvas.
     return camera.render(world)
 }
