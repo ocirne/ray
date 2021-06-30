@@ -22,7 +22,7 @@ fun defaultWorld(): World {
         diffuse = 0.7,
         specular = 0.2))
     val s2 = Sphere(transform = scaling(0.5, 0.5, 0.5))
-    return World (objects = listOf(s1, s2), lights = listOf(light))
+    return World (shapes = listOf(s1, s2), lights = listOf(light))
 }
 
 internal class WorldTest {
@@ -32,7 +32,7 @@ internal class WorldTest {
   @Test
   fun `Scenario Creating a world`() {
     val  w = World()
-    w.objects shouldHaveSize  0
+    w.shapes shouldHaveSize  0
     w.lights shouldHaveSize  0
   }
 
@@ -46,8 +46,8 @@ internal class WorldTest {
       val s2 = Sphere(transform = scaling(0.5, 0.5, 0.5))
       val w = defaultWorld()
       w.lights shouldContain light
-      w.objects shouldContain s1
-      w.objects shouldContain s2
+      w.shapes shouldContain s1
+      w.shapes shouldContain s2
    }
 
             @Test
@@ -66,7 +66,7 @@ internal class WorldTest {
     fun `Scenario Shading an intersection`() {
     val w = defaultWorld ()
     val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
-    val  shape = w.objects.first()
+    val  shape = w.shapes.first()
     val  i = Intersection (4, shape)
     val comps = i.prepareComputations (r)
     val  c = w.shadeHit(comps)
@@ -77,7 +77,7 @@ internal class WorldTest {
     fun `Scenario Shading an intersection from the inside`() {
     val w = defaultWorld ().withLight(PointLight(point(0.0, 0.25, 0.0), color(1, 1, 1)))
     val  r = Ray (point(0, 0, 0), vector(0, 0, 1))
-    val  shape = w.objects.get(1)
+    val  shape = w.shapes.get(1)
     val  i = Intersection(0.5, shape)
     val comps = i.prepareComputations (r)
     val  c = w.shadeHit( comps)
@@ -103,9 +103,9 @@ internal class WorldTest {
     @Test
     fun `Scenario The color with an intersection behind the ray`() {
         val w = defaultWorld()
-        val outer = w.objects.first()
+        val outer = w.shapes.first()
         outer.material.ambient = 1.0
-        val inner = w.objects.get(1)
+        val inner = w.shapes.get(1)
         inner.material.ambient = 1.0
         val r = Ray(point(0.0, 0.0, 0.75), vector(0, 0, -1))
         val c = w.colorAt(r)

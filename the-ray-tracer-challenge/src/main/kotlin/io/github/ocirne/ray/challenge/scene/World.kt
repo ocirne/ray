@@ -4,15 +4,15 @@ import io.github.ocirne.ray.challenge.lights.PointLight
 import io.github.ocirne.ray.challenge.raysphere.Computation
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
-import io.github.ocirne.ray.challenge.shapes.Sphere
+import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.tuples.BLACK
 import io.github.ocirne.ray.challenge.tuples.Color
 import io.github.ocirne.ray.challenge.tuples.Point
 
-class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> = listOf()) {
+class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = listOf()) {
 
     fun intersect(ray: Ray): List<Intersection> {
-        return objects.map { o -> o.intersect(ray) }
+        return shapes.map { o -> o.intersect(ray) }
             .filter { hit -> hit.isNotEmpty() }
             .flatten()
             .filter { hit -> hit.t >= 0}
@@ -20,11 +20,11 @@ class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> =
     }
 
     fun addLight(light: PointLight): World {
-        return World(objects, lights + light)
+        return World(shapes, lights + light)
     }
 
     fun withLight(light: PointLight): World {
-        return World(objects, listOf(light))
+        return World(shapes, listOf(light))
     }
 
     fun shadeHit(comps: Computation): Color {
