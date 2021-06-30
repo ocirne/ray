@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.challenge.raysphere
 
+import io.github.ocirne.ray.challenge.math.epsilon
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
 
@@ -7,20 +8,22 @@ data class Computation(
     val t: Double,
     val obj: Sphere,
     val point: Point,
-    val eyev: Vector,
-    val preNormalv: Vector) {
+    val eyeV: Vector,
+    val preNormalV: Vector) {
 
-    val normalv: Vector
+    val normalV: Vector
     val inside: Boolean
+    val overPoint: Point
 
     init {
-        if (preNormalv.dot(eyev) < 0) {
+        if (preNormalV.dot(eyeV) < 0) {
             inside = true
-            normalv = -preNormalv
+            normalV = -preNormalV
         } else {
             inside = false
-            normalv = preNormalv
+            normalV = preNormalV
         }
+        overPoint = point + normalV * epsilon
     }
 }
 
@@ -34,8 +37,8 @@ class Intersection(val t: Double, val obj: Sphere) {
             t = t,
             obj = obj,
             point = point,
-            eyev = -ray.direction,
-            preNormalv = obj.normalAt(point),
+            eyeV = -ray.direction,
+            preNormalV = obj.normalAt(point),
         )
     }
 }

@@ -7,6 +7,7 @@ import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.raysphere.Sphere
 import io.github.ocirne.ray.challenge.scene.World
 import io.github.ocirne.ray.challenge.transformations.scaling
+import io.github.ocirne.ray.challenge.transformations.translation
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveSize
@@ -138,23 +139,20 @@ internal class WorldTest {
     val  p = point (-2, 2, -2)
     w.isShadowed (p) shouldBe false
   }
-/*
+
     @Test
     fun `Scenario shadeHit() is given an intersection in shadow`() {
-    val w = world ()
-    val  w . light = point_light (point(0, 0, -10), color(1, 1, 1))
-    val  s1 = Sphere ()
-    val  s1 is added to w
-            val  s2 = Sphere () with :
-    | transform | translation(0, 0, 10) |
-    val  s2 is added to w
-            val  r = Ray (point(0, 0, 5), vector(0, 0, 1))
-    val  i = Intersection(4, s2)
-    val comps = prepareComputations (i, r)
-    val  c = shadeHit (w, comps)
-    c shouldBe color (0.1, 0.1, 0.1)
+        val s1 = Sphere ()
+        val s2 = Sphere (transform = translation(0, 0, 10))
+        val light = PointLight (point(0, 0, -10), color(1, 1, 1))
+        val w = World (listOf(s1, s2), listOf(light))
+        val  r = Ray (point(0, 0, 5), vector(0, 0, 1))
+        val  i = Intersection(4, s2)
+        val comps = i.prepareComputations (r)
+        val  c = w.shadeHit (comps)
+        c shouldBe color (0.1, 0.1, 0.1)
   }
-
+/*
     @Test
     fun `Scenario The reflected color for a nonreflective material`() {
     val w = defaultWorld ()

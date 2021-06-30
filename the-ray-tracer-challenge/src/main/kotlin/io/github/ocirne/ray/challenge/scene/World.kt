@@ -28,8 +28,10 @@ class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> =
     }
 
     fun shadeHit(comps: Computation): Color {
+        val shadowed = isShadowed(comps.overPoint)
+
         return lights.map { light ->
-            comps.obj.material.lighting(light, comps.point, comps.eyev, comps.normalv)
+            comps.obj.material.lighting(light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
         }.reduce { acc, color -> acc + color }
     }
 
@@ -43,6 +45,7 @@ class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> =
     }
 
     fun isShadowed(point: Point): Boolean {
+        // TODO was machen bei mehreren Lichtern?
         val light = lights.first()
         val v = light.position - point
         val distance = v.magnitude()

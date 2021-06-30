@@ -1,13 +1,16 @@
 package io.github.ocirne.ray.challenge
 
+import io.github.ocirne.ray.challenge.math.epsilon
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Intersections
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.raysphere.Sphere
+import io.github.ocirne.ray.challenge.transformations.translation
 import io.github.ocirne.ray.challenge.tuples.*
+import io.kotest.matchers.doubles.shouldBeGreaterThan
+import io.kotest.matchers.doubles.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import kotlin.math.sqrt
 
 internal class IntersectionTest  {
 
@@ -81,8 +84,8 @@ internal class IntersectionTest  {
    comps.t shouldBe i.t
      comps.obj shouldBe i.obj
      comps.point shouldBe point(0, 0, -1)
-     comps.eyev shouldBe vector(0, 0, -1)
-     comps.normalv shouldBe vector(0, 0, -1)
+     comps.eyeV shouldBe vector(0, 0, -1)
+     comps.normalV shouldBe vector(0, 0, -1)
       }
 
     @Test
@@ -101,10 +104,20 @@ internal class IntersectionTest  {
         val i = Intersection(1, shape)
         val comps = i.prepareComputations(r)
         comps.point shouldBe point(0, 0, 1)
-         comps.eyev shouldBe vector(0, 0, -1)
+         comps.eyeV shouldBe vector(0, 0, -1)
          comps.inside shouldBe true
         // normal would have been (0, 0, 1), but is inverted!
-         comps.normalv shouldBe vector(0, 0, -1)
+         comps.normalV shouldBe vector(0, 0, -1)
+    }
+
+    @Test
+    fun `Scenario The hit should offset the point`() {
+        val r = Ray(point(0, 0, -5), vector(0, 0, 1))
+        val shape = Sphere(translation(0, 0, 1))
+        val i = Intersection(5, shape)
+        val comps = i.prepareComputations(r)
+        comps.overPoint.z shouldBeLessThan -epsilon/2
+        comps.point.z shouldBeGreaterThan comps.overPoint.z
     }
 
 /*
@@ -117,16 +130,6 @@ internal class IntersectionTest  {
    comps.reflectv shouldBe vector(0, √2/2, √2/2)
       }
 
-      @Test
-      fun `Scenario The hit should offset the point`() {
-  val r = Ray(point(0, 0, -5), vector(0, 0, 1))
-    And shape = Sphere() with:
-      | transform | translation(0, 0, 1) |
-    And i = Intersection(5, shape)
-  val comps = prepareComputations(i, r)
-   comps.over_point.z < -EPSILON/2
-    And comps.point.z > comps.over_point.z
-      }
 
             @Test
             fun `Scenario The under point is offset below the surface`() {
