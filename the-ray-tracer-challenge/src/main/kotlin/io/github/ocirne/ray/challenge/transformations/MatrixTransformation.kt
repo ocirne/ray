@@ -2,6 +2,8 @@ package io.github.ocirne.ray.challenge.transformations
 
 import io.github.ocirne.ray.challenge.matrices.Matrix
 import io.github.ocirne.ray.challenge.matrices.identityMatrix
+import io.github.ocirne.ray.challenge.tuples.Point
+import io.github.ocirne.ray.challenge.tuples.Vector
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -79,4 +81,16 @@ fun shearing(xy: Int, xz: Int, yx: Int, yz: Int, zx: Int, zy: Int): Matrix {
 
 fun identity(): Matrix {
     return identityMatrix
+}
+
+fun viewTransform(from: Point, to: Point, up: Vector): Matrix {
+    val forward = (to - from).normalize()
+    val left = forward.cross(up.normalize())
+    val trueUp = left.cross(forward)
+    val orientation = Matrix(4,
+        left.x, left.y, left.z, 0.0,
+        trueUp.x, trueUp.y, trueUp.z, 0.0,
+        -forward.x, -forward.y, -forward.z, 0.0,
+        0.0, 0.0, 0.0, 1.0)
+    return orientation * translation(-from.x, -from.y, -from.z)
 }
