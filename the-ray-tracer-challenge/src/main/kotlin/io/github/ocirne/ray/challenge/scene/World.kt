@@ -14,6 +14,7 @@ class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> =
         return objects.map { o -> o.intersect(ray) }
             .filter { hit -> hit.isNotEmpty() }
             .flatten()
+            .filter { hit -> hit.t >= 0}
             .sortedBy { s -> s.t }
     }
 
@@ -26,13 +27,17 @@ class World(val objects: List<Sphere> = listOf(), val lights: List<PointLight> =
     }
 
     fun shadeHit(comps: Computation): Color {
-        println("lights: " + lights)
         return lights.map { light ->
             comps.obj.material.lighting(light, comps.point, comps.eyev, comps.normalv)
         }.reduce { acc, color -> acc + color }
     }
 
     fun colorAt(ray: Ray): Color {
-        return BLACK
+        val hits = intersect(ray)
+        if (hits.isEmpty()) {
+            return BLACK
+        }
+        val comps = hits.first().prepareComputations(ray)
+        return shadeHit(comps)
     }
 }

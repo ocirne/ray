@@ -83,12 +83,11 @@ internal class WorldTest {
     c shouldBe color (0.90498, 0.90498, 0.90498)
   }
 
-/*
     @Test
     fun `Scenario The color when a ray misses`() {
     val w = defaultWorld ()
     val  r = Ray (point(0, 0, -5), vector(0, 1, 0))
-    val c = color_at (w, r)
+    val c = w.colorAt (r)
     c shouldBe color (0, 0, 0)
   }
 
@@ -96,21 +95,22 @@ internal class WorldTest {
     fun `Scenario The color when a ray hits`() {
     val w = defaultWorld ()
     val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
-    val c = color_at (w, r)
+    val c = w.colorAt (r)
     c shouldBe color (0.38066, 0.47583, 0.2855)
   }
 
     @Test
     fun `Scenario The color with an intersection behind the ray`() {
-    val w = defaultWorld ()
-    val  outer = the first object in w
-    val  outer . material . ambient = 1
-    val  inner = the second object in w
-    val  inner . material . ambient = 1
-    val  r = Ray (point(0, 0, 0.75), vector(0, 0, -1))
-    val c = color_at (w, r)
-    c shouldBe inner . material . color
-
+        val w = defaultWorld()
+        val outer = w.objects.first()
+        outer.material.ambient = 1.0
+        val inner = w.objects.get(1)
+        inner.material.ambient = 1.0
+        val r = Ray(point(0.0, 0.0, 0.75), vector(0, 0, -1))
+        val c = w.colorAt(r)
+        c shouldBe inner.material.color
+    }
+    /*
             @Test
             fun `Scenario There is no shadow when nothing is collinear with point and light`() {
             val w = defaultWorld ()
@@ -196,7 +196,7 @@ internal class WorldTest {
   }
 
     @Test
-    fun `Scenario color_at() with mutually reflective surfaces`() {
+    fun `Scenario colorAt() with mutually reflective surfaces`() {
     val w = world ()
     val  w . light = point_light (point(0, 0, 0), color(1, 1, 1))
     val  lower = plane () with :
@@ -208,7 +208,7 @@ internal class WorldTest {
     | transform           | translation(0, 1, 0) |
     val  upper is added to w
             val  r = Ray (point(0, 0, 0), vector(0, 1, 0))
-    color_at (w, r) should terminate successfully
+    colorAt (w, r) should terminate successfully
   }
 
     @Test

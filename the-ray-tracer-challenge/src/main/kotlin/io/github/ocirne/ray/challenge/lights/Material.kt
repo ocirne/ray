@@ -5,7 +5,8 @@ import kotlin.math.pow
 
 data class Material(
     val color: Color = WHITE,
-    val ambient: Double = 0.1,
+    // TODO val?
+    var ambient: Double = 0.1,
     val diffuse: Double = 0.9,
     val specular: Double = 0.9,
     val shininess: Double = 200.0
