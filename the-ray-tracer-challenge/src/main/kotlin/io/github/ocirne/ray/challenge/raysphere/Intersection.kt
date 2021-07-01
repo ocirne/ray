@@ -4,6 +4,8 @@ import io.github.ocirne.ray.challenge.math.epsilon
 import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
+import kotlin.math.sqrt
+import kotlin.math.pow
 
 data class Computation(
     val t: Double,
@@ -14,7 +16,6 @@ data class Computation(
     val n1: Double,
     val n2: Double
 ) {
-
     val eyeV: Vector = -direction
     val normalV: Vector
     val reflectV: Vector
@@ -33,6 +34,25 @@ data class Computation(
         overPoint = point + normalV * epsilon
         underPoint = point - normalV * epsilon
         reflectV = direction.reflect(normalV)
+    }
+
+    fun schlick(): Double {
+        // find the cosine of the angle between the eye and normal vectors
+        var cos = eyeV.dot(normalV)
+        // total internal reflection can only occur if n1 > n2
+        if (n1 > n2) {
+            val n = n1 / n2
+            val sin2_t = n * n * (1.0 - cos * cos)
+            if (sin2_t > 1.0) {
+                return 1.0
+            }
+            // compute cosine of theta_t using trig identity
+            val cos_t = sqrt(1.0 - sin2_t)
+            // when n1 > n2, use cos(theta_t) instead
+            cos = cos_t
+        }
+        val r0 = ((n1 - n2) / (n1 + n2)).pow(2)
+        return r0 + (1 - r0) * (1 - cos).pow(5)
     }
 }
 

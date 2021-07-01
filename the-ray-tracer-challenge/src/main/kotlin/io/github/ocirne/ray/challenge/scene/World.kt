@@ -8,7 +8,6 @@ import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.tuples.BLACK
 import io.github.ocirne.ray.challenge.tuples.Color
 import io.github.ocirne.ray.challenge.tuples.Point
-import io.github.ocirne.ray.challenge.tuples.WHITE
 import kotlin.math.sqrt
 
 class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = listOf()) {
@@ -17,7 +16,7 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         return shapes.map { o -> o.intersect(ray) }
             .filter { hit -> hit.isNotEmpty() }
             .flatten()
-            .filter { hit -> hit.t >= 0}
+            .filter { hit -> hit.t >= 0 }
             .sortedBy { s -> s.t }
     }
 
@@ -29,18 +28,25 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         return World(shapes, listOf(light))
     }
 
-    fun shadeHit(comps: Computation, remaining: Int=4): Color {
+    fun shadeHit(comps: Computation, remaining: Int = 4): Color {
         val shadowed = isShadowed(comps.overPoint)
 
         return lights.map { light ->
-            val surface = comps.shape.material.lighting(comps.shape, light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
+            val surface =
+                comps.shape.material.lighting(comps.shape, light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
             val reflected = reflectedColor(comps, remaining)
             val refracted = refractedColor(comps, remaining)
-            surface + reflected + refracted
+            val material = comps.shape.material
+            if (material.reflective > 0 && material.transparency > 0) {
+                val reflectance = comps.schlick()
+                surface + reflected * reflectance + refracted * (1 - reflectance)
+            } else {
+                surface + reflected + refracted
+            }
         }.reduce { acc, color -> acc + color }
     }
 
-    fun colorAt(ray: Ray, remaining: Int=4): Color {
+    fun colorAt(ray: Ray, remaining: Int = 4): Color {
         val hits = intersect(ray)
         if (hits.isEmpty()) {
             return BLACK
@@ -84,7 +90,7 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         val cos_i = comps.eyeV.dot(comps.normalV)
 
         // Find sin(theta_t)^2 via trigonometric identity
-        val sin2_t = n_ratio*n_ratio * (1 - cos_i*cos_i)
+        val sin2_t = n_ratio * n_ratio * (1 - cos_i * cos_i)
 
         if (sin2_t > 1) {
             return BLACK
