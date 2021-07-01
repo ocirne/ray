@@ -6,6 +6,8 @@ import io.github.ocirne.ray.challenge.raysphere.Intersections
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Plane
 import io.github.ocirne.ray.challenge.shapes.Sphere
+import io.github.ocirne.ray.challenge.shapes.glassSphere
+import io.github.ocirne.ray.challenge.transformations.scaling
 import io.github.ocirne.ray.challenge.transformations.translation
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.doubles.shouldBeGreaterThan
@@ -21,7 +23,7 @@ internal class IntersectionTest  {
         val s = Sphere()
         val i = Intersection(3.5, s)
         i.t shouldBe 3.5
-        i.obj shouldBe s
+        i.shape shouldBe s
       }
 
     @Test
@@ -84,7 +86,7 @@ internal class IntersectionTest  {
     val i = Intersection(4, shape)
   val comps = i.prepareComputations(r)
    comps.t shouldBe i.t
-     comps.shape shouldBe i.obj
+     comps.shape shouldBe i.shape
      comps.point shouldBe point(0, 0, -1)
      comps.eyeV shouldBe vector(0, 0, -1)
      comps.normalV shouldBe vector(0, 0, -1)
@@ -131,11 +133,43 @@ internal class IntersectionTest  {
    comps.reflectV shouldBe vector(0.0, magic2, magic2)
       }
 
-/*
+    data class Example(val index: Int, val n1: Double, val n2: Double)
+
+        @Test
+        fun `Scenario Outline Finding n1 and n2 at various intersections`() {
+            for (example in listOf(
+                Example(0, 1.0, 1.5),
+                Example(1, 1.5, 2.0),
+                Example(2, 2.0, 2.5),
+                Example(3, 2.5, 2.5),
+                Example(4, 2.5, 1.5),
+                Example(5, 1.5, 1.0)
+            )) {
+                verifyIntersectionExample(example.index, example.n1, example.n2)
+            }
+        }
+
+       private fun verifyIntersectionExample(index: Int, n1: Double, n2: Double) {
+           val a = glassSphere(scaling(2, 2, 2), refractiveIndex = 1.5)
+            val b = glassSphere(translation(0.0, 0.0, -0.25), refractiveIndex = 2.0)
+            val c = glassSphere(translation(0.0, 0.0, 0.25), refractiveIndex = 2.5)
+            val r = Ray(point(0, 0, -4), vector(0, 0, 1))
+            val xs = listOf(Intersection(2, a),
+                Intersection(2.75,b),
+                    Intersection(3.25,c),
+                        Intersection(4.75,b),
+                            Intersection(5.25,c),
+                                Intersection(6,a))
+            val comps = xs[index].prepareComputations(r, xs)
+            comps.n1 shouldBe n1
+            comps.n2 shouldBe n2
+        }
+
+    /*
             @Test
             fun `Scenario The under point is offset below the surface`() {
   val r = Ray(point(0, 0, -5), vector(0, 0, 1))
-    val shape = glass_Sphere() with:
+    val shape = glassSphere() with:
       | transform | translation(0, 0, 1) |
     val i = Intersection(5, shape)
     val xs = intersections(i)
@@ -144,36 +178,9 @@ internal class IntersectionTest  {
     val comps.point.z < comps.under_point.z
             }
 
-        @Test
-        fun `Scenario Outline: Finding n1 and n2 at various intersections`() {
-  val A = glass_Sphere() with:
-      | transform                 | scaling(2, 2, 2) |
-      | material.refractiveIndex | 1.5              |
-    val B = glass_Sphere() with:
-      | transform                 | translation(0, 0, -0.25) |
-      | material.refractiveIndex | 2.0                      |
-    val C = glass_Sphere() with:
-      | transform                 | translation(0, 0, 0.25) |
-      | material.refractiveIndex | 2.5                     |
-    val r = Ray(point(0, 0, -4), vector(0, 0, 1))
-    val xs = intersections(2:A, 2.75:B, 3.25:C, 4.75:B, 5.25:C, 6:A)
-  val comps = prepareComputations(xs[<index>], r, xs)
-   comps.n1 shouldBe <n1>
-    val comps.n2 shouldBe <n2>
-
-  Examples:
-    | index | n1  | n2  |
-    | 0     | 1.0 | 1.5 |
-    | 1     | 1.5 | 2.0 |
-    | 2     | 2.0 | 2.5 |
-    | 3     | 2.5 | 2.5 |
-    | 4     | 2.5 | 1.5 |
-    | 5     | 1.5 | 1.0 |
-        }
-
       @Test
       fun `Scenario The Schlick approximation under total internal reflection`() {
-  val shape = glass_Sphere()
+  val shape = glassSphere()
     val r = Ray(point(0, 0, √2/2), vector(0, 1, 0))
     val xs = intersections(-√2/2:shape, √2/2:shape)
   val comps = prepareComputations(xs[1], r, xs)

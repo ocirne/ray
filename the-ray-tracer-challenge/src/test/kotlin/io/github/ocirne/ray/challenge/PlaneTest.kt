@@ -42,7 +42,7 @@ internal class PlaneTest {
         val xs = p.localIntersect(r)
         xs.size shouldBe 1
         xs[0].t shouldBe 1
-        xs[0].obj shouldBe p
+        xs[0].shape shouldBe p
     }
 
     @Test
@@ -52,6 +52,6 @@ internal class PlaneTest {
         val xs = p.localIntersect(r)
         xs.size shouldBe 1
         xs[0].t shouldBe 1
-        xs[0].obj shouldBe p
+        xs[0].shape shouldBe p
     }
 }

@@ -42,7 +42,7 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         if (hits.isEmpty()) {
             return BLACK
         }
-        val comps = hits.first().prepareComputations(ray)
+        val comps = hits.first().prepareComputations(ray, hits)
         return shadeHit(comps, remaining)
     }
 

@@ -43,3 +43,7 @@ data class Sphere(
         return localPoint - point(0, 0, 0)
     }
 }
+
+fun glassSphere(transform: Matrix = identityMatrix, refractiveIndex: Double = 1.5): Sphere {
+    return Sphere(transform, Material(transparency = 1.0, refractiveIndex = refractiveIndex))
+}

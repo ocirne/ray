@@ -1,7 +1,9 @@
 package io.github.ocirne.ray.challenge
 
+import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Sphere
+import io.github.ocirne.ray.challenge.shapes.glassSphere
 import io.github.ocirne.ray.challenge.transformations.rotationZ
 import io.github.ocirne.ray.challenge.transformations.scaling
 import io.github.ocirne.ray.challenge.transformations.translation
@@ -66,8 +68,8 @@ internal class SphereTest {
         val s = Sphere()
         val xs = s.intersect(r)
         xs.size shouldBe 2
-        xs[0].obj shouldBe s
-        xs[1].obj shouldBe s
+        xs[0].shape shouldBe s
+        xs[1].shape shouldBe s
     }
 
     @Test
@@ -139,13 +141,11 @@ internal class SphereTest {
         n shouldBe vector(0.0, 0.97014, -0.24254)
     }
 
-/*
-  @Test
-  fun `Scenario A helper for producing a sphere with a glassy material`() {
-  val s = glass_Sphere()
-   s.transform shouldBe identityMatrix
-    s.material.transparency shouldBe 1.0
-    s.material.refractiveIndex shouldBe 1.5
-  }
-    */
+    @Test
+    fun `Scenario A helper for producing a sphere with a glassy material`() {
+        val s = glassSphere()
+        s.transform shouldBe identityMatrix
+        s.material.transparency shouldBe 1.0
+        s.material.refractiveIndex shouldBe 1.5
+    }
 }
