@@ -95,13 +95,13 @@ internal class MaterialTest {
           c1 shouldBe color (1, 1, 1)
           c2 shouldBe color (0, 0, 0)
         }
-/*
+
       @Test
       fun `Scenario Reflectivity for the default material`() {
-  val m = Material()
-  m.reflective shouldBe 0.0
-}
-
+        val m = Material()
+    m.reflective shouldBe 0.0
+    }
+/*
       @Test
       fun `Scenario Transparency and Refractive Index for the default material`() {
   val m = Material()

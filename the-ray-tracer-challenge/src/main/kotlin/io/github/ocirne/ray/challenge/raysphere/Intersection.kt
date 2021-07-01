@@ -9,10 +9,12 @@ data class Computation(
     val t: Double,
     val shape: Shape,
     val point: Point,
-    val eyeV: Vector,
+    private val direction: Vector,
     val preNormalV: Vector) {
 
+    val eyeV: Vector = -direction
     val normalV: Vector
+    val reflectV: Vector
     val inside: Boolean
     val overPoint: Point
 
@@ -25,6 +27,7 @@ data class Computation(
             normalV = preNormalV
         }
         overPoint = point + normalV * epsilon
+        reflectV = direction.reflect(normalV)
     }
 }
 
@@ -38,7 +41,7 @@ class Intersection(val t: Double, val obj: Shape) {
             t = t,
             shape = obj,
             point = point,
-            eyeV = -ray.direction,
+            direction = ray.direction,
             preNormalV = obj.normalAt(point),
         )
     }

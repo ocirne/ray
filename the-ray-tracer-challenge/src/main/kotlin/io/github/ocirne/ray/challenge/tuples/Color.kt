@@ -1,7 +1,6 @@
 package io.github.ocirne.ray.challenge.tuples
 
 import io.github.ocirne.ray.challenge.math.equalsDelta
-import kotlin.math.abs
 import kotlin.random.Random
 
 /** TODO Prüfen, ob mit Color zusammenführbar. Allerdings: Unterschiedliche Größe und Semantik. */

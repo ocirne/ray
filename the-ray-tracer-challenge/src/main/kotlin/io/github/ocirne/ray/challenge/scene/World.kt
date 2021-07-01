@@ -27,21 +27,23 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         return World(shapes, listOf(light))
     }
 
-    fun shadeHit(comps: Computation): Color {
+    fun shadeHit(comps: Computation, remaining: Int=4): Color {
         val shadowed = isShadowed(comps.overPoint)
 
         return lights.map { light ->
-            comps.shape.material.lighting(comps.shape, light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
+            val surface = comps.shape.material.lighting(comps.shape, light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
+            val reflected = reflectedColor(comps, remaining)
+            surface + reflected
         }.reduce { acc, color -> acc + color }
     }
 
-    fun colorAt(ray: Ray): Color {
+    fun colorAt(ray: Ray, remaining: Int=4): Color {
         val hits = intersect(ray)
         if (hits.isEmpty()) {
             return BLACK
         }
         val comps = hits.first().prepareComputations(ray)
-        return shadeHit(comps)
+        return shadeHit(comps, remaining)
     }
 
     fun isShadowed(point: Point): Boolean {
@@ -53,5 +55,17 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         val r = Ray(point, direction)
         val intersections = intersect(r)
         return intersections.isNotEmpty() && intersections.first().t < distance
+    }
+
+    fun reflectedColor(comps: Computation, remaining: Int): Color {
+        if (remaining <= 1) {
+            return BLACK
+        }
+        if (comps.shape.material.reflective == 0.0) {
+            return BLACK
+        }
+        val reflectRay = Ray(comps.overPoint, comps.reflectV)
+        val color = colorAt(reflectRay, remaining - 1)
+        return color * comps.shape.material.reflective
     }
 }

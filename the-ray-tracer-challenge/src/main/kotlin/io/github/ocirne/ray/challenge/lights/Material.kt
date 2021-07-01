@@ -12,7 +12,8 @@ data class Material(
     var ambient: Double = 0.1,
     val diffuse: Double = 0.9,
     val specular: Double = 0.9,
-    val shininess: Double = 200.0
+    val shininess: Double = 200.0,
+    val reflective: Double = 0.0
 ) {
     fun lighting(shape: Shape, light: PointLight, point: Point, eyev: Vector, normalv: Vector, inShadow: Boolean=false): Color {
         val patternColor = pattern?.patternAtShape(shape, point) ?: color
@@ -27,8 +28,8 @@ data class Material(
         var effectiveSpecular = BLACK
         if (lightDotNormal >= 0) {
             effectiveDiffuse = effectiveColor * diffuse * lightDotNormal
-            val reflectv = (-lightv).reflect(normalv)
-            val reflectDotEye = reflectv.dot(eyev)
+            val reflectV = (-lightv).reflect(normalv)
+            val reflectDotEye = reflectV.dot(eyev)
             if (reflectDotEye > 0) {
                 val factor = reflectDotEye.pow(shininess)
                 effectiveSpecular = light.intensity * specular * factor
