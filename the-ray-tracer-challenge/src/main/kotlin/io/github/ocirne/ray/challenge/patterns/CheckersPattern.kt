@@ -6,11 +6,13 @@ import io.github.ocirne.ray.challenge.tuples.Color
 import io.github.ocirne.ray.challenge.tuples.Point
 import kotlin.math.floor
 
-class StripePattern(val a: Color,
-                    val b: Color,
-                    override val transform: Matrix = identityMatrix): Pattern(transform) {
+class CheckersPattern(
+    val a: Color,
+    val b: Color,
+    override val transform: Matrix = identityMatrix
+) : Pattern(transform) {
 
     override fun patternAt(point: Point): Color {
-        return if (floor(point.x).toInt() % 2 == 0) a else b
+        return if ((floor(point.x) + floor(point.y) + floor(point.z)).toInt() % 2 == 0) a else b
     }
 }

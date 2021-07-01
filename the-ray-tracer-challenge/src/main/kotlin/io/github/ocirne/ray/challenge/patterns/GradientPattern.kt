@@ -6,11 +6,15 @@ import io.github.ocirne.ray.challenge.tuples.Color
 import io.github.ocirne.ray.challenge.tuples.Point
 import kotlin.math.floor
 
-class StripePattern(val a: Color,
-                    val b: Color,
-                    override val transform: Matrix = identityMatrix): Pattern(transform) {
+class GradientPattern(
+    val a: Color,
+    val b: Color,
+    override val transform: Matrix = identityMatrix
+) : Pattern(transform) {
 
     override fun patternAt(point: Point): Color {
-        return if (floor(point.x).toInt() % 2 == 0) a else b
+        val distance = b - a
+        val fraction = point.x - floor(point.x)
+        return a + distance * fraction
     }
 }
