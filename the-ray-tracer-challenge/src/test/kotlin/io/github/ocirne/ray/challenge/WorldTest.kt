@@ -226,7 +226,7 @@ val w = defaultWorld ()
 val  shape = the first object in w
 val  shape has:
 | material.transparency     | 1.0 |
-| material.refractive_index | 1.5 |
+| material.refractiveIndex | 1.5 |
 val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
 val  xs = intersections (4:shape, 6:shape)
 val comps = prepareComputations (xs[0], r, xs)
@@ -240,7 +240,7 @@ val w = defaultWorld ()
 val  shape = the first object in w
 val  shape has:
 | material.transparency     | 1.0 |
-| material.refractive_index | 1.5 |
+| material.refractiveIndex | 1.5 |
 val  r = Ray (point(0, 0, √2/2), vector(0, 1, 0))
 val  xs = intersections (-√2/2:shape, √2/2:shape)
 # NOTE: this time you're inside the sphere, so you need
@@ -260,7 +260,7 @@ val  A has:
 val  B = the second object in w
 val  B has:
 | material.transparency     | 1.0 |
-| material.refractive_index | 1.5 |
+| material.refractiveIndex | 1.5 |
 val  r = Ray (point(0, 0, 0.1), vector(0, 1, 0))
 val  xs = intersections (-0.9899:A, -0.4899:B, 0.4899:B, 0.9899:A)
 val comps = prepareComputations (xs[2], r, xs)
@@ -274,7 +274,7 @@ val w = defaultWorld ()
 val  floor = Plane () with :
 | transform                 | translation(0, -1, 0) |
 | material.transparency     | 0.5                   |
-| material.refractive_index | 1.5                   |
+| material.refractiveIndex | 1.5                   |
 val  floor is added to w
         val  ball = Sphere () with :
 | material.color     | (1, 0, 0)                  |
@@ -296,7 +296,7 @@ val  floor = Plane () with :
 | transform                 | translation(0, -1, 0) |
 | material.reflective       | 0.5                   |
 | material.transparency     | 0.5                   |
-| material.refractive_index | 1.5                   |
+| material.refractiveIndex | 1.5                   |
 val  floor is added to w
         val  ball = Sphere () with :
 | material.color     | (1, 0, 0)                  |

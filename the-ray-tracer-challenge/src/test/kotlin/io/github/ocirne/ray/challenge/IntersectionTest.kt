@@ -148,13 +148,13 @@ internal class IntersectionTest  {
         fun `Scenario Outline: Finding n1 and n2 at various intersections`() {
   val A = glass_Sphere() with:
       | transform                 | scaling(2, 2, 2) |
-      | material.refractive_index | 1.5              |
+      | material.refractiveIndex | 1.5              |
     val B = glass_Sphere() with:
       | transform                 | translation(0, 0, -0.25) |
-      | material.refractive_index | 2.0                      |
+      | material.refractiveIndex | 2.0                      |
     val C = glass_Sphere() with:
       | transform                 | translation(0, 0, 0.25) |
-      | material.refractive_index | 2.5                     |
+      | material.refractiveIndex | 2.5                     |
     val r = Ray(point(0, 0, -4), vector(0, 0, 1))
     val xs = intersections(2:A, 2.75:B, 3.25:C, 4.75:B, 5.25:C, 6:A)
   val comps = prepareComputations(xs[<index>], r, xs)

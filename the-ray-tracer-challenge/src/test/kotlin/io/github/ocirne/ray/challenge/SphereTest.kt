@@ -145,7 +145,7 @@ internal class SphereTest {
   val s = glass_Sphere()
    s.transform shouldBe identityMatrix
     s.material.transparency shouldBe 1.0
-    s.material.refractive_index shouldBe 1.5
+    s.material.refractiveIndex shouldBe 1.5
   }
     */
 }

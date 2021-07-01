@@ -7,7 +7,6 @@ import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import kotlin.math.sqrt
 
 internal class MaterialTest {
 
@@ -70,44 +69,43 @@ internal class MaterialTest {
         result shouldBe color(0.1, 0.1, 0.1)
     }
 
-      @Test
-      fun `Scenario Lighting with the surface in shadow`() {
-        val eyeV = vector (0, 0, -1)
-        val normalV = vector (0, 0, -1)
+    @Test
+    fun `Scenario Lighting with the surface in shadow`() {
+        val eyeV = vector(0, 0, -1)
+        val normalV = vector(0, 0, -1)
         val light = PointLight(point(0, 0, -10), color(1, 1, 1))
         val inShadow = true
         val result = m.lighting(s, light, position, eyeV, normalV, inShadow)
-        result shouldBe color (0.1, 0.1, 0.1)
+        result shouldBe color(0.1, 0.1, 0.1)
     }
 
-        @Test
-        fun `Scenario Lighting with a pattern applied`() {
-          val m = Material(
-              pattern = StripePattern (WHITE, BLACK),
-              ambient = 1.0,
-              diffuse = 0.0,
-              specular = 0.0)
-          val eyeV = vector (0, 0, -1)
-          val normalV = vector (0, 0, -1)
-          val light = PointLight (point(0, 0, -10), color(1, 1, 1))
-          val c1 = m.lighting (s, light, point(0.9, 0.0, 0.0), eyeV, normalV, false)
-          val c2 = m.lighting (s, light, point(1.1, 0.0, 0.0), eyeV, normalV, false)
-          c1 shouldBe color (1, 1, 1)
-          c2 shouldBe color (0, 0, 0)
-        }
+    @Test
+    fun `Scenario Lighting with a pattern applied`() {
+        val m = Material(
+            pattern = StripePattern(WHITE, BLACK),
+            ambient = 1.0,
+            diffuse = 0.0,
+            specular = 0.0
+        )
+        val eyeV = vector(0, 0, -1)
+        val normalV = vector(0, 0, -1)
+        val light = PointLight(point(0, 0, -10), color(1, 1, 1))
+        val c1 = m.lighting(s, light, point(0.9, 0.0, 0.0), eyeV, normalV, false)
+        val c2 = m.lighting(s, light, point(1.1, 0.0, 0.0), eyeV, normalV, false)
+        c1 shouldBe color(1, 1, 1)
+        c2 shouldBe color(0, 0, 0)
+    }
 
-      @Test
-      fun `Scenario Reflectivity for the default material`() {
+    @Test
+    fun `Scenario Reflectivity for the default material`() {
         val m = Material()
-    m.reflective shouldBe 0.0
+        m.reflective shouldBe 0.0
     }
-/*
-      @Test
-      fun `Scenario Transparency and Refractive Index for the default material`() {
-  val m = Material()
-  m.transparency shouldBe 0.0
-    val m.refractive_index shouldBe 1.0
-}
 
- */
-      }
+    @Test
+    fun `Scenario Transparency and Refractive Index for the default material`() {
+        val m = Material()
+        m.transparency shouldBe 0.0
+        m.refractiveIndex shouldBe 1.0
+    }
+}

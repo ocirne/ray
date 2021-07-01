@@ -13,7 +13,9 @@ data class Material(
     val diffuse: Double = 0.9,
     val specular: Double = 0.9,
     val shininess: Double = 200.0,
-    val reflective: Double = 0.0
+    val reflective: Double = 0.0,
+    val transparency: Double = 0.0,
+    val refractiveIndex: Double = 1.0
 ) {
     fun lighting(shape: Shape, light: PointLight, point: Point, eyev: Vector, normalv: Vector, inShadow: Boolean=false): Color {
         val patternColor = pattern?.patternAtShape(shape, point) ?: color
