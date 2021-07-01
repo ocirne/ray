@@ -270,7 +270,7 @@ internal class WorldTest {
     val  A = the first object in w
     val  A has:
     | material.ambient | 1.0            |
-    | material.pattern | test_pattern() |
+    | material.pattern | TestPattern() |
     val  B = the second object in w
     val  B has:
     | material.transparency     | 1.0 |
