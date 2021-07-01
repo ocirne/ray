@@ -2,6 +2,7 @@ package io.github.ocirne.ray.challenge
 
 import io.github.ocirne.ray.challenge.lights.Material
 import io.github.ocirne.ray.challenge.lights.PointLight
+import io.github.ocirne.ray.challenge.patterns.StripePattern
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
@@ -77,23 +78,24 @@ internal class MaterialTest {
         val inShadow = true
         val result = m.lighting(light, position, eyeV, normalV, inShadow)
         result shouldBe color (0.1, 0.1, 0.1)
-}
-/*
+    }
+
         @Test
         fun `Scenario Lighting with a pattern applied`() {
-          val m . pattern = stripe_pattern (color(1, 1, 1), color(0, 0, 0))
-          val m . ambient = 1
-          val m . diffuse = 0
-          val m . specular = 0
+          val m = Material(
+              pattern = StripePattern (WHITE, BLACK),
+              ambient = 1.0,
+              diffuse = 0.0,
+              specular = 0.0)
           val eyev = vector (0, 0, -1)
           val normalv = vector (0, 0, -1)
-          val light = point_light (point(0, 0, -10), color(1, 1, 1))
-          val c1 = lighting (m, light, point(0.9, 0, 0), eyev, normalv, false)
-          val c2 = lighting (m, light, point(1.1, 0, 0), eyev, normalv, false)
+          val light = PointLight (point(0, 0, -10), color(1, 1, 1))
+          val c1 = m.lighting (light, point(0.9, 0.0, 0.0), eyev, normalv, false)
+          val c2 = m.lighting (light, point(1.1, 0.0, 0.0), eyev, normalv, false)
           c1 shouldBe color (1, 1, 1)
           c2 shouldBe color (0, 0, 0)
         }
-
+/*
       @Test
       fun `Scenario Reflectivity for the default material`() {
   val m = Material()

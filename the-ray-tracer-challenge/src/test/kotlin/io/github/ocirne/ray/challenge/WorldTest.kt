@@ -196,7 +196,7 @@ internal class WorldTest {
     @Test
     fun `Scenario colorAt() with mutually reflective surfaces`() {
     val w = world ()
-    val  w . light = point_light (point(0, 0, 0), color(1, 1, 1))
+    val  w . light = PointLight (point(0, 0, 0), color(1, 1, 1))
     val  lower = Plane () with :
     | material.reflective | 1                     |
     | transform           | translation(0, -1, 0) |
