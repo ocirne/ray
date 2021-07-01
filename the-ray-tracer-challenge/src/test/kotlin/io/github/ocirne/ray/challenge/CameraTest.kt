@@ -14,8 +14,6 @@ import kotlin.math.sqrt
 
 internal class CameraTest {
 
-    private val magic2 = sqrt(2.0) / 2.0
-
     @Test
     fun `Scenario Constructing a camera`() {
         val hSize = 160

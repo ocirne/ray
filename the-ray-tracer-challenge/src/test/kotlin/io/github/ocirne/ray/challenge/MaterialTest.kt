@@ -11,8 +11,6 @@ import kotlin.math.sqrt
 
 internal class MaterialTest {
 
-    private val magic2 = sqrt(2.0) / 2.0
-
     private val s = Sphere()
     private val m = Material()
     private val position = point(0, 0, 0)

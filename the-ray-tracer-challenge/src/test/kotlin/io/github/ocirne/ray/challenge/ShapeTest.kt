@@ -37,8 +37,6 @@ class TestShape(transform: Matrix= identityMatrix, material: Material=Material()
 
 internal class ShapeTest {
 
-    private val magic2 = sqrt(2.0)/2.0
-
       @Test
       fun `Scenario The default transformation`() {
       val s = TestShape()

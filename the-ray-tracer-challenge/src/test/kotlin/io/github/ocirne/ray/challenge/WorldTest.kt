@@ -27,8 +27,6 @@ fun defaultWorld(): World {
 
 internal class WorldTest {
 
-  private val magic2 = sqrt(2.0)/2.0
-
   @Test
   fun `Scenario Creating a world`() {
     val  w = World()

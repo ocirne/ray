@@ -7,8 +7,6 @@ import kotlin.math.sqrt
 
 internal class TupleTest {
 
-    private val magic2 = sqrt(2.0) / 2.0
-
     @Test
     fun `Scenario A tuple with w eq 0 dot 1 is a point`() {
         val a = Tuple(4.3, -4.2, 3.1, 1.0)

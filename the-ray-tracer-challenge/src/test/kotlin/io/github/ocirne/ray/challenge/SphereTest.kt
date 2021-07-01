@@ -9,12 +9,8 @@ import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import kotlin.math.PI
-import kotlin.math.sqrt
 
 internal class SphereTest {
-
-    private val magic2 = sqrt(2.0) / 2.0
-    private val magic3 = sqrt(3.0) / 3.0
 
     @Test
     fun `Scenario A ray intersects a sphere at two points`() {
