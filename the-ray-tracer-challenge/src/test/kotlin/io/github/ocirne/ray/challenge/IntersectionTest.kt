@@ -82,7 +82,7 @@ internal class IntersectionTest  {
     val i = Intersection(4, shape)
   val comps = i.prepareComputations(r)
    comps.t shouldBe i.t
-     comps.obj shouldBe i.obj
+     comps.shape shouldBe i.obj
      comps.point shouldBe point(0, 0, -1)
      comps.eyeV shouldBe vector(0, 0, -1)
      comps.normalV shouldBe vector(0, 0, -1)

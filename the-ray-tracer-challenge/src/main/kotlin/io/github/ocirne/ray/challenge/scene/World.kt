@@ -31,7 +31,7 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         val shadowed = isShadowed(comps.overPoint)
 
         return lights.map { light ->
-            comps.obj.material.lighting(light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
+            comps.shape.material.lighting(comps.shape, light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
         }.reduce { acc, color -> acc + color }
     }
 

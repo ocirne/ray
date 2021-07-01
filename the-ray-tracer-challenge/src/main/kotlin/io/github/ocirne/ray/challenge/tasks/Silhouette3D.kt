@@ -48,7 +48,7 @@ fun main() {
                 val point = ray.position(hit.t)
                 val normal = hit.obj.normalAt(point)
                 val eye = -ray.direction
-                val color = hit.obj.material.lighting(light, point, eye, normal)
+                val color = hit.obj.material.lighting(Sphere(), light, point, eye, normal)
                 canvas.writePixel(x, y, color)
             } else {
                 canvas.writePixel(x, y, BLACK)

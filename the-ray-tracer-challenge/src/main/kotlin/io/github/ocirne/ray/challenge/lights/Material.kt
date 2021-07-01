@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.challenge.lights
 
 import io.github.ocirne.ray.challenge.patterns.StripePattern
+import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.tuples.*
 import kotlin.math.pow
 
@@ -13,8 +14,8 @@ data class Material(
     val specular: Double = 0.9,
     val shininess: Double = 200.0
 ) {
-    fun lighting(light: PointLight, point: Point, eyev: Vector, normalv: Vector, inShadow: Boolean=false): Color {
-        val patternColor = pattern?.stripeAt(point) ?: color
+    fun lighting(shape: Shape, light: PointLight, point: Point, eyev: Vector, normalv: Vector, inShadow: Boolean=false): Color {
+        val patternColor = pattern?.stripeAtShape(shape, point) ?: color
         val effectiveColor = patternColor * light.intensity
         val lightv = (light.position - point).normalize()
         val effectiveAmbient = effectiveColor * ambient

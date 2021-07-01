@@ -7,7 +7,7 @@ import io.github.ocirne.ray.challenge.tuples.Vector
 
 data class Computation(
     val t: Double,
-    val obj: Shape,
+    val shape: Shape,
     val point: Point,
     val eyeV: Vector,
     val preNormalV: Vector) {
@@ -36,7 +36,7 @@ class Intersection(val t: Double, val obj: Shape) {
         val point = ray.position(t)
         return Computation(
             t = t,
-            obj = obj,
+            shape = obj,
             point = point,
             eyeV = -ray.direction,
             preNormalV = obj.normalAt(point),
