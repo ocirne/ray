@@ -20,6 +20,7 @@ data class Computation(
     val reflectV: Vector
     val inside: Boolean
     val overPoint: Point
+    val underPoint: Point
 
     init {
         if (preNormalV.dot(eyeV) < 0) {
@@ -30,6 +31,7 @@ data class Computation(
             normalV = preNormalV
         }
         overPoint = point + normalV * epsilon
+        underPoint = point - normalV * epsilon
         reflectV = direction.reflect(normalV)
     }
 }

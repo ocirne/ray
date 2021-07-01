@@ -165,19 +165,17 @@ internal class IntersectionTest  {
             comps.n2 shouldBe n2
         }
 
-    /*
             @Test
             fun `Scenario The under point is offset below the surface`() {
   val r = Ray(point(0, 0, -5), vector(0, 0, 1))
-    val shape = glassSphere() with:
-      | transform | translation(0, 0, 1) |
+    val shape = glassSphere(translation(0, 0, 1))
     val i = Intersection(5, shape)
-    val xs = intersections(i)
-  val comps = prepareComputations(i, r, xs)
-   comps.under_point.z > EPSILON/2
-    val comps.point.z < comps.under_point.z
+    val xs = listOf(i)
+  val comps = i.prepareComputations(r, xs)
+   comps.underPoint.z shouldBeGreaterThan epsilon/2
+    comps.point.z shouldBeLessThan comps.underPoint.z
             }
-
+/*
       @Test
       fun `Scenario The Schlick approximation under total internal reflection`() {
   val shape = glassSphere()

@@ -208,86 +208,74 @@ internal class WorldTest {
     color shouldBe color (0, 0, 0)
   }
 
-    /*
 @Test
 fun `Scenario The refracted color with an opaque surface`() {
 val w = defaultWorld ()
-val  shape = the first object in w
+val  shape = w.shapes[0]
 val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
-val  xs = intersections (4:shape, 6:shape)
-val comps = prepareComputations (xs[0], r, xs)
-val  c = refracted_color (w, comps, 5)
+val  xs = listOf(Intersection(4, shape), Intersection(6, shape))
+val comps = xs[0].prepareComputations (r, xs)
+val  c = w.refractedColor (comps, 5)
 c shouldBe color (0, 0, 0)
 }
 
 @Test
 fun `Scenario The refracted color at the maximum recursive depth`() {
 val w = defaultWorld ()
-val  shape = the first object in w
-val  shape has:
-| material.transparency     | 1.0 |
-| material.refractiveIndex | 1.5 |
+val shape = w.shapes[0]
+shape.material.transparency = 1.0
+shape.material.refractiveIndex = 1.5
 val  r = Ray (point(0, 0, -5), vector(0, 0, 1))
-val  xs = intersections (4:shape, 6:shape)
-val comps = prepareComputations (xs[0], r, xs)
-val  c = refracted_color (w, comps, 0)
-c shouldBe color (0, 0, 0)
+val  xs = listOf(Intersection (4, shape), Intersection(6, shape))
+val comps = xs[0].prepareComputations (r, xs)
+val  c = w.refractedColor (comps, 0)
+c shouldBe BLACK
 }
 
 @Test
 fun `Scenario The refracted color under total internal reflection`() {
 val w = defaultWorld ()
-val  shape = the first object in w
-val  shape has:
-| material.transparency     | 1.0 |
-| material.refractiveIndex | 1.5 |
-val  r = Ray (point(0, 0, √2/2), vector(0, 1, 0))
-val  xs = intersections (-√2/2:shape, √2/2:shape)
-# NOTE: this time you're inside the sphere, so you need
-# to look at the second intersection, xs[1], not xs[0]
-val comps = prepareComputations (xs[1], r, xs)
-val  c = refracted_color (w, comps, 5)
+val  shape = w.shapes[0]
+shape.material.transparency = 1.0
+shape.material.refractiveIndex = 1.5
+val  r = Ray (point(0.0, 0.0, magic2), vector(0, 1, 0))
+val  xs = listOf(Intersection(-magic2, shape), Intersection(magic2, shape))
+// NOTE: this time you're inside the sphere, so you need
+// to look at the second intersection, xs[1], not xs[0]
+val comps = xs[1].prepareComputations (r, xs)
+val  c = w.refractedColor (comps, 5)
 c shouldBe color (0, 0, 0)
 }
 
 @Test
 fun `Scenario The refracted color with a refracted ray`() {
 val w = defaultWorld ()
-val  A = the first object in w
-val  A has:
-| material.ambient | 1.0            |
-| material.pattern | TestPattern() |
-val  B = the second object in w
-val  B has:
-| material.transparency     | 1.0 |
-| material.refractiveIndex | 1.5 |
-val  r = Ray (point(0, 0, 0.1), vector(0, 1, 0))
-val  xs = intersections (-0.9899:A, -0.4899:B, 0.4899:B, 0.9899:A)
-val comps = prepareComputations (xs[2], r, xs)
-val  c = refracted_color (w, comps, 5)
-c shouldBe color (0, 0.99888, 0.04725)
+val  a = w.shapes[0]
+a.material.ambient = 1.0
+a.material.pattern = TestPattern()
+val  b = w.shapes[1]
+b.material.transparency = 1.0
+b.material.refractiveIndex = 1.5
+val  r = Ray (point(0.0, 0.0, 0.1), vector(0, 1, 0))
+val  xs = listOf(Intersection (-0.9899,a), Intersection(-0.4899,b), Intersection(0.4899,b), Intersection(0.9899,a))
+val comps = xs[2].prepareComputations (r, xs)
+val  c = w.refractedColor (comps, 5)
+c shouldBe color (0.0, 0.99887, 0.04722)
 }
 
 @Test
 fun `Scenario shadeHit() with a transparent material`() {
-val w = defaultWorld ()
-val  floor = Plane () with :
-| transform                 | translation(0, -1, 0) |
-| material.transparency     | 0.5                   |
-| material.refractiveIndex | 1.5                   |
-val  floor is added to w
-        val  ball = Sphere () with :
-| material.color     | (1, 0, 0)                  |
-| material.ambient   | 0.5                        |
-| transform          | translation(0, -3.5, -0.5) |
-val  ball is added to w
-        val  r = Ray (point(0, 0, -3), vector(0, -√2/2, √2/2))
-val  xs = intersections (√2:floor)
-val comps = prepareComputations (xs[0], r, xs)
-val  color = shadeHit (w, comps, 5)
+val  floor = Plane (translation(0, -1, 0), Material(transparency = 0.5, refractiveIndex = 1.5))
+val  ball = Sphere (translation(0.0, -3.5, -0.5), Material(color=RED, ambient = 0.5))
+val w = defaultWorld (floor, ball)
+val  r = Ray (point(0, 0, -3), vector(0.0, -magic2, magic2))
+val  xs = listOf(Intersection (sqrt(2.0), floor))
+val comps = xs[0].prepareComputations (r, xs)
+val  color = w.shadeHit (comps, 5)
 color shouldBe color (0.93642, 0.68642, 0.68642)
 }
 
+/*
 @Test
 fun `Scenario shadeHit() with a reflective, transparent material`() {
 val w = defaultWorld ()
@@ -298,15 +286,15 @@ val  floor = Plane () with :
 | material.transparency     | 0.5                   |
 | material.refractiveIndex | 1.5                   |
 val  floor is added to w
-        val  ball = Sphere () with :
+val  ball = Sphere () with :
 | material.color     | (1, 0, 0)                  |
 | material.ambient   | 0.5                        |
 | transform          | translation(0, -3.5, -0.5) |
 val  ball is added to w
-        val  xs = intersections (√2:floor)
+val  xs = intersections (√2:floor)
 val comps = prepareComputations (xs[0], r, xs)
 val  color = shadeHit (w, comps, 5)
 color shouldBe color (0.93391, 0.69643, 0.69243)
 }
-  */
+*/
 }

@@ -8,6 +8,8 @@ import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.tuples.BLACK
 import io.github.ocirne.ray.challenge.tuples.Color
 import io.github.ocirne.ray.challenge.tuples.Point
+import io.github.ocirne.ray.challenge.tuples.WHITE
+import kotlin.math.sqrt
 
 class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = listOf()) {
 
@@ -33,7 +35,8 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         return lights.map { light ->
             val surface = comps.shape.material.lighting(comps.shape, light, comps.overPoint, comps.eyeV, comps.normalV, shadowed)
             val reflected = reflectedColor(comps, remaining)
-            surface + reflected
+            val refracted = refractedColor(comps, remaining)
+            surface + reflected + refracted
         }.reduce { acc, color -> acc + color }
     }
 
@@ -67,5 +70,36 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
         val reflectRay = Ray(comps.overPoint, comps.reflectV)
         val color = colorAt(reflectRay, remaining - 1)
         return color * comps.shape.material.reflective
+    }
+
+    fun refractedColor(comps: Computation, remaining: Int): Color {
+        if (remaining == 0) {
+            return BLACK
+        }
+        // Find the ratio of first index of refraction to the second.
+        // (Yup, this is inverted from the definition of Snell's Law.)
+        val n_ratio = comps.n1 / comps.n2
+
+        // cos(theta_i) is the same as the dot product of the two vectors
+        val cos_i = comps.eyeV.dot(comps.normalV)
+
+        // Find sin(theta_t)^2 via trigonometric identity
+        val sin2_t = n_ratio*n_ratio * (1 - cos_i*cos_i)
+
+        if (sin2_t > 1) {
+            return BLACK
+        }
+        // Find cos(theta_t) via trigonometric identity
+        val cos_t = sqrt(1.0 - sin2_t)
+
+        // Compute the direction of the refracted ray
+        val direction = comps.normalV * (n_ratio * cos_i - cos_t) - comps.eyeV * n_ratio
+
+        // Create the refracted ray
+        val refract_ray = Ray(comps.underPoint, direction)
+
+        // Find the color of the refracted ray, making sure to multiply
+        // by the transparency value to account for any opacity
+        return colorAt(refract_ray, remaining - 1) * comps.shape.material.transparency
     }
 }

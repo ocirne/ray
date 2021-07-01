@@ -7,15 +7,15 @@ import kotlin.math.pow
 
 data class Material(
     val color: Color = WHITE,
-    val pattern: Pattern? = null,
+    var pattern: Pattern? = null,
     // TODO val?
     var ambient: Double = 0.1,
     val diffuse: Double = 0.9,
     val specular: Double = 0.9,
     val shininess: Double = 200.0,
     val reflective: Double = 0.0,
-    val transparency: Double = 0.0,
-    val refractiveIndex: Double = 1.0
+    var transparency: Double = 0.0,
+    var refractiveIndex: Double = 1.0
 ) {
     fun lighting(shape: Shape, light: PointLight, point: Point, eyev: Vector, normalv: Vector, inShadow: Boolean=false): Color {
         val patternColor = pattern?.patternAtShape(shape, point) ?: color
