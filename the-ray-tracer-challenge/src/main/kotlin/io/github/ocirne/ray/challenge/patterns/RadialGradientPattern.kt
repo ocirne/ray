@@ -5,13 +5,18 @@ import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.tuples.Color
 import io.github.ocirne.ray.challenge.tuples.Point
 import kotlin.math.floor
+import kotlin.math.sqrt
 
-class StripePattern(val a: Color,
-                    val b: Color,
-                    override val transform: Matrix = identityMatrix): Pattern(transform) {
+class RadialGradientPattern(val a: Color,
+                            val b: Color,
+                            override val transform: Matrix = identityMatrix
+): Pattern(transform) {
 
     override fun patternAt(objectPoint: Point): Color {
         val p = transform.inverse() * objectPoint
-        return if (floor(p.x).toInt() % 2 == 0) a else b
+        val distance = b - a
+        val radialDistance = sqrt(p.x * p.x + p.z * p.z)
+        val fraction = radialDistance - floor(radialDistance)
+        return a + distance * fraction
     }
 }

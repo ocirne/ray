@@ -13,7 +13,8 @@ class RingPattern(
     override val transform: Matrix = identityMatrix
 ) : Pattern(transform) {
 
-    override fun patternAt(point: Point): Color {
-        return if (floor(sqrt(point.x * point.x + point.z * point.z)).toInt() % 2 == 0) a else b
+    override fun patternAt(objectPoint: Point): Color {
+        val p = transform.inverse() * objectPoint
+        return if (floor(sqrt(p.x * p.x + p.z * p.z)).toInt() % 2 == 0) a else b
     }
 }

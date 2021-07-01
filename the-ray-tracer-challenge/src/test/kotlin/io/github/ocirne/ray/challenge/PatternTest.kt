@@ -13,8 +13,9 @@ import org.junit.jupiter.api.Test
 
 class TestPattern(transform: Matrix = identityMatrix) : Pattern(transform) {
 
-    override fun patternAt(point: Point): Color {
-        return color(point.x, point.y, point.z)
+    override fun patternAt(objectPoint: Point): Color {
+        val p = transform.inverse() * objectPoint
+        return color(p.x, p.y, p.z)
     }
 }
 

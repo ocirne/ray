@@ -12,7 +12,8 @@ class CheckersPattern(
     override val transform: Matrix = identityMatrix
 ) : Pattern(transform) {
 
-    override fun patternAt(point: Point): Color {
-        return if ((floor(point.x) + floor(point.y) + floor(point.z)).toInt() % 2 == 0) a else b
+    override fun patternAt(objectPoint: Point): Color {
+        val p = transform.inverse() * objectPoint
+        return if ((floor(p.x) + floor(p.y) + floor(p.z)).toInt() % 2 == 0) a else b
     }
 }

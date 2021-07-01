@@ -12,9 +12,10 @@ class GradientPattern(
     override val transform: Matrix = identityMatrix
 ) : Pattern(transform) {
 
-    override fun patternAt(point: Point): Color {
+    override fun patternAt(objectPoint: Point): Color {
+        val p = transform.inverse() * objectPoint
         val distance = b - a
-        val fraction = point.x - floor(point.x)
+        val fraction = p.x - floor(p.x)
         return a + distance * fraction
     }
 }
