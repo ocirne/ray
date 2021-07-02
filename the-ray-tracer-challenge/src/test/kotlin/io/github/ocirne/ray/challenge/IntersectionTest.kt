@@ -15,8 +15,12 @@ import io.kotest.matchers.doubles.shouldBeGreaterThan
 import io.kotest.matchers.doubles.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import kotlin.math.sqrt
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class IntersectionTest {
 
     @Test
@@ -134,23 +138,19 @@ internal class IntersectionTest {
         comps.reflectV shouldBe vector(0.0, magic2, magic2)
     }
 
-    data class Example(val index: Int, val n1: Double, val n2: Double)
+    data class ExampleFindingN1N2(val index: Int, val n1: Double, val n2: Double)
 
-    @Test
-    fun `Scenario Outline Finding n1 and n2 at various intersections`() {
-        for (example in listOf(
-            Example(0, 1.0, 1.5),
-            Example(1, 1.5, 2.0),
-            Example(2, 2.0, 2.5),
-            Example(3, 2.5, 2.5),
-            Example(4, 2.5, 1.5),
-            Example(5, 1.5, 1.0)
-        )) {
-            verifyIntersectionExample(example.index, example.n1, example.n2)
-        }
-    }
+    fun examplesFindingN1N2() = listOf(
+        ExampleFindingN1N2(0, 1.0, 1.5),
+        ExampleFindingN1N2(1, 1.5, 2.0),
+        ExampleFindingN1N2(2, 2.0, 2.5),
+        ExampleFindingN1N2(3, 2.5, 2.5),
+        ExampleFindingN1N2(4, 2.5, 1.5),
+        ExampleFindingN1N2(5, 1.5, 1.0))
 
-    private fun verifyIntersectionExample(index: Int, n1: Double, n2: Double) {
+    @ParameterizedTest
+    @MethodSource("examplesFindingN1N2")
+    fun `Scenario Outline Finding n1 and n2 at various intersections`(ex: ExampleFindingN1N2) {
         val a = glassSphere(scaling(2, 2, 2), refractiveIndex = 1.5)
         val b = glassSphere(translation(0.0, 0.0, -0.25), refractiveIndex = 2.0)
         val c = glassSphere(translation(0.0, 0.0, 0.25), refractiveIndex = 2.5)
@@ -163,9 +163,9 @@ internal class IntersectionTest {
             Intersection(5.25, c),
             Intersection(6, a)
         )
-        val comps = xs[index].prepareComputations(r, xs)
-        comps.n1 shouldBe n1
-        comps.n2 shouldBe n2
+        val comps = xs[ex.index].prepareComputations(r, xs)
+        comps.n1 shouldBe ex.n1
+        comps.n2 shouldBe ex.n2
     }
 
     @Test
