@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.challenge
 
+import io.github.ocirne.ray.challenge.math.equalsDelta
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Cylinder
 import io.github.ocirne.ray.challenge.tuples.*
@@ -49,8 +50,8 @@ internal class CylinderTest {
         val r = Ray(ex.origin, direction)
         val xs = cyl.localIntersect(r)
         xs.size shouldBe 2
-        xs[0].t shouldBe ex.t0
-        xs[1].t shouldBe ex.t1
+        xs[0].t.equalsDelta(ex.t0) shouldBe true
+        xs[1].t.equalsDelta(ex.t1) shouldBe true
     }
 
     data class ExampleNormalVector(val point: Point, val normal: Vector)
