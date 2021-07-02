@@ -10,7 +10,6 @@ import io.github.ocirne.ray.challenge.shapes.Cube
 import io.github.ocirne.ray.challenge.shapes.Plane
 import io.github.ocirne.ray.challenge.transformations.*
 import io.github.ocirne.ray.challenge.tuples.*
-import java.io.File
 import kotlin.math.PI
 
 fun cover(): Canvas {
@@ -18,7 +17,7 @@ fun cover(): Canvas {
     // Camera
     val transform = viewTransform(point(-6, 6, -10), point(6, 0, 6), vector(-0.45, 1.0, 0.0))
     // 1680 / 1050
-    val camera = Camera(100, 100, 0.785, transform)
+    val camera = Camera(1680, 1050, 0.785, transform)
 
     // light sources
 
