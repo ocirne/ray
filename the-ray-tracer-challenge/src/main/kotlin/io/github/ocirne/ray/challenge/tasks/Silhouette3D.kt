@@ -9,11 +9,10 @@ import io.github.ocirne.ray.challenge.transformations.rotationZ
 import io.github.ocirne.ray.challenge.transformations.scaling
 import io.github.ocirne.ray.challenge.transformations.shearing
 import io.github.ocirne.ray.challenge.tuples.*
-import java.io.File
 import kotlin.math.PI
 
 
-fun main() {
+fun silhouette3d(): Canvas {
     val wallSize = 15.0
     val canvasSize = 600
     val middle = wallSize / 2
@@ -55,6 +54,5 @@ fun main() {
             }
         }
     }
-
-    File("output/silhouette3D.ppm").printWriter().use(canvas::toPPM)
+    return canvas
 }

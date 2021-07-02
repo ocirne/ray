@@ -9,7 +9,6 @@ import io.github.ocirne.ray.challenge.scene.World
 import io.github.ocirne.ray.challenge.shapes.Plane
 import io.github.ocirne.ray.challenge.transformations.*
 import io.github.ocirne.ray.challenge.tuples.*
-import java.io.File
 import kotlin.math.PI
 
 fun funWithPatterns2(): Canvas {
@@ -43,9 +42,4 @@ fun funWithPatterns2(): Canvas {
     val camera = Camera(600, 600, PI / 2, transform)
     // render the result to a canvas.
     return camera.render(world)
-}
-
-fun main() {
-    val canvas = funWithPatterns2()
-    File("output/funWithPatterns2.ppm").printWriter().use(canvas::toPPM)
 }

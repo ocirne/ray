@@ -10,7 +10,6 @@ import io.github.ocirne.ray.challenge.scene.World
 import io.github.ocirne.ray.challenge.shapes.Plane
 import io.github.ocirne.ray.challenge.transformations.*
 import io.github.ocirne.ray.challenge.tuples.*
-import java.io.File
 import kotlin.math.PI
 
 fun pond(): Canvas {
@@ -45,9 +44,4 @@ fun pond(): Canvas {
     val camera = Camera(600, 300, PI / 2, transform)
 
     return camera.render(world)
-}
-
-fun main() {
-    val canvas = pond()
-    File("output/pond.ppm").printWriter().use(canvas::toPPM)
 }

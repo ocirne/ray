@@ -11,7 +11,7 @@ import java.io.File
 import kotlin.math.PI
 
 
-fun main() {
+fun silhouette(): Canvas {
     val wallSize = 4.0
     val canvasSize = 600
     val middle = wallSize / 2
@@ -40,6 +40,5 @@ fun main() {
             }
         }
     }
-
-    File("output/silhouette.ppm").printWriter().use(canvas::toPPM)
+    return canvas
 }

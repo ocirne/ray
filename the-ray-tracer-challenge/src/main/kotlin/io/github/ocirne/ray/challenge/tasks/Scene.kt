@@ -8,7 +8,6 @@ import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.scene.World
 import io.github.ocirne.ray.challenge.transformations.*
 import io.github.ocirne.ray.challenge.tuples.*
-import java.io.File
 import kotlin.math.PI
 
 fun scene(): Canvas {
@@ -66,9 +65,4 @@ fun scene(): Canvas {
     val camera = Camera(400, 200, PI / 2, transform)
     // render the result to a canvas.
     return camera.render(world)
-}
-
-fun main() {
-    val canvas = scene()
-    File("output/sceneShadow.ppm").printWriter().use(canvas::toPPM)
 }

@@ -88,8 +88,3 @@ fun cover(): Canvas {
     val world = World(shapes, lights)
     return camera.render(world)
 }
-
-fun main() {
-    val canvas = cover()
-    File("output/cover.ppm").printWriter().use(canvas::toPPM)
-}

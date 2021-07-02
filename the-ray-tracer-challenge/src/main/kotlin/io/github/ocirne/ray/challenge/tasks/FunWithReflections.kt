@@ -40,8 +40,3 @@ fun funWithReflection1(): Canvas {
     // render the result to a canvas.
     return camera.render(world)
 }
-
-fun main() {
-    val canvas = funWithReflection1()
-    File("output/funWithReflection1.ppm").printWriter().use(canvas::toPPM)
-}

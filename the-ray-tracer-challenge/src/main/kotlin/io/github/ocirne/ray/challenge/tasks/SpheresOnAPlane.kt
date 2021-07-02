@@ -9,7 +9,6 @@ import io.github.ocirne.ray.challenge.scene.World
 import io.github.ocirne.ray.challenge.shapes.Plane
 import io.github.ocirne.ray.challenge.transformations.*
 import io.github.ocirne.ray.challenge.tuples.*
-import java.io.File
 import kotlin.math.PI
 
 fun spheresOnAPlane(): Canvas {
@@ -56,9 +55,4 @@ fun spheresOnAPlane(): Canvas {
     val camera = Camera(100, 50, PI / 3, transform)
     // render the result to a canvas.
     return camera.render(world)
-}
-
-fun main() {
-    val canvas = spheresOnAPlane()
-    File("output/spheresOnAPlane.ppm").printWriter().use(canvas::toPPM)
 }
