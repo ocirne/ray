@@ -17,6 +17,7 @@ fun cover(): Canvas {
 
     // Camera
     val transform = viewTransform(point(-6, 6, -10), point(6, 0, 6), vector(-0.45, 1.0, 0.0))
+    // 1680 / 1050
     val camera = Camera(100, 100, 0.785, transform)
 
     // light sources
