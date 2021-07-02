@@ -39,11 +39,13 @@ class Camera(val hSize: Int, val vSize: Int, val fieldOfView: Double, val transf
 
     fun render(world: World): Canvas {
         val image = Canvas(hSize, vSize)
+        val feedback = Feedback(hSize * vSize)
         for (y in 0 until vSize) {
             for (x in 0 until hSize) {
                 val ray = rayForPixel(x, y)
                 val color = world.colorAt(ray)
                 image.writePixel(x, y, color)
+                feedback.update(y * hSize + x + 1)
             }
         }
         return image

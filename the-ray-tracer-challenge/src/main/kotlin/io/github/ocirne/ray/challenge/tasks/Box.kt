@@ -62,7 +62,7 @@ fun box(): Canvas {
     val world = World(listOf(floor, leftWall, rightWall, roof, backWall, right, left, bulb), listOf(lightSource))
 
     val transform = viewTransform(point(0.0, 0.0, -5.0), point(0, 0, 0), vector(0, 1, 0))
-    val camera = Camera(400, 400, PI / 2, transform)
+    val camera = Camera(100, 100, PI / 2, transform)
     // render the result to a canvas.
     return camera.render(world)
 }
