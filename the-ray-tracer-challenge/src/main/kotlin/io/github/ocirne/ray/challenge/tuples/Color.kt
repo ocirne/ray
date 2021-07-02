@@ -63,6 +63,10 @@ fun color(red: Int, green: Int, blue: Int): Color {
     return Color(red, green, blue)
 }
 
+fun colorRGB(red: Int, green: Int, blue: Int): Color {
+    return Color(red.toDouble()/255.0, green.toDouble()/255.0, blue.toDouble()/255.0)
+}
+
 fun color(): Color {
     return Color(Random.nextDouble(0.0, 1.0), Random.nextDouble(0.0, 1.0), Random.nextDouble(0.0, 1.0))
 }
@@ -73,3 +77,6 @@ val RED = Color(1, 0, 0)
 val GREEN = Color(0, 1, 0)
 val BLUE = Color(0, 0, 1)
 val DARK_GREEN = Color(0.0, 0.5, 0.0)
+val BROWN = colorRGB(133, 94, 66)
+val ELFENBEIN = colorRGB(225, 204, 79)
+val DARK_GRAY = Color(0.2, 0.2, 0.2)
