@@ -12,6 +12,8 @@ class Matrix(private val size: Int, vararg values: Double) {
 
     private val elements = Array(size) { DoubleArray(size) }
 
+    var inverse: Matrix? = null
+
     init {
         if (values.size != 1) {
             require(size * size == values.size)
@@ -106,6 +108,13 @@ class Matrix(private val size: Int, vararg values: Double) {
     }
 
     fun inverse(): Matrix {
+        if (inverse == null) {
+            inverse = prepareInverse()
+        }
+        return inverse!!
+    }
+
+    private fun prepareInverse(): Matrix {
         if (!isInvertible()) {
             throw IllegalStateException()
         }
