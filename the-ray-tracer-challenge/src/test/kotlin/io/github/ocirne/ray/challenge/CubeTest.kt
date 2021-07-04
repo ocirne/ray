@@ -1,8 +1,10 @@
 package io.github.ocirne.ray.challenge
 
+import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Cube
 import io.github.ocirne.ray.challenge.tuples.*
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
@@ -57,7 +59,7 @@ internal class CubeTest {
         val c = Cube()
         val r = Ray(ex.origin, ex.direction)
         val xs = c.localIntersect(r)
-        xs.size shouldBe 0
+        xs shouldBe beEmpty<Intersection>()
     }
 
     data class ExampleTheNormalOnTheSurfaceOfACube(val point: Point, val normal: Vector)

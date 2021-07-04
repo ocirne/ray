@@ -3,6 +3,8 @@ package io.github.ocirne.ray.challenge
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Plane
 import io.github.ocirne.ray.challenge.tuples.*
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -24,7 +26,7 @@ internal class PlaneTest {
         val p = Plane()
         val r = Ray(point(0, 10, 0), vector(0, 0, 1))
         val xs = p.localIntersect(r)
-        xs.size shouldBe 0
+        xs should beEmpty()
     }
 
     @Test
@@ -32,7 +34,7 @@ internal class PlaneTest {
         val p = Plane()
         val r = Ray(point(0, 0, 0), vector(0, 0, 1))
         val xs = p.localIntersect(r)
-        xs.size shouldBe 0
+        xs should beEmpty()
     }
 
     @Test

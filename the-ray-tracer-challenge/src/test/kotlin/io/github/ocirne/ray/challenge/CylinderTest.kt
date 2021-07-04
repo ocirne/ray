@@ -4,6 +4,7 @@ import io.github.ocirne.ray.challenge.math.equalsDelta
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Cylinder
 import io.github.ocirne.ray.challenge.tuples.*
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.doubles.beNegativeInfinity
 import io.kotest.matchers.doubles.bePositiveInfinity
 import io.kotest.matchers.should
@@ -31,7 +32,7 @@ internal class CylinderTest {
         val direction = ex.direction.normalize()
         val r = Ray(ex.origin, direction)
         val xs = cyl.localIntersect(r)
-        xs.size shouldBe 0
+        xs should beEmpty()
     }
 
     data class ExampleRayStrikes(val origin: Point, val direction: Vector, val t0: Double, val t1: Double)

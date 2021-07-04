@@ -8,6 +8,8 @@ import io.github.ocirne.ray.challenge.transformations.rotationZ
 import io.github.ocirne.ray.challenge.transformations.scaling
 import io.github.ocirne.ray.challenge.transformations.translation
 import io.github.ocirne.ray.challenge.tuples.*
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import kotlin.math.PI
@@ -39,7 +41,7 @@ internal class SphereTest {
         val r = Ray(point(0, 2, -5), vector(0, 0, 1))
         val s = Sphere()
         val xs = s.intersect(r)
-        xs.size shouldBe 0
+        xs should beEmpty()
     }
 
     @Test
@@ -89,7 +91,7 @@ internal class SphereTest {
         val s = Sphere()
         val sm = s.withTransform(translation(5, 0, 0))
         val xs = sm.intersect(r)
-        xs.size shouldBe 0
+        xs should beEmpty()
     }
 
     @Test
