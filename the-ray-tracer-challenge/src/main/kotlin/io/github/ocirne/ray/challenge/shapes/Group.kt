@@ -18,11 +18,32 @@ data class Group(
 
     private var children = mutableSetOf<Shape>()
 
+    private var bounds: Bounds? = null
+
     override fun localIntersect(localRay: Ray): List<Intersection> {
+        if (children.isEmpty() || !hitsBoundingBox(localRay)) {
+            return listOf()
+        }
         return children
             .map { child -> child.intersect(localRay) }
             .flatten()
             .sortedBy { intersection -> intersection.t }
+    }
+
+    private fun hitsBoundingBox(localRay: Ray): Boolean {
+        val bounds = bounds()
+        val (xtmin, xtmax) = checkAxis(localRay.origin.x, localRay.direction.x, bounds.minimum.x, bounds.maximum.x)
+        val (ytmin, ytmax) = checkAxis(localRay.origin.y, localRay.direction.y, bounds.minimum.y, bounds.maximum.y)
+        val (ztmin, ztmax) = checkAxis(localRay.origin.z, localRay.direction.z, bounds.minimum.z, bounds.maximum.z)
+        val tmin = maxOf(xtmin, ytmin, ztmin)
+        val tmax = minOf(xtmax, ytmax, ztmax)
+        return tmin <= tmax
+    }
+
+    private fun checkAxis(origin: Double, direction: Double, minA: Double, maxA: Double): Pair<Double, Double> {
+        val tmin = (minA - origin) / direction
+        val tmax = (maxA - origin) / direction
+        return if (tmin > tmax) Pair(tmax, tmin) else Pair(tmin, tmax)
     }
 
     override fun localNormalAt(localPoint: Point): Vector {
@@ -52,20 +73,23 @@ data class Group(
     }
 
     override fun bounds(): Bounds {
-        val tuples = mutableListOf<Point>()
-        for (child in children) {
-            val bounds = child.bounds()
-            for (corner in bounds.corners()) {
-                // object space to parent space
-                tuples.add(child.transform * corner)
+        if (bounds == null) {
+            val tuples = mutableListOf<Point>()
+            for (child in children) {
+                val bounds = child.bounds()
+                for (corner in bounds.corners()) {
+                    // object space to parent space
+                    tuples.add(child.transform * corner)
+                }
             }
+            val minX = tuples.minOfOrNull { it.x }!!
+            val minY = tuples.minOfOrNull { it.y }!!
+            val minZ = tuples.minOfOrNull { it.z }!!
+            val maxX = tuples.maxOfOrNull { it.x }!!
+            val maxY = tuples.maxOfOrNull { it.y }!!
+            val maxZ = tuples.maxOfOrNull { it.z }!!
+            bounds = Bounds(point(minX, minY, minZ), point(maxX, maxY, maxZ))
         }
-        val minX = tuples.minOfOrNull { it.x }!!
-        val minY = tuples.minOfOrNull { it.y }!!
-        val minZ = tuples.minOfOrNull { it.z }!!
-        val maxX = tuples.maxOfOrNull { it.x }!!
-        val maxY = tuples.maxOfOrNull { it.y }!!
-        val maxZ = tuples.maxOfOrNull { it.z }!!
-        return Bounds(point(minX, minY, minZ), point(maxX, maxY, maxZ))
+        return bounds!!
     }
 }

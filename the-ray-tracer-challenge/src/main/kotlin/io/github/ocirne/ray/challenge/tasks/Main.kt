@@ -20,12 +20,14 @@ fun renderScene(sceneNo: Int): Canvas {
         (12) -> funWithShapes1()
         (13) -> funWithPatterns3()
         (14) -> boundsVisualization()
+        (15) -> boundsVisualization2() // 188 seconds
+        (16) -> boundsVisualization2Opt()  // 64 seconds
         else -> throw IllegalArgumentException("Unknown sceneNo $sceneNo")
     }
 }
 
 fun main() {
-    val sceneNo = 14
+    val sceneNo = 15
     val timeInMillisRendering = measureTimeMillis {
         val canvas = renderScene(sceneNo)
         val timestamp = System.currentTimeMillis().toString()
