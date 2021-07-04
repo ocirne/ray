@@ -7,6 +7,7 @@ import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
+import io.github.ocirne.ray.challenge.tuples.point
 
 data class Group(
     override val transform: Matrix = identityMatrix,
@@ -51,6 +52,20 @@ data class Group(
     }
 
     override fun bounds(): Bounds {
-        TODO()
+        val tuples = mutableListOf<Point>()
+        for (child in children) {
+            val bounds = child.bounds()
+            for (corner in bounds.corners()) {
+                // object space to parent space
+                tuples.add(child.transform * corner)
+            }
+        }
+        val minX = tuples.minOfOrNull { it.x }!!
+        val minY = tuples.minOfOrNull { it.y }!!
+        val minZ = tuples.minOfOrNull { it.z }!!
+        val maxX = tuples.maxOfOrNull { it.x }!!
+        val maxY = tuples.maxOfOrNull { it.y }!!
+        val maxZ = tuples.maxOfOrNull { it.z }!!
+        return Bounds(point(minX, minY, minZ), point(maxX, maxY, maxZ))
     }
 }

@@ -1,13 +1,15 @@
 package io.github.ocirne.ray.challenge
 
 import io.github.ocirne.ray.challenge.shapes.*
+import io.github.ocirne.ray.challenge.transformations.rotationZ
 import io.github.ocirne.ray.challenge.transformations.translation
 import io.github.ocirne.ray.challenge.tuples.point
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import java.awt.geom.QuadCurve2D
 import kotlin.Double.Companion.NEGATIVE_INFINITY
 import kotlin.Double.Companion.POSITIVE_INFINITY
+import kotlin.math.PI
+import kotlin.math.sqrt
 
 internal class BoundsTest {
 
@@ -91,5 +93,17 @@ internal class BoundsTest {
         val bounds = g.bounds()
         bounds.minimum shouldBe point(-2, -1, -2)
         bounds.maximum shouldBe point(2, 5, 2)
+    }
+
+    @Test
+    fun `Scenario Bounds for another group`() {
+        val c1 = Cube()
+        val c2 = Cube(rotationZ(PI/4))
+        val g = Group()
+        g.addChild(c1)
+        g.addChild(c2)
+        val bounds = g.bounds()
+        bounds.minimum shouldBe point(-sqrt(2.0), -sqrt(2.0), -1.0)
+        bounds.maximum shouldBe point(sqrt(2.0), sqrt(2.0), 1.0)
     }
 }
