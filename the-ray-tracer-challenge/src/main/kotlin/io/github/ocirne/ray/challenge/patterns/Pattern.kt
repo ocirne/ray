@@ -9,7 +9,7 @@ import io.github.ocirne.ray.challenge.tuples.Point
 abstract class Pattern(open val transform: Matrix = identityMatrix) {
 
     fun patternAtShape(shape: Shape, worldPoint: Point): Color {
-        val objectPoint = shape.transform.inverse() * worldPoint
+        val objectPoint = shape.worldToObject(worldPoint)
         return patternAt(objectPoint)
     }
 
