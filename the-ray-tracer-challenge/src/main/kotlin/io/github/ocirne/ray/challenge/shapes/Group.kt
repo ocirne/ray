@@ -49,4 +49,8 @@ data class Group(
     override fun iterator(): Iterator<Shape> {
         return children.iterator()
     }
+
+    override fun bounds(): Bounds {
+        TODO()
+    }
 }

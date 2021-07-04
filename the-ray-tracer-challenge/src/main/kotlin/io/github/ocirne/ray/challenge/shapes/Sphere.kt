@@ -42,6 +42,10 @@ data class Sphere(
     override fun localNormalAt(localPoint: Point): Vector {
         return localPoint - point(0, 0, 0)
     }
+
+    override fun bounds(): Bounds {
+        return Bounds(point(-1, -1, -1), point(1, 1, 1))
+    }
 }
 
 fun glassSphere(transform: Matrix = identityMatrix, refractiveIndex: Double = 1.5): Sphere {

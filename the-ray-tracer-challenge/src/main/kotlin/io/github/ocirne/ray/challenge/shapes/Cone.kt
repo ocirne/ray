@@ -8,17 +8,17 @@ import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
+import io.github.ocirne.ray.challenge.tuples.point
 import io.github.ocirne.ray.challenge.tuples.vector
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sign
-import kotlin.math.sqrt
+import kotlin.Double.Companion.NEGATIVE_INFINITY
+import kotlin.Double.Companion.POSITIVE_INFINITY
+import kotlin.math.*
 
 data class Cone(
     override val transform: Matrix = identityMatrix,
     override val material: Material = Material(),
-    val maximum: Double = Double.POSITIVE_INFINITY,
-    val minimum: Double = Double.NEGATIVE_INFINITY,
+    val maximum: Double = POSITIVE_INFINITY,
+    val minimum: Double = NEGATIVE_INFINITY,
     val closed: Boolean = false
 ) : Shape(transform, material) {
 
@@ -105,5 +105,14 @@ data class Cone(
             val y = -sign(point.y) * sqrt(point.x * point.x + point.z * point.z)
             vector(point.x, y, point.z)
         }
+    }
+
+    override fun bounds(): Bounds {
+        val lowerBound = max(minimum, NEGATIVE_INFINITY)
+        val upperBound = min(maximum, POSITIVE_INFINITY)
+        return Bounds(
+            point(lowerBound, lowerBound, lowerBound),
+            point(upperBound, upperBound, upperBound)
+        )
     }
 }

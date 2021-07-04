@@ -6,7 +6,6 @@ import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.tuples.Point
-import io.github.ocirne.ray.challenge.tuples.Tuple
 import io.github.ocirne.ray.challenge.tuples.Vector
 
 abstract class Shape(
@@ -45,4 +44,6 @@ abstract class Shape(
 
         return if (parent != null) parent!!.normalToWorld(normal2) else normal2
     }
+
+    abstract fun bounds(): Bounds
 }

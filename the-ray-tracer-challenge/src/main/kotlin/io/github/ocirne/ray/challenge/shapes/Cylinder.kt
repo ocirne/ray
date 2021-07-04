@@ -8,16 +8,17 @@ import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
+import io.github.ocirne.ray.challenge.tuples.point
 import io.github.ocirne.ray.challenge.tuples.vector
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.Double.Companion.NEGATIVE_INFINITY
+import kotlin.Double.Companion.POSITIVE_INFINITY
+import kotlin.math.*
 
 data class Cylinder(
     override val transform: Matrix = identityMatrix,
     override val material: Material = Material(),
-    val maximum: Double = Double.POSITIVE_INFINITY,
-    val minimum: Double = Double.NEGATIVE_INFINITY,
+    val maximum: Double = POSITIVE_INFINITY,
+    val minimum: Double = NEGATIVE_INFINITY,
     val closed: Boolean = false
 ) : Shape(transform, material) {
 
@@ -102,5 +103,14 @@ data class Cylinder(
         } else {
             vector(localPoint.x, 0.0, localPoint.z)
         }
+    }
+
+    override fun bounds(): Bounds {
+        val lowerBound = max(minimum, NEGATIVE_INFINITY)
+        val upperBound = min(maximum, POSITIVE_INFINITY)
+        return Bounds(
+            point(-1.0, lowerBound, -1.0),
+            point(1.0, upperBound, 1.0)
+        )
     }
 }

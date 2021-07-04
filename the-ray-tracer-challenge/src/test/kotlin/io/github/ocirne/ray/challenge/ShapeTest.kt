@@ -5,6 +5,7 @@ import io.github.ocirne.ray.challenge.matrices.Matrix
 import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
+import io.github.ocirne.ray.challenge.shapes.Bounds
 import io.github.ocirne.ray.challenge.shapes.Group
 import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.shapes.Sphere
@@ -34,6 +35,10 @@ class TestShape(transform: Matrix = identityMatrix, material: Material = Materia
 
     override fun localNormalAt(localPoint: Point): Vector {
         return localPoint - point(0, 0, 0)
+    }
+
+    override fun bounds(): Bounds {
+        TODO("Not implemented")
     }
 }
 

@@ -7,6 +7,7 @@ import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
+import io.github.ocirne.ray.challenge.tuples.point
 import io.github.ocirne.ray.challenge.tuples.vector
 import kotlin.math.abs
 
@@ -38,5 +39,12 @@ data class Cube(
             abs(localPoint.y) -> vector(0.0, localPoint.y, 0.0)
             else -> vector(0.0, 0.0, localPoint.z)
         }
+    }
+
+    override fun bounds(): Bounds {
+        return Bounds(
+            point(-1, -1, -1),
+            point(1, 1, 1)
+        )
     }
 }

@@ -8,7 +8,10 @@ import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
+import io.github.ocirne.ray.challenge.tuples.point
 import io.github.ocirne.ray.challenge.tuples.vector
+import kotlin.Double.Companion.NEGATIVE_INFINITY
+import kotlin.Double.Companion.POSITIVE_INFINITY
 import kotlin.math.abs
 
 data class Plane(
@@ -26,5 +29,12 @@ data class Plane(
 
     override fun localNormalAt(localPoint: Point): Vector {
         return vector(0, 1, 0)
+    }
+
+    override fun bounds(): Bounds {
+        return Bounds(
+            point(NEGATIVE_INFINITY, 0.0, NEGATIVE_INFINITY),
+            point(POSITIVE_INFINITY, 0.0, POSITIVE_INFINITY)
+        )
     }
 }
