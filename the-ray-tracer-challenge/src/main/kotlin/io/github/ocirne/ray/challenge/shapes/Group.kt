@@ -15,31 +15,38 @@ data class Group(
 
     override var size = 0
 
+    private var children = mutableSetOf<Shape>()
+
     override fun localIntersect(localRay: Ray): List<Intersection> {
-        TODO("No implementend")
+        return children
+            .map { child -> child.intersect(localRay) }
+            .flatten()
+            .sortedBy { intersection -> intersection.t }
     }
 
     override fun localNormalAt(localPoint: Point): Vector {
-        TODO("No implementend")
+        TODO("This should never be called")
     }
 
     fun addChild(shape: Shape) {
-        TODO("No implementend")
+        children.add(shape)
+        shape.setParent(this)
+        size = children.size
     }
 
     override fun isEmpty(): Boolean {
-        TODO()
+        return size == 0
     }
 
     override fun contains(element: Shape): Boolean {
-        TODO("Not yet implemented")
+        return children.contains(element)
     }
 
     override fun containsAll(elements: Collection<Shape>): Boolean {
-        TODO("Not yet implemented")
+        return children.containsAll(elements)
     }
 
     override fun iterator(): Iterator<Shape> {
-        TODO("Not yet implemented")
+        return children.iterator()
     }
 }
