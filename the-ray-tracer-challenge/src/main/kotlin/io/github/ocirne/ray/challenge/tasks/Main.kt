@@ -23,16 +23,17 @@ fun renderScene(sceneNo: Int): Canvas {
         (15) -> boundsVisualization2() // 188 seconds
         (16) -> boundsVisualization2Opt()  // 64 seconds
         (17) -> hexagonMain()
+        (18) -> funWithTriangles1()
         else -> throw IllegalArgumentException("Unknown sceneNo $sceneNo")
     }
 }
 
 fun main() {
-    val sceneNo = 17
+    val sceneNo = 18
     val timeInMillisRendering = measureTimeMillis {
         val canvas = renderScene(sceneNo)
         val timestamp = System.currentTimeMillis().toString()
-        File("output/image${timestamp}.ppm").printWriter().use(canvas::toPPM)
+        File("output/imagetimestamp.ppm").printWriter().use(canvas::toPPM)
     }
     println("rendering total $timeInMillisRendering ms")
 }
