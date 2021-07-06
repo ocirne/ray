@@ -40,4 +40,4 @@ fun main() {
 // TODO
 // - fractale (Lindenmeyer Trees)
 // - Materialen vererben
-// 
+//
