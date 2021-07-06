@@ -36,3 +36,8 @@ fun main() {
     }
     println("rendering total $timeInMillisRendering ms")
 }
+
+// TODO
+// - fractale (Lindenmeyer Trees)
+// - Materialen vererben
+// 
