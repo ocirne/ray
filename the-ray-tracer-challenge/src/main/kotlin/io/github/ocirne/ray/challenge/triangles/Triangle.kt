@@ -11,7 +11,7 @@ import io.github.ocirne.ray.challenge.tuples.Vector
 import kotlin.math.abs
 
 class Triangle(val p1: Point, val p2: Point, val p3: Point,
-               override val material: Material
+               override val material: Material = Material()
 ): Shape(material = material) {
 
     val e1: Vector = p2 - p1

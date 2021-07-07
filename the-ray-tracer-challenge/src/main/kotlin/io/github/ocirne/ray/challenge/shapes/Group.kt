@@ -5,6 +5,7 @@ import io.github.ocirne.ray.challenge.matrices.Matrix
 import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
+import io.github.ocirne.ray.challenge.triangles.Triangle
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
 import io.github.ocirne.ray.challenge.tuples.point
@@ -16,7 +17,7 @@ data class Group(
 
     override var size = 0
 
-    private var children = mutableSetOf<Shape>()
+    private var children = mutableListOf<Shape>()
 
     private var bounds: Bounds? = null
 
@@ -91,5 +92,9 @@ data class Group(
             bounds = Bounds(point(minX, minY, minZ), point(maxX, maxY, maxZ))
         }
         return bounds!!
+    }
+
+    operator fun get(i: Int): Shape {
+        return children[i]
     }
 }
