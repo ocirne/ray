@@ -39,7 +39,7 @@ data class Sphere(
         return Sphere(material = m)
     }
 
-    override fun localNormalAt(localPoint: Point): Vector {
+    override fun localNormalAt(localPoint: Point, hit: Intersection?): Vector {
         return localPoint - point(0, 0, 0)
     }
 

@@ -1,9 +1,11 @@
 package io.github.ocirne.ray.challenge
 
+import io.github.ocirne.ray.challenge.math.equalsDelta
 import io.github.ocirne.ray.challenge.raysphere.Intersections
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.triangles.SmoothTriangle
 import io.github.ocirne.ray.challenge.tuples.*
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -26,20 +28,22 @@ internal class SmoothTriangleTest {
              tri . n2 shouldBe n2
              tri . n3 shouldBe n3
         }
-    /*
+
           @Test
           fun `Scenario An intersection with a smooth triangle stores u v`() {
               val r = Ray (point(-0.2, 0.3, -2.0), vector(0, 0, 1))
               val xs = tri.localIntersect (r)
-              xs [0].u shouldBe 0.45
-              xs [0].v shouldBe 0.25
+              xs[0].u!!.equalsDelta(0.45) shouldBe true
+              xs[0].v!!.equalsDelta(0.25) shouldBe true
           }
+
         @Test
         fun `Scenario A smooth triangle uses u v to interpolate the normal`() {
-            val i = intersectionWithUV (1, tri, 0.45, 0.25)
+            val i = tri.intersectionWithUV (1.0, 0.45, 0.25)
             val n = tri.normalAt(point(0, 0, 0), i)
             n shouldBe vector (-0.5547, 0.83205, 0.0)
         }
+        /*
             @Test
             fun `Scenario Preparing the normal on a smooth triangle`() {
                 val i = intersectionWithUV (1, tri, 0.45, 0.25)

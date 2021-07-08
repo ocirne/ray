@@ -21,13 +21,13 @@ abstract class Shape(
 
     abstract fun localIntersect(localRay: Ray): List<Intersection>
 
-    fun normalAt(worldPoint: Point): Vector {
+    fun normalAt(worldPoint: Point, hit: Intersection? = null): Vector {
         val localPoint = worldToObject(worldPoint)
-        val localNormal = localNormalAt(localPoint)
+        val localNormal = localNormalAt(localPoint, hit)
         return normalToWorld(localNormal)
     }
 
-    abstract fun localNormalAt(localPoint: Point): Vector
+    abstract fun localNormalAt(localPoint: Point, hit: Intersection? = null): Vector
 
     fun setParent(group: Group) {
         parent = group
@@ -47,6 +47,7 @@ abstract class Shape(
 
     abstract fun bounds(): Bounds
 
+    // TODO oder in Triangle
     fun intersectionWithUV(t: Double, u: Double, v: Double): Intersection {
         return Intersection(t, this, u, v)
     }

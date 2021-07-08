@@ -27,7 +27,7 @@ data class Plane(
         return listOf(Intersection(t, this))
     }
 
-    override fun localNormalAt(localPoint: Point): Vector {
+    override fun localNormalAt(localPoint: Point, hit: Intersection?): Vector {
         return vector(0, 1, 0)
     }
 

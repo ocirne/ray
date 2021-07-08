@@ -42,7 +42,7 @@ class Triangle(val p1: Point, val p2: Point, val p3: Point,
         return listOf(Intersection(t, this))
     }
 
-    override fun localNormalAt(localPoint: Point): Vector {
+    override fun localNormalAt(localPoint: Point, hit: Intersection?): Vector {
         return normal
     }
 

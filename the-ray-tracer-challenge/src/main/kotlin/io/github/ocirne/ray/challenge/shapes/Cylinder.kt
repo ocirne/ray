@@ -92,7 +92,7 @@ data class Cylinder(
         }
     }
 
-    override fun localNormalAt(localPoint: Point): Vector {
+    override fun localNormalAt(localPoint: Point, hit: Intersection?): Vector {
         // compute the square of the distance from the y axis
         val dist = localPoint.x * localPoint.x + localPoint.z * localPoint.z
 

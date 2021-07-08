@@ -33,7 +33,7 @@ class TestShape(transform: Matrix = identityMatrix, material: Material = Materia
         return listOf()
     }
 
-    override fun localNormalAt(localPoint: Point): Vector {
+    override fun localNormalAt(localPoint: Point, hit: Intersection?): Vector {
         return localPoint - point(0, 0, 0)
     }
 

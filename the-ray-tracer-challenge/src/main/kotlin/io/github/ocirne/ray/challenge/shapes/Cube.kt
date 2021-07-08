@@ -31,7 +31,7 @@ data class Cube(
         return if (tmin > tmax) Pair(tmax, tmin) else Pair(tmin, tmax)
     }
 
-    override fun localNormalAt(localPoint: Point): Vector {
+    override fun localNormalAt(localPoint: Point, hit: Intersection?): Vector {
         val maxc = maxOf(abs(localPoint.x), abs(localPoint.y), abs(localPoint.z))
 
         return when (maxc) {

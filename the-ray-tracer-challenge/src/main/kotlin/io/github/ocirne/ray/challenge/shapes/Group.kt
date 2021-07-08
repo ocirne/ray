@@ -47,7 +47,7 @@ data class Group(
         return if (tmin > tmax) Pair(tmax, tmin) else Pair(tmin, tmax)
     }
 
-    override fun localNormalAt(localPoint: Point): Vector {
+    override fun localNormalAt(localPoint: Point, hit: Intersection?): Vector {
         TODO("This should never be called")
     }
 

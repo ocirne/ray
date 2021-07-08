@@ -93,7 +93,7 @@ data class Cone(
         }
     }
 
-    override fun localNormalAt(point: Point): Vector {
+    override fun localNormalAt(point: Point, hit: Intersection?): Vector {
         // compute the square of the distance from the y axis
         val dist = point.x * point.x + point.z * point.z
 
