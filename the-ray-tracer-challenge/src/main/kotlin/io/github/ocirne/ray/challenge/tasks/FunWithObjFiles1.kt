@@ -21,7 +21,7 @@ val f7 = "utah-teapot.obj"
 
 fun funWithObjFiles1(): Canvas {
 
-    val content = Canvas::class.java.classLoader.getResource("external/$f2")!!.readText()
+    val content = Canvas::class.java.classLoader.getResource("external/$f3")!!.readText()
     val parser = ObjFileParser(content)
     val g = parser.toGroup()
 

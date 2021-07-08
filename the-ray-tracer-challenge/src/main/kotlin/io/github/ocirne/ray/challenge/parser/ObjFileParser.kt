@@ -19,30 +19,32 @@ class ObjFileParser(content: String) {
 
     init {
         groups["default"] = currentGroup
-        for (line in content.lines().map { line -> line.trim() }) {
-            when {
-                line.isBlank() -> continue
-                line[0] == 'v' -> vertices.add(lineToVertex(line))
-                line[0] == 'f' -> lineToFace(line).forEach(currentGroup::addChild)
-                line[0] == 'g' -> lineToGroup(line)
+        for (line in content.lines()) {
+            val token = line.trim().split("\\s+".toRegex())
+            if (token.isEmpty()) {
+                continue
+            }
+            when (token[0]){
+                "v" -> vertices.add(lineToVertex(token))
+                "f" -> lineToFace(token).forEach(currentGroup::addChild)
+                "g" -> lineToGroup(token)
                 else -> ignored++
             }
         }
     }
 
-    private fun lineToVertex(line: String): Point {
-        println(line)
-        val token = line.split(' ')
+    private fun lineToVertex(token: List<String>): Point {
+        println(token)
         return point(token[1].toDouble(), token[2].toDouble(), token[3].toDouble())
     }
 
-    private fun lineToFace(line: String): List<Triangle> {
-        val faceVertices = line.split(' ').drop(1).map { vertices[it.toInt() - 1] }
+    private fun lineToFace(token: List<String>): List<Triangle> {
+        val faceVertices = token.drop(1).map { vertices[it.toInt() - 1] }
         return fanTriangulation(faceVertices)
     }
 
-    private fun lineToGroup(line: String) {
-        val name = line.split(' ')[1]
+    private fun lineToGroup(token: List<String>) {
+        val name = token[1]
         currentGroup = Group()
         groups[name] = currentGroup
     }
