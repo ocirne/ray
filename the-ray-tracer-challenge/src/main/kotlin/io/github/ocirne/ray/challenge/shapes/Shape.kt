@@ -46,4 +46,8 @@ abstract class Shape(
     }
 
     abstract fun bounds(): Bounds
+
+    fun intersectionWithUV(t: Double, u: Double, v: Double): Intersection {
+        return Intersection(t, this, u, v)
+    }
 }

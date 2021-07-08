@@ -21,10 +21,10 @@ class ObjFileParser(content: String) {
 
     init {
         for (line in content.lines()) {
-            val token = line.trim().split("\\s+".toRegex())
-            if (token.isEmpty()) {
+            if (line.isBlank()) {
                 continue
             }
+            val token = line.trim().split("\\s+".toRegex())
             when (token[0]){
                 "v" -> vertices.add(lineToVertex(token))
                 "f" -> lineToFace(token).forEach { child -> getOrCreateCurrentGroup().addChild(child) }
@@ -60,6 +60,7 @@ class ObjFileParser(content: String) {
     private fun getOrCreateCurrentGroup(): Group {
         if (currentGroup == null) {
             currentGroup = Group()
+            groups["default"] = currentGroup!!
         }
         return currentGroup!!
     }

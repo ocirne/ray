@@ -56,7 +56,7 @@ data class Computation(
     }
 }
 
-class Intersection(val t: Double, val shape: Shape) {
+class Intersection(val t: Double, val shape: Shape, val u: Double? = null, val v: Double? = null) {
 
     constructor(t: Int, obj: Shape) : this(t.toDouble(), obj)
 

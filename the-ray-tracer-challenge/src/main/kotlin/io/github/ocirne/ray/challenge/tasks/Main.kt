@@ -25,12 +25,13 @@ fun renderScene(sceneNo: Int): Canvas {
         17 -> hexagonMain()
         18 -> funWithTriangles1()
         19 -> funWithObjFiles1()
+        20 -> funWithSmoothing1()
         else -> throw IllegalArgumentException("Unknown sceneNo $sceneNo")
     }
 }
 
 fun main() {
-    val sceneNo = 19
+    val sceneNo = 20
     val timeInMillisRendering = measureTimeMillis {
         val canvas = renderScene(sceneNo)
         val timestamp = System.currentTimeMillis().toString()

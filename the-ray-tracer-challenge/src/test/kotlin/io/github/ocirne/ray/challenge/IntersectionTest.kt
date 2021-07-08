@@ -10,6 +10,7 @@ import io.github.ocirne.ray.challenge.shapes.Sphere
 import io.github.ocirne.ray.challenge.shapes.glassSphere
 import io.github.ocirne.ray.challenge.transformations.scaling
 import io.github.ocirne.ray.challenge.transformations.translation
+import io.github.ocirne.ray.challenge.triangles.Triangle
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.doubles.shouldBeGreaterThan
 import io.kotest.matchers.doubles.shouldBeLessThan
@@ -146,7 +147,8 @@ internal class IntersectionTest {
         ExampleFindingN1N2(2, 2.0, 2.5),
         ExampleFindingN1N2(3, 2.5, 2.5),
         ExampleFindingN1N2(4, 2.5, 1.5),
-        ExampleFindingN1N2(5, 1.5, 1.0))
+        ExampleFindingN1N2(5, 1.5, 1.0)
+    )
 
     @ParameterizedTest
     @MethodSource("examplesFindingN1N2")
@@ -208,14 +210,12 @@ internal class IntersectionTest {
         val reflectance = comps.schlick()
         reflectance.equalsDelta(0.48873) shouldBe true
     }
-/*
-        @Test
-        fun `Scenario An intersection can encapsulate `u` and `v``() {
-          val s = triangle (point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0))
-          val i = intersection_with_uv (3.5, s, 0.2, 0.4)
-           i . u shouldBe 0.2
-          val i . v shouldBe 0.4
-        }
-        
- */
+
+    @Test
+    fun `Scenario An intersection can encapsulate u and v`() {
+        val s = Triangle(point(0, 1, 0), point(-1, 0, 0), point(1, 0, 0))
+        val i = s.intersectionWithUV(3.5, 0.2, 0.4)
+        i.u shouldBe 0.2
+        i.v shouldBe 0.4
+    }
 }
