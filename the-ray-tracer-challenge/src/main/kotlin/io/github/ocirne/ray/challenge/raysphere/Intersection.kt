@@ -87,7 +87,7 @@ class Intersection(val t: Double, val shape: Shape, val u: Double? = null, val v
             shape = shape,
             point = point,
             direction = ray.direction,
-            preNormalV = shape.normalAt(point),
+            preNormalV = shape.normalAt(point, this),
             n1 = n1,
             n2 = n2
         )

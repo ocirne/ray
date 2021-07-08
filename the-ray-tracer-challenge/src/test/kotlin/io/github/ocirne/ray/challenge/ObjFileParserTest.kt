@@ -2,6 +2,7 @@ package io.github.ocirne.ray.challenge
 
 import io.github.ocirne.ray.challenge.parser.ObjFileParser
 import io.github.ocirne.ray.challenge.shapes.Group
+import io.github.ocirne.ray.challenge.triangles.SmoothTriangle
 import io.github.ocirne.ray.challenge.triangles.Triangle
 import io.github.ocirne.ray.challenge.tuples.*
 import io.kotest.matchers.collections.shouldContain
@@ -114,48 +115,43 @@ internal class ObjFileParserTest {
         g shouldContain parser["SecondGroup"]
     }
 
-/*
-@Test
-fun `Scenario Vertex normal records`() {
-  val file = a file containing:
-    """
-    vn 0 0 1
-    vn 0.707 0 -0.707
-    vn 1 2 3
-    """
-  val parser = ObjFileParser(file)
-  parser.normals[1] shouldBe vector(0, 0, 1)
-  parser.normals[2] shouldBe vector(0.707, 0, -0.707)
-     parser.normals[3] shouldBe vector(1, 2, 3)
+    @Test
+    fun `Scenario Vertex normal records`() {
+        val file = """
+            vn 0 0 1
+            vn 0.707 0 -0.707
+            vn 1 2 3
+            """
+        val parser = ObjFileParser(file)
+        parser.normals[0] shouldBe vector(0, 0, 1)
+        parser.normals[1] shouldBe vector(0.707, 0.0, -0.707)
+        parser.normals[2] shouldBe vector(1, 2, 3)
+    }
 
-}
-
-@Test
-fun `Scenario Faces with normals`() {
-  val file = a file containing:
-    """
-    v 0 1 0
-    v -1 0 0
-    v 1 0 0
-
-    vn -1 0 0
-    vn 1 0 0
-    vn 0 1 0
-
-    f 1//3 2//1 3//2
-    f 1/0/3 2/102/1 3/14/2
-    """
-  val parser = ObjFileParser(file)
-    val g = parser.default_group
-    val t1 = first child of g
-    val t2 = second child of g
-  t1.p1 shouldBe parser.vertices[1]
-     t1.p2 shouldBe parser.vertices[2]
-     t1.p3 shouldBe parser.vertices[3]
-     t1.n1 shouldBe parser.normals[3]
-     t1.n2 shouldBe parser.normals[1]
-     t1.n3 shouldBe parser.normals[2]
-     t2 shouldBe t1
-}
-  */
+    @Test
+    fun `Scenario Faces with normals`() {
+        val file = """
+            v 0 1 0
+            v -1 0 0
+            v 1 0 0
+        
+            vn -1 0 0
+            vn 1 0 0
+            vn 0 1 0
+        
+            f 1//3 2//1 3//2
+            f 1/0/3 2/102/1 3/14/2
+            """
+        val parser = ObjFileParser(file)
+        val g = parser["default"] as Group
+        val t1 = g[0] as SmoothTriangle
+        val t2 = g[1] as SmoothTriangle
+        t1.p1 shouldBe parser.vertices[0]
+        t1.p2 shouldBe parser.vertices[1]
+        t1.p3 shouldBe parser.vertices[2]
+        t1.n1 shouldBe parser.normals[2]
+        t1.n2 shouldBe parser.normals[0]
+        t1.n3 shouldBe parser.normals[1]
+        t2 shouldBe t1
+    }
 }

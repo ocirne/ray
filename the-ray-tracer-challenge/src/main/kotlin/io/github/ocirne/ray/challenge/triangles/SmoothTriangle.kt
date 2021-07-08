@@ -2,8 +2,6 @@ package io.github.ocirne.ray.challenge.triangles
 
 import io.github.ocirne.ray.challenge.lights.Material
 import io.github.ocirne.ray.challenge.math.epsilon
-import io.github.ocirne.ray.challenge.matrices.Matrix
-import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Bounds
@@ -12,7 +10,7 @@ import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
 import kotlin.math.abs
 
-class SmoothTriangle(
+data class SmoothTriangle(
     val p1: Point,
     val p2: Point,
     val p3: Point,
@@ -22,8 +20,8 @@ class SmoothTriangle(
     override val material: Material = Material()
 ) : Shape(material = material) {
 
-    val e1: Vector = p2 - p1
-    val e2: Vector = p3 - p1
+    private val e1: Vector = p2 - p1
+    private val e2: Vector = p3 - p1
     val normal: Vector = e2.cross(e1).normalize()
 
     // TODO duplicated Code with Triangle
