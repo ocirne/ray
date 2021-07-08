@@ -1,5 +1,7 @@
 package io.github.ocirne.ray.challenge.parser
 
+import io.github.ocirne.ray.challenge.matrices.Matrix
+import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.shapes.Group
 import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.triangles.Triangle
@@ -13,12 +15,11 @@ class ObjFileParser(content: String) {
 
     var vertices = mutableListOf<Point>()
 
-    var currentGroup = Group()
+    var currentGroup: Group? = null
 
     val groups = mutableMapOf<String, Shape>()
 
     init {
-        groups["default"] = currentGroup
         for (line in content.lines()) {
             val token = line.trim().split("\\s+".toRegex())
             if (token.isEmpty()) {
@@ -26,7 +27,7 @@ class ObjFileParser(content: String) {
             }
             when (token[0]){
                 "v" -> vertices.add(lineToVertex(token))
-                "f" -> lineToFace(token).forEach(currentGroup::addChild)
+                "f" -> lineToFace(token).forEach { child -> getOrCreateCurrentGroup().addChild(child) }
                 "g" -> lineToGroup(token)
                 else -> ignored++
             }
@@ -39,14 +40,10 @@ class ObjFileParser(content: String) {
     }
 
     private fun lineToFace(token: List<String>): List<Triangle> {
-        val faceVertices = token.drop(1).map { vertices[it.toInt() - 1] }
+        val faceVertices = token.drop(1).map {
+            vertices[it.split('/')[0].toInt() - 1]
+        }
         return fanTriangulation(faceVertices)
-    }
-
-    private fun lineToGroup(token: List<String>) {
-        val name = token[1]
-        currentGroup = Group()
-        groups[name] = currentGroup
     }
 
     private fun fanTriangulation(faceVertices: List<Point>): List<Triangle> {
@@ -54,12 +51,26 @@ class ObjFileParser(content: String) {
             .map { Triangle(faceVertices[0], faceVertices[it - 1], faceVertices[it]) }
     }
 
+    private fun lineToGroup(token: List<String>) {
+        val name = token[1]
+        currentGroup = Group()
+        groups[name] = currentGroup!!
+    }
+
+    private fun getOrCreateCurrentGroup(): Group {
+        if (currentGroup == null) {
+            currentGroup = Group()
+        }
+        return currentGroup!!
+    }
+
     operator fun get(s: String): Shape {
         return groups[s]!!
     }
 
-    fun toGroup(): Group {
-        val group = Group()
+    // TODO withTransform in Group / Shape?
+    fun toGroup(transform: Matrix = identityMatrix): Group {
+        val group = Group(transform)
         for (g in groups.values) {
             group.addChild(g)
         }
