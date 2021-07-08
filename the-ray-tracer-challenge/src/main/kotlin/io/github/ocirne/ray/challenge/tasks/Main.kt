@@ -6,30 +6,31 @@ import kotlin.system.measureTimeMillis
 
 fun renderScene(sceneNo: Int): Canvas {
     return when (sceneNo) {
-        (1) -> box()
-        (2) -> cover()
-        (3) -> funWithPatterns1()
-        (4) -> funWithPatterns2()
-        (5) -> funWithReflection1()
-        (6) -> pond()
-        (7) -> scene()
-        (8) -> silhouette()
-        (9) -> silhouette3d()
-        (10) -> spheresOnAPlane()
-        (11) -> stripedSpheres()
-        (12) -> funWithShapes1()
-        (13) -> funWithPatterns3()
-        (14) -> boundsVisualization()
-        (15) -> boundsVisualization2() // 188 seconds
-        (16) -> boundsVisualization2Opt()  // 64 seconds
-        (17) -> hexagonMain()
-        (18) -> funWithTriangles1()
+        1 -> box()
+        2 -> cover()
+        3 -> funWithPatterns1()
+        4 -> funWithPatterns2()
+        5 -> funWithReflection1()
+        6 -> pond()
+        7 -> scene()
+        8 -> silhouette()
+        9 -> silhouette3d()
+        10 -> spheresOnAPlane()
+        11 -> stripedSpheres()
+        12 -> funWithShapes1()
+        13 -> funWithPatterns3()
+        14 -> boundsVisualization()
+        15 -> boundsVisualization2() // 188 seconds
+        16 -> boundsVisualization2Opt()  // 64 seconds
+        17 -> hexagonMain()
+        18 -> funWithTriangles1()
+        19 -> funWithObjFiles1()
         else -> throw IllegalArgumentException("Unknown sceneNo $sceneNo")
     }
 }
 
 fun main() {
-    val sceneNo = 18
+    val sceneNo = 19
     val timeInMillisRendering = measureTimeMillis {
         val canvas = renderScene(sceneNo)
         val timestamp = System.currentTimeMillis().toString()

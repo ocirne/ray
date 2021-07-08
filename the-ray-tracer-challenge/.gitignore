@@ -1,3 +1,5 @@
 
 *.pseudo
 *.feature
+
+/src/main/resources/external/*

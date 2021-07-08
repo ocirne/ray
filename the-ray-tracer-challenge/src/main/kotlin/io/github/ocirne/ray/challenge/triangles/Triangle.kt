@@ -8,6 +8,7 @@ import io.github.ocirne.ray.challenge.shapes.Bounds
 import io.github.ocirne.ray.challenge.shapes.Shape
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
+import io.github.ocirne.ray.challenge.tuples.point
 import kotlin.math.abs
 
 class Triangle(val p1: Point, val p2: Point, val p3: Point,
@@ -17,6 +18,8 @@ class Triangle(val p1: Point, val p2: Point, val p3: Point,
     val e1: Vector = p2 - p1
     val e2: Vector = p3 - p1
     val normal: Vector = e2.cross(e1).normalize()
+
+    private var bounds: Bounds? = null
 
     override fun localIntersect(localRay: Ray): List<Intersection> {
         val dirCrossE2 = localRay.direction.cross(e2)
@@ -44,6 +47,15 @@ class Triangle(val p1: Point, val p2: Point, val p3: Point,
     }
 
     override fun bounds(): Bounds {
-        TODO("Not yet implemented")
+        if (bounds == null) {
+            val minX = minOf(p1.x, p2.x, p3.x)
+            val minY = minOf(p1.y, p2.y, p3.y)
+            val minZ = minOf(p1.z, p2.z, p3.z)
+            val maxX = maxOf(p1.x, p2.x, p3.x)
+            val maxY = maxOf(p1.y, p2.y, p3.y)
+            val maxZ = maxOf(p1.z, p2.z, p3.z)
+            bounds = Bounds(point(minX, minY, minZ), point(maxX, maxY, maxZ))
+        }
+        return bounds!!
     }
 }
