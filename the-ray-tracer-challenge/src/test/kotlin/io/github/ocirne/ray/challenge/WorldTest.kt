@@ -284,13 +284,9 @@ internal class WorldTest {
 
     @Test
     fun `Scenario shadeHit() with a reflective, transparent material`() {
-
         val r = Ray(point(0, 0, -3), vector(0.0, -magic2, magic2))
         val floor = Plane(translation(0, -1, 0), Material(reflective = 0.5, transparency = 0.5, refractiveIndex = 1.5))
-
         val ball = Sphere(translation(0.0, -3.5, -0.5), Material(color = RED, ambient = 0.5))
-
-
         val w = defaultWorld(floor, ball)
         val xs = listOf(Intersection(sqrt(2.0), floor))
         val comps = xs[0].prepareComputations(r, xs)

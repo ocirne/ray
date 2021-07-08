@@ -31,7 +31,7 @@ fun renderScene(sceneNo: Int): Canvas {
 }
 
 fun main() {
-    val sceneNo = 20
+    val sceneNo = 19
     val timeInMillisRendering = measureTimeMillis {
         val canvas = renderScene(sceneNo)
         val timestamp = System.currentTimeMillis().toString()
