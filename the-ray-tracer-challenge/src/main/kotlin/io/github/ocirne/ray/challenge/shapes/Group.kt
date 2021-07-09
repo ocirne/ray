@@ -53,7 +53,7 @@ data class Group(
 
     fun addChild(shape: Shape) {
         children.add(shape)
-        shape.setParent(this)
+        shape.parent = this
         size = children.size
     }
 

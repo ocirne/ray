@@ -17,7 +17,7 @@ class World(val shapes: List<Shape> = listOf(), val lights: List<PointLight> = l
             .filter { hit -> hit.isNotEmpty() }
             .flatten()
             .filter { hit -> hit.t >= 0 }
-            .sortedBy { s -> s.t }
+            .sortedBy { it.t }
     }
 
     fun addLight(light: PointLight): World {

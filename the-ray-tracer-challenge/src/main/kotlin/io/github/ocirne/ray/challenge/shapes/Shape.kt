@@ -29,10 +29,6 @@ abstract class Shape(
 
     abstract fun localNormalAt(localPoint: Point, hit: Intersection? = null): Vector
 
-    fun setParent(group: Group) {
-        parent = group
-    }
-
     fun worldToObject(worldPoint: Point): Point {
         val point = if (parent != null) parent!!.worldToObject(worldPoint) else worldPoint
         return transform.inverse() * point
@@ -50,5 +46,9 @@ abstract class Shape(
     // TODO oder in Triangle
     fun intersectionWithUV(t: Double, u: Double, v: Double): Intersection {
         return Intersection(t, this, u, v)
+    }
+
+    open fun contains(shape: Shape): Boolean {
+        return this == shape
     }
 }
