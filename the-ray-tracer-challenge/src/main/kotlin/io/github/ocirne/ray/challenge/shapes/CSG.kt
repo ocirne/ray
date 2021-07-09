@@ -1,5 +1,7 @@
 package io.github.ocirne.ray.challenge.shapes
 
+import io.github.ocirne.ray.challenge.matrices.Matrix
+import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
 import io.github.ocirne.ray.challenge.shapes.Operation.*
@@ -12,7 +14,8 @@ enum class Operation {
     DIFFERENCE
 }
 
-class CSG(val operation: Operation, val left: Shape, val right: Shape): Shape() {
+class CSG(val operation: Operation, val left: Shape, val right: Shape,
+          transform: Matrix = identityMatrix): Shape(transform) {
 
     init {
         left.parent = this
