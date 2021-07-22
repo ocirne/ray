@@ -4,14 +4,16 @@ import org.lwjgl.BufferUtils
 import org.lwjgl.Version
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
-import org.lwjgl.glfw.GLFW.glfwPollEvents
-import org.lwjgl.glfw.GLFW.glfwSwapBuffers
+import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL30C.*
 import org.lwjgl.system.MemoryStack
+import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil
-import org.lwjgl.system.MemoryUtil.memAllocFloat
+import java.nio.FloatBuffer
+import java.nio.IntBuffer
+import kotlin.math.min
 
 class HelloWorld {
 
@@ -85,6 +87,10 @@ class HelloWorld {
         GLFW.glfwShowWindow(window)
     }
 
+    fun reshape(w: Int, h: Int) {
+        glViewport(0, 0, w, h)
+    }
+
     private fun loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -94,15 +100,14 @@ class HelloWorld {
         GL.createCapabilities()
 
         // Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
-
-        glViewport(0, 0, 300, 300)
+        glClearColor(1.0f, 1.0f, 1.0f, 0.0f)
 
         val theProgram = initializeProgram()
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
-        while (!GLFW.glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window)) {
+            handleResize()
             glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
             glUseProgram(theProgram)
@@ -113,7 +118,7 @@ class HelloWorld {
             glEnableVertexAttribArray(0)
             glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
 
-            glDrawArrays(GL_TRIANGLES, 0, 3)
+            glDrawArrays(GL_TRIANGLES, 0, 6)
 
             glDisableVertexAttribArray(0)
             glUseProgram(0);
@@ -126,20 +131,57 @@ class HelloWorld {
         }
     }
 
+    fun handleResize() {
+        stackPush().let { stack ->
+            val fw: IntBuffer = stack.mallocInt(1)
+            val fh: IntBuffer = stack.mallocInt(1)
+
+            glfwGetFramebufferSize(window, fw, fh)
+            val framebufferWidth = fw[0]
+            val framebufferHeight = fh[0]
+
+            val framebufferSize = min(framebufferWidth, framebufferHeight)
+
+            glViewport(
+                (framebufferWidth - framebufferSize) / 2,
+                (framebufferHeight - framebufferSize) / 2,
+                framebufferSize,
+                framebufferSize)
+        }
+    }
+
     fun initializeVertexBuffer(): Int {
-        val vertexPositions = BufferUtils.createFloatBuffer(12)
+        val vertexPositions = BufferUtils.createFloatBuffer(24)
+
         vertexPositions.put(0, 0.75f)
-        vertexPositions.put(1, 0.75f)
+        vertexPositions.put(1, 0.74f)
         vertexPositions.put(2, 0.0f)
         vertexPositions.put(3, 1.0f)
+
         vertexPositions.put(4, 0.75f)
         vertexPositions.put(5, -0.75f)
         vertexPositions.put(6, 0.0f)
         vertexPositions.put(7, 1.0f)
-        vertexPositions.put(8, -0.75f)
+
+        vertexPositions.put(8, -0.74f)
         vertexPositions.put(9, -0.75f)
         vertexPositions.put(10, 0.0f)
         vertexPositions.put(11, 1.0f)
+
+        vertexPositions.put(12, 0.74f)
+        vertexPositions.put(13, 0.75f)
+        vertexPositions.put(14, 0.0f)
+        vertexPositions.put(15, 1.0f)
+
+        vertexPositions.put(16, -0.75f)
+        vertexPositions.put(17, 0.75f)
+        vertexPositions.put(18, 0.0f)
+        vertexPositions.put(19, 1.0f)
+
+        vertexPositions.put(20, -0.75f)
+        vertexPositions.put(21, -0.74f)
+        vertexPositions.put(22, 0.0f)
+        vertexPositions.put(23, 1.0f)
 
         val positionBufferObject = glGenBuffers()
 
@@ -166,7 +208,7 @@ class HelloWorld {
         out vec4 outputColor;
         void main(void)
         {
-           outputColor = vec4(1.0f, 1.0f, 1.0f, 0.5f);
+           outputColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
         }
         """
 
