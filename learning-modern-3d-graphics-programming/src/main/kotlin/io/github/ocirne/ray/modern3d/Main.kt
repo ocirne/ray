@@ -1,5 +1,6 @@
 package io.github.ocirne.ray.modern3d
 
+import org.lwjgl.BufferUtils
 import org.lwjgl.Version
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
@@ -110,12 +111,11 @@ class HelloWorld {
 
             glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
             glEnableVertexAttribArray(0)
-            glVertexAttribPointer(0, 4, GL_FLOAT, /* GL_FALSE */ false, 0, 0);
+            glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
 
             glDrawArrays(GL_TRIANGLES, 0, 3)
 
             glDisableVertexAttribArray(0)
-            glBindBuffer(GL_ARRAY_BUFFER, 0)
             glUseProgram(0);
 
             glfwSwapBuffers(window) // swap the color buffers
@@ -127,14 +127,7 @@ class HelloWorld {
     }
 
     fun initializeVertexBuffer(): Int {
-/*        val vertexPositions = BufferUtils.createFloatBuffer(12)
-        vertexPositions.put(
-            floatArrayOf(
-            0.75f, 0.75f, 0.0f, 1.0f,
-            0.75f, -0.75f, 0.0f, 1.0f,
-            -0.75f, -0.75f, 0.0f, 1.0f)
-        ) */
-        val vertexPositions = memAllocFloat(12)
+        val vertexPositions = BufferUtils.createFloatBuffer(12)
         vertexPositions.put(0, 0.75f)
         vertexPositions.put(1, 0.75f)
         vertexPositions.put(2, 0.0f)
@@ -199,7 +192,6 @@ class HelloWorld {
 
         val status = glGetShaderi(shader, GL_COMPILE_STATUS)
         if (status == GL_FALSE) {
-            val infoLogLength = glGetShaderi(shader, GL_INFO_LOG_LENGTH)
             val strInfoLog = glGetShaderInfoLog(shader)
             val strShaderType = when (eShaderType) {
                 GL_VERTEX_SHADER -> "vertex"
@@ -223,7 +215,6 @@ class HelloWorld {
 
         val status = glGetProgrami(program, GL_LINK_STATUS)
         if (status == GL_FALSE) {
-            val infoLogLength = glGetProgrami(program, GL_INFO_LOG_LENGTH)
             val strInfoLog = glGetProgramInfoLog(program)
             println("Linker failure: $strInfoLog\n")
         }
