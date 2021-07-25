@@ -48,7 +48,7 @@ class HelloWorld {
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE) // the window will be resizable
 
         // Create the window
-        window = GLFW.glfwCreateWindow(300, 300, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL)
+        window = GLFW.glfwCreateWindow(500, 500, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL)
         if (window == MemoryUtil.NULL) throw RuntimeException("Failed to create the GLFW window")
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
@@ -100,7 +100,7 @@ class HelloWorld {
         GL.createCapabilities()
 
         // Set the clear color
-        glClearColor(1.0f, 1.0f, 1.0f, 0.0f)
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         val theProgram = initializeProgram()
 
@@ -118,7 +118,7 @@ class HelloWorld {
             glEnableVertexAttribArray(0)
             glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
 
-            glDrawArrays(GL_TRIANGLES, 0, 6)
+            glDrawArrays(GL_TRIANGLES, 0, 3)
 
             glDisableVertexAttribArray(0)
             glUseProgram(0);
@@ -151,7 +151,7 @@ class HelloWorld {
     }
 
     fun initializeVertexBuffer(): Int {
-        val vertexPositions = BufferUtils.createFloatBuffer(24)
+        val vertexPositions = BufferUtils.createFloatBuffer(12)
 
         vertexPositions.put(0, 0.75f)
         vertexPositions.put(1, 0.74f)
@@ -167,7 +167,7 @@ class HelloWorld {
         vertexPositions.put(9, -0.75f)
         vertexPositions.put(10, 0.0f)
         vertexPositions.put(11, 1.0f)
-
+/*
         vertexPositions.put(12, 0.74f)
         vertexPositions.put(13, 0.75f)
         vertexPositions.put(14, 0.0f)
@@ -181,7 +181,7 @@ class HelloWorld {
         vertexPositions.put(20, -0.75f)
         vertexPositions.put(21, -0.74f)
         vertexPositions.put(22, 0.0f)
-        vertexPositions.put(23, 1.0f)
+        vertexPositions.put(23, 1.0f) */
 
         val positionBufferObject = glGenBuffers()
 
