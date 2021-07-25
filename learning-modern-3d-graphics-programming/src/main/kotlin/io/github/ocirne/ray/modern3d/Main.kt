@@ -192,30 +192,10 @@ class HelloWorld {
         return positionBufferObject
     }
 
-    val strVertexShader = """
-        #version 330
-
-        layout(location = 0) in vec4 position;
-        void main(void)
-        {
-            gl_Position = position;
-        }
-        """
-
-    val strFragmentShader = """
-        #version 330
-
-        out vec4 outputColor;
-        void main(void)
-        {
-           outputColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-        }
-        """
-
     fun initializeProgram(): Int {
         val shaderList = listOf(
-            createShader(GL_VERTEX_SHADER, strVertexShader),
-            createShader(GL_FRAGMENT_SHADER, strFragmentShader)
+            loadShader(GL_VERTEX_SHADER, "FragPosition.vert"),
+            loadShader(GL_FRAGMENT_SHADER, "FragPosition.frag")
         )
         val theProgram = createProgram(shaderList)
 
@@ -225,7 +205,8 @@ class HelloWorld {
         return theProgram
     }
 
-    fun createShader(eShaderType: Int, strShader: String): Int {
+    fun loadShader(eShaderType: Int, shaderFilename: String): Int {
+        val strShader = HelloWorld::class.java.classLoader.getResource(shaderFilename)!!.readText()
         val shader = glCreateShader(eShaderType)
 
         glShaderSource(shader, strShader)
