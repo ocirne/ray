@@ -11,7 +11,6 @@ import org.lwjgl.opengl.GL30C.*
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil
-import java.nio.FloatBuffer
 import java.nio.IntBuffer
 import kotlin.math.min
 
@@ -116,14 +115,19 @@ class HelloWorld {
 
             glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
             glEnableVertexAttribArray(0)
-            glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0);
+            glEnableVertexAttribArray(1)
+            glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0)
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 48)
 
             glDrawArrays(GL_TRIANGLES, 0, 3)
 
             glDisableVertexAttribArray(0)
+            glDisableVertexAttribArray(1)
             glUseProgram(0);
 
             glfwSwapBuffers(window) // swap the color buffers
+
+//            glutPostRedisplay()  ??
 
             // Poll for window events. The key callback above will only be
             // invoked during this call.
@@ -151,38 +155,16 @@ class HelloWorld {
     }
 
     fun initializeVertexBuffer(): Int {
-        val vertexPositions = BufferUtils.createFloatBuffer(12)
-
-        vertexPositions.put(0, 0.75f)
-        vertexPositions.put(1, 0.74f)
-        vertexPositions.put(2, 0.0f)
-        vertexPositions.put(3, 1.0f)
-
-        vertexPositions.put(4, 0.75f)
-        vertexPositions.put(5, -0.75f)
-        vertexPositions.put(6, 0.0f)
-        vertexPositions.put(7, 1.0f)
-
-        vertexPositions.put(8, -0.74f)
-        vertexPositions.put(9, -0.75f)
-        vertexPositions.put(10, 0.0f)
-        vertexPositions.put(11, 1.0f)
-/*
-        vertexPositions.put(12, 0.74f)
-        vertexPositions.put(13, 0.75f)
-        vertexPositions.put(14, 0.0f)
-        vertexPositions.put(15, 1.0f)
-
-        vertexPositions.put(16, -0.75f)
-        vertexPositions.put(17, 0.75f)
-        vertexPositions.put(18, 0.0f)
-        vertexPositions.put(19, 1.0f)
-
-        vertexPositions.put(20, -0.75f)
-        vertexPositions.put(21, -0.74f)
-        vertexPositions.put(22, 0.0f)
-        vertexPositions.put(23, 1.0f) */
-
+        val vertexData = floatArrayOf(
+            0.0f,    0.5f, 0.0f, 1.0f,
+            0.5f, -0.366f, 0.0f, 1.0f,
+            -0.5f, -0.366f, 0.0f, 1.0f,
+            1.0f,    0.0f, 0.0f, 1.0f,
+            0.0f,    1.0f, 0.0f, 1.0f,
+            0.0f,    0.0f, 1.0f, 1.0f,
+        )
+        val vertexPositions = BufferUtils.createFloatBuffer(vertexData.size)
+        vertexData.forEachIndexed { i, f -> vertexPositions.put(i, f) }
         val positionBufferObject = glGenBuffers()
 
         glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
