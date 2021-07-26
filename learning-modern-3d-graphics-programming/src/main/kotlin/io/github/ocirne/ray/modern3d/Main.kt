@@ -105,6 +105,8 @@ class HelloWorld {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         val theProgram = initializeProgram()
+        val offsetLocation = glGetUniformLocation(theProgram, "offset")
+
         val positionBufferObject = initializeVertexBuffer()
 
         // Run the rendering loop until the user has attempted to close
@@ -118,6 +120,8 @@ class HelloWorld {
             glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
             glUseProgram(theProgram)
+
+            glUniform2f(offsetLocation, fXOffset, fYOffset)
 
             glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
             glEnableVertexAttribArray(0)
@@ -183,7 +187,7 @@ class HelloWorld {
 
     fun initializeProgram(): Int {
         val shaderList = listOf(
-            loadShader(GL_VERTEX_SHADER, "FragPosition.vert"),
+            loadShader(GL_VERTEX_SHADER, "OffsettingShader.vert"),
             loadShader(GL_FRAGMENT_SHADER, "FragPosition.frag")
         )
         val theProgram = createProgram(shaderList)
@@ -245,7 +249,6 @@ class HelloWorld {
         val fElapsedTime = (System.currentTimeMillis() - start) / 1000.0f
 
         val fCurrTimeThroughLoop = fElapsedTime % fLoopDuration
-        println("" + fElapsedTime + " " + fCurrTimeThroughLoop)
 
         val fXOffset = cos(fCurrTimeThroughLoop * fScale) * 0.5f
         val fYOffset = sin(fCurrTimeThroughLoop * fScale) * 0.5f
