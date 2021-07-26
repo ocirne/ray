@@ -1,6 +1,5 @@
 package io.github.ocirne.ray.modern3d
 
-import org.lwjgl.BufferUtils
 import org.lwjgl.Version
 import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW
@@ -11,11 +10,8 @@ import org.lwjgl.opengl.GL30C.*
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil
-import java.nio.FloatBuffer
 import java.nio.IntBuffer
-import kotlin.math.cos
 import kotlin.math.min
-import kotlin.math.sin
 
 class HelloWorld {
 
@@ -191,9 +187,17 @@ class HelloWorld {
     fun initializeProgram(): Int {
         val shaderList = listOf(
             loadShader(GL_VERTEX_SHADER, "OffsettingShader.vert"),
-            loadShader(GL_FRAGMENT_SHADER, "FragPosition.frag")
+            loadShader(GL_FRAGMENT_SHADER, "calcColor.frag")
         )
         val theProgram = createProgram(shaderList)
+
+        val elapsedTimeUniform = glGetUniformLocation(theProgram, "time")
+        val loopDurationUnf = glGetUniformLocation(theProgram, "loopDuration")
+        val fragLoopDurUnf = glGetUniformLocation(theProgram, "fragLoopDuration")
+        glUseProgram(theProgram)
+        glUniform1f(loopDurationUnf, 5.0f)
+        glUniform1f(fragLoopDurUnf, 10.0f)
+        glUseProgram(0)
 
         for (shader in shaderList) {
             glDeleteShader(shader)
