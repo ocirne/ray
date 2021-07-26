@@ -105,7 +105,13 @@ class HelloWorld {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         val theProgram = initializeProgram()
-        val offsetLocation = glGetUniformLocation(theProgram, "offset")
+
+        val elapsedTimeUniform = glGetUniformLocation(theProgram, "time")
+
+        val loopDurationUnf = glGetUniformLocation(theProgram, "loopDuration")
+        glUseProgram(theProgram)
+        glUniform1f(loopDurationUnf, 5.0f)
+        glUseProgram(0)
 
         val positionBufferObject = initializeVertexBuffer()
 
@@ -114,14 +120,11 @@ class HelloWorld {
         while (!glfwWindowShouldClose(window)) {
             handleResize()
 
-            val (fXOffset, fYOffset) = computePositionOffsets()
-            adjustVertexData(fXOffset, fYOffset)
-
             glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
             glUseProgram(theProgram)
 
-            glUniform2f(offsetLocation, fXOffset, fYOffset)
+            glUniform1f(elapsedTimeUniform, glutGet())
 
             glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
             glEnableVertexAttribArray(0)
@@ -242,31 +245,9 @@ class HelloWorld {
 
     val start = System.currentTimeMillis()
 
-    fun computePositionOffsets(): Pair<Float, Float> {
-        val fLoopDuration = 5
-        val fScale = 3.14159f * 2.0f / fLoopDuration
-
+    fun glutGet(): Float {
         val fElapsedTime = (System.currentTimeMillis() - start) / 1000.0f
-
-        val fCurrTimeThroughLoop = fElapsedTime % fLoopDuration
-
-        val fXOffset = cos(fCurrTimeThroughLoop * fScale) * 0.5f
-        val fYOffset = sin(fCurrTimeThroughLoop * fScale) * 0.5f
-
-        return Pair(fXOffset, fYOffset)
-    }
-
-    fun adjustVertexData(fXOffset: Float, fYOffset: Float) {
-        val fNewData = vertexPositions.copyOf()
-
-        for (iVertex in vertexPositions.indices step 4) {
-            fNewData[iVertex] += fXOffset
-            fNewData[iVertex + 1] += fYOffset
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
-        glBufferSubData(GL_ARRAY_BUFFER, 0, fNewData)
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
+        return fElapsedTime
     }
 }
 
