@@ -11,8 +11,11 @@ import org.lwjgl.opengl.GL30C.*
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil
+import java.nio.FloatBuffer
 import java.nio.IntBuffer
+import kotlin.math.cos
 import kotlin.math.min
+import kotlin.math.sin
 
 class HelloWorld {
 
@@ -102,16 +105,19 @@ class HelloWorld {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         val theProgram = initializeProgram()
+        val positionBufferObject = initializeVertexBuffer()
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
             handleResize()
+
+            val (fXOffset, fYOffset) = computePositionOffsets()
+            adjustVertexData(fXOffset, fYOffset)
+
             glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
             glUseProgram(theProgram)
-
-            val positionBufferObject = initializeVertexBuffer()
 
             glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
             glEnableVertexAttribArray(0)
@@ -154,8 +160,11 @@ class HelloWorld {
         }
     }
 
+    var vertexPositions: FloatArray = floatArrayOf()
+    var positionBufferObject: Int = 0
+
     fun initializeVertexBuffer(): Int {
-        val vertexData = floatArrayOf(
+        vertexPositions = floatArrayOf(
             0.0f,    0.5f, 0.0f, 1.0f,
             0.5f, -0.366f, 0.0f, 1.0f,
             -0.5f, -0.366f, 0.0f, 1.0f,
@@ -163,12 +172,10 @@ class HelloWorld {
             0.0f,    1.0f, 0.0f, 1.0f,
             0.0f,    0.0f, 1.0f, 1.0f,
         )
-        val vertexPositions = BufferUtils.createFloatBuffer(vertexData.size)
-        vertexData.forEachIndexed { i, f -> vertexPositions.put(i, f) }
-        val positionBufferObject = glGenBuffers()
+        positionBufferObject = glGenBuffers()
 
         glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
-        glBufferData(GL_ARRAY_BUFFER, vertexPositions, GL_STATIC_DRAW)
+        glBufferData(GL_ARRAY_BUFFER, vertexPositions, GL_STREAM_DRAW)
         glBindBuffer(GL_ARRAY_BUFFER, 0)
 
         return positionBufferObject
@@ -227,6 +234,36 @@ class HelloWorld {
             glDetachShader(program, shader)
         }
         return program
+    }
+
+    val start = System.currentTimeMillis()
+
+    fun computePositionOffsets(): Pair<Float, Float> {
+        val fLoopDuration = 5
+        val fScale = 3.14159f * 2.0f / fLoopDuration
+
+        val fElapsedTime = (System.currentTimeMillis() - start) / 1000.0f
+
+        val fCurrTimeThroughLoop = fElapsedTime % fLoopDuration
+        println("" + fElapsedTime + " " + fCurrTimeThroughLoop)
+
+        val fXOffset = cos(fCurrTimeThroughLoop * fScale) * 0.5f
+        val fYOffset = sin(fCurrTimeThroughLoop * fScale) * 0.5f
+
+        return Pair(fXOffset, fYOffset)
+    }
+
+    fun adjustVertexData(fXOffset: Float, fYOffset: Float) {
+        val fNewData = vertexPositions.copyOf()
+
+        for (iVertex in vertexPositions.indices step 4) {
+            fNewData[iVertex] += fXOffset
+            fNewData[iVertex + 1] += fYOffset
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
+        glBufferSubData(GL_ARRAY_BUFFER, 0, fNewData)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
     }
 }
 
