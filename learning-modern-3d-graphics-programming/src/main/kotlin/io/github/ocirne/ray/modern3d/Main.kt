@@ -2,58 +2,56 @@ package io.github.ocirne.ray.modern3d
 
 import org.lwjgl.Version
 import org.lwjgl.glfw.Callbacks
-import org.lwjgl.glfw.GLFW
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL30C.*
 import org.lwjgl.system.MemoryStack
-import org.lwjgl.system.MemoryStack.stackPush
 import org.lwjgl.system.MemoryUtil
 import java.nio.IntBuffer
 import kotlin.math.min
 
-class HelloWorld {
+class Main {
 
     // The window handle
     private var window: Long = 0
 
     fun run() {
         println("Hello LWJGL " + Version.getVersion() + "!")
-        init()
+        defaults()
         loop()
 
         // Free the window callbacks and destroy the window
         Callbacks.glfwFreeCallbacks(window)
-        GLFW.glfwDestroyWindow(window)
+        glfwDestroyWindow(window)
 
         // Terminate GLFW and free the error callback
-        GLFW.glfwTerminate()
-        GLFW.glfwSetErrorCallback(null)!!.free()
+        glfwTerminate()
+        glfwSetErrorCallback(null)!!.free()
     }
 
-    private fun init() {
+    fun defaults() {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set()
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
-        check(GLFW.glfwInit()) { "Unable to initialize GLFW" }
+        check(glfwInit()) { "Unable to initialize GLFW" }
 
         // Configure GLFW
-        GLFW.glfwDefaultWindowHints() // optional, the current window hints are already the default
-        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE) // the window will stay hidden after creation
-        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE) // the window will be resizable
+        glfwDefaultWindowHints() // optional, the current window hints are already the default
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE) // the window will stay hidden after creation
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE) // the window will be resizable
 
         // Create the window
-        window = GLFW.glfwCreateWindow(500, 500, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL)
+        window = glfwCreateWindow(500, 500, "Hello World!", MemoryUtil.NULL, MemoryUtil.NULL)
         if (window == MemoryUtil.NULL) throw RuntimeException("Failed to create the GLFW window")
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        GLFW.glfwSetKeyCallback(
+        glfwSetKeyCallback(
             window
         ) { window: Long, key: Int, scancode: Int, action: Int, mods: Int ->
-            if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) GLFW.glfwSetWindowShouldClose(
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) glfwSetWindowShouldClose(
                 window,
                 true
             ) // We will detect this in the rendering loop
@@ -63,13 +61,13 @@ class HelloWorld {
             val pHeight = stack.mallocInt(1) // int*
 
             // Get the window size passed to glfwCreateWindow
-            GLFW.glfwGetWindowSize(window, pWidth, pHeight)
+            glfwGetWindowSize(window, pWidth, pHeight)
 
             // Get the resolution of the primary monitor
-            val vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor())
+            val vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor())
 
             // Center the window
-            GLFW.glfwSetWindowPos(
+            glfwSetWindowPos(
                 window,
                 (vidmode!!.width() - pWidth[0]) / 2,
                 (vidmode.height() - pHeight[0]) / 2
@@ -77,75 +75,16 @@ class HelloWorld {
         }
 
         // Make the OpenGL context current
-        GLFW.glfwMakeContextCurrent(window)
+        glfwMakeContextCurrent(window)
         // Enable v-sync
-        GLFW.glfwSwapInterval(1)
+        glfwSwapInterval(1)
 
         // Make the window visible
-        GLFW.glfwShowWindow(window)
-    }
-
-    fun reshape(w: Int, h: Int) {
-        glViewport(0, 0, w, h)
-    }
-
-    private fun loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
-        GL.createCapabilities()
-
-        // Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
-
-        val theProgram = initializeProgram()
-
-        val elapsedTimeUniform = glGetUniformLocation(theProgram, "time")
-
-        val loopDurationUnf = glGetUniformLocation(theProgram, "loopDuration")
-        glUseProgram(theProgram)
-        glUniform1f(loopDurationUnf, 5.0f)
-        glUseProgram(0)
-
-        val positionBufferObject = initializeVertexBuffer()
-
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while (!glfwWindowShouldClose(window)) {
-            handleResize()
-
-            glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
-
-            glUseProgram(theProgram)
-
-            glUniform1f(elapsedTimeUniform, glutGet())
-
-            glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
-            glEnableVertexAttribArray(0)
-            glEnableVertexAttribArray(1)
-            glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, 0)
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, 48)
-
-            glDrawArrays(GL_TRIANGLES, 0, 3)
-
-            glDisableVertexAttribArray(0)
-            glDisableVertexAttribArray(1)
-            glUseProgram(0);
-
-            glfwSwapBuffers(window) // swap the color buffers
-
-//            glutPostRedisplay()  ??
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents()
-        }
+        glfwShowWindow(window)
     }
 
     fun handleResize() {
-        stackPush().let { stack ->
+        MemoryStack.stackPush().let { stack ->
             val fw: IntBuffer = stack.mallocInt(1)
             val fh: IntBuffer = stack.mallocInt(1)
 
@@ -159,102 +98,25 @@ class HelloWorld {
                 (framebufferWidth - framebufferSize) / 2,
                 (framebufferHeight - framebufferSize) / 2,
                 framebufferSize,
-                framebufferSize)
+                framebufferSize
+            )
         }
     }
 
-    var vertexPositions: FloatArray = floatArrayOf()
-    var positionBufferObject: Int = 0
+    fun loop() {
+        GL.createCapabilities()
 
-    fun initializeVertexBuffer(): Int {
-        vertexPositions = floatArrayOf(
-            0.0f,    0.5f, 0.0f, 1.0f,
-            0.5f, -0.366f, 0.0f, 1.0f,
-            -0.5f, -0.366f, 0.0f, 1.0f,
-            1.0f,    0.0f, 0.0f, 1.0f,
-            0.0f,    1.0f, 0.0f, 1.0f,
-            0.0f,    0.0f, 1.0f, 1.0f,
-        )
-        positionBufferObject = glGenBuffers()
+        val tutorial = RotatingTriangle()
 
-        glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject)
-        glBufferData(GL_ARRAY_BUFFER, vertexPositions, GL_STREAM_DRAW)
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-
-        return positionBufferObject
-    }
-
-    fun initializeProgram(): Int {
-        val shaderList = listOf(
-            loadShader(GL_VERTEX_SHADER, "OffsettingShader.vert"),
-            loadShader(GL_FRAGMENT_SHADER, "calcColor.frag")
-        )
-        val theProgram = createProgram(shaderList)
-
-        val elapsedTimeUniform = glGetUniformLocation(theProgram, "time")
-        val loopDurationUnf = glGetUniformLocation(theProgram, "loopDuration")
-        val fragLoopDurUnf = glGetUniformLocation(theProgram, "fragLoopDuration")
-        glUseProgram(theProgram)
-        glUniform1f(loopDurationUnf, 5.0f)
-        glUniform1f(fragLoopDurUnf, 10.0f)
-        glUseProgram(0)
-
-        for (shader in shaderList) {
-            glDeleteShader(shader)
+        while (!glfwWindowShouldClose(window)) {
+            handleResize()
+            tutorial.display()
+            glfwSwapBuffers(window) // swap the color buffers
+            glfwPollEvents()
         }
-        return theProgram
-    }
-
-    fun loadShader(eShaderType: Int, shaderFilename: String): Int {
-        val strShader = HelloWorld::class.java.classLoader.getResource(shaderFilename)!!.readText()
-        val shader = glCreateShader(eShaderType)
-
-        glShaderSource(shader, strShader)
-
-        glCompileShader(shader)
-
-        val status = glGetShaderi(shader, GL_COMPILE_STATUS)
-        if (status == GL_FALSE) {
-            val strInfoLog = glGetShaderInfoLog(shader)
-            val strShaderType = when (eShaderType) {
-                GL_VERTEX_SHADER -> "vertex"
-//                GL_GEOMETRY_SHADER -> "geometry"
-                GL_FRAGMENT_SHADER -> "fragment"
-                else -> throw IllegalArgumentException()
-            }
-            println("Compile failure in $strShaderType shader:\n$strInfoLog\n")
-        }
-        return shader
-    }
-
-    fun createProgram(shaderList: List<Int>): Int {
-        val program = glCreateProgram()
-
-        for (shader in shaderList) {
-            glAttachShader(program, shader)
-        }
-
-        glLinkProgram(program)
-
-        val status = glGetProgrami(program, GL_LINK_STATUS)
-        if (status == GL_FALSE) {
-            val strInfoLog = glGetProgramInfoLog(program)
-            println("Linker failure: $strInfoLog\n")
-        }
-        for (shader in shaderList) {
-            glDetachShader(program, shader)
-        }
-        return program
-    }
-
-    val start = System.currentTimeMillis()
-
-    fun glutGet(): Float {
-        val fElapsedTime = (System.currentTimeMillis() - start) / 1000.0f
-        return fElapsedTime
     }
 }
 
 fun main() {
-    HelloWorld().run()
+    Main().run()
 }
