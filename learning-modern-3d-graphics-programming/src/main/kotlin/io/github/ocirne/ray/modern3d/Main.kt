@@ -83,7 +83,7 @@ class Main {
         glfwShowWindow(window)
     }
 
-    fun handleResize() {
+    fun handleResize(tutorial: Framework) {
         MemoryStack.stackPush().let { stack ->
             val fw: IntBuffer = stack.mallocInt(1)
             val fh: IntBuffer = stack.mallocInt(1)
@@ -92,14 +92,7 @@ class Main {
             val framebufferWidth = fw[0]
             val framebufferHeight = fh[0]
 
-            val framebufferSize = min(framebufferWidth, framebufferHeight)
-
-            glViewport(
-                (framebufferWidth - framebufferSize) / 2,
-                (framebufferHeight - framebufferSize) / 2,
-                framebufferSize,
-                framebufferSize
-            )
+            tutorial.reshape(framebufferWidth, framebufferHeight)
         }
     }
 
@@ -109,7 +102,7 @@ class Main {
         val tutorial = Tutorial4()
 
         while (!glfwWindowShouldClose(window)) {
-            handleResize()
+            handleResize(tutorial)
             tutorial.display()
             glfwSwapBuffers(window) // swap the color buffers
             glfwPollEvents()

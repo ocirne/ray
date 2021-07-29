@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.modern3d
 
 import org.lwjgl.opengl.GL30C.*
+import kotlin.math.min
 
 class RotatingTriangle: Framework {
 
@@ -74,5 +75,15 @@ class RotatingTriangle: Framework {
             glDeleteShader(shader)
         }
         return theProgram
+    }
+
+    override fun reshape(w: Int, h: Int) {
+        val size = min(w, h)
+        glViewport(
+            (w - size) / 2,
+            (h - size) / 2,
+            size,
+            size
+        )
     }
 }

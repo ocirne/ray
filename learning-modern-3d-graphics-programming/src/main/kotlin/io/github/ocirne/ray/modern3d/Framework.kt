@@ -12,7 +12,7 @@ interface Framework {
     fun display()
 
     /** when the window is resized */
- //   fun reshape()
+    fun reshape(w: Int, h: Int)
 
     /** called when the user presses a key */
 //    fun keyboard()

@@ -7,6 +7,9 @@ class Tutorial4: Framework {
     private val theProgram: Int
     private var offsetUniform: Int = 0
     private var perspectiveMatrixUnif: Int = 0
+    private val perspectiveMatrix = FloatArray(16) { 0f }
+    private val fFrustumScale = 1.0f
+
     private val vertexBufferObject: Int
     private val vao: Int
 
@@ -127,7 +130,7 @@ class Tutorial4: Framework {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
         glUseProgram(theProgram)
-        glUniform2f(offsetUniform, 0.5f, 0.5f)
+        glUniform2f(offsetUniform, 1.5f, 0.5f)
 
         val colorData = vertexData.size * 2L
 
@@ -163,24 +166,31 @@ class Tutorial4: Framework {
         offsetUniform = glGetUniformLocation(theProgram, "offset")
         perspectiveMatrixUnif = glGetUniformLocation(theProgram, "perspectiveMatrix");
 
-        val fFrustumScale = 1.0f
         val fzNear = 0.5f
         val fzFar = 3.0f
 
-        val theMatrix = FloatArray(16) { 0f }
-        theMatrix[0] = fFrustumScale
-        theMatrix[5] = fFrustumScale
-        theMatrix[10] = (fzFar + fzNear) / (fzNear - fzFar)
-        theMatrix[14] = (2 * fzFar * fzNear) / (fzNear - fzFar)
-        theMatrix[11] = -1.0f
+        perspectiveMatrix[0] = fFrustumScale
+        perspectiveMatrix[5] = fFrustumScale
+        perspectiveMatrix[10] = (fzFar + fzNear) / (fzNear - fzFar)
+        perspectiveMatrix[14] = (2 * fzFar * fzNear) / (fzNear - fzFar)
+        perspectiveMatrix[11] = -1.0f
 
         glUseProgram(theProgram);
-        glUniformMatrix4fv(perspectiveMatrixUnif, false, theMatrix)
+        glUniformMatrix4fv(perspectiveMatrixUnif, false, perspectiveMatrix)
 
         glUseProgram(0);
         for (shader in shaderList) {
             glDeleteShader(shader)
         }
         return theProgram
+    }
+
+    override fun reshape(w: Int, h: Int) {
+        perspectiveMatrix[0] = fFrustumScale / (w / h.toFloat())
+        perspectiveMatrix[5] = fFrustumScale
+        glUseProgram(theProgram)
+        glUniformMatrix4fv(perspectiveMatrixUnif, false, perspectiveMatrix)
+        glUseProgram(0)
+        glViewport(0,0, w, h)
     }
 }
