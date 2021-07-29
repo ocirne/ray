@@ -2,7 +2,7 @@ package io.github.ocirne.ray.modern3d
 
 import org.lwjgl.opengl.GL30C.*
 
-class OrthographicCube: Framework {
+class Tutorial4: Framework {
 
     private val theProgram: Int
     private var offsetUniform: Int = 0
@@ -10,53 +10,53 @@ class OrthographicCube: Framework {
     private val vao: Int
 
     val vertexData = floatArrayOf(
-        0.25f,  0.25f, 0.75f, 1.0f,
-        0.25f, -0.25f, 0.75f, 1.0f,
-        -0.25f,  0.25f, 0.75f, 1.0f,
+        0.25f,  0.25f, -1.25f, 1.0f,
+        0.25f, -0.25f, -1.25f, 1.0f,
+        -0.25f,  0.25f, -1.25f, 1.0f,
 
-        0.25f, -0.25f, 0.75f, 1.0f,
-        -0.25f, -0.25f, 0.75f, 1.0f,
-        -0.25f,  0.25f, 0.75f, 1.0f,
+        0.25f, -0.25f, -1.25f, 1.0f,
+        -0.25f, -0.25f, -1.25f, 1.0f,
+        -0.25f,  0.25f, -1.25f, 1.0f,
 
-        0.25f,  0.25f, -0.75f, 1.0f,
-        -0.25f,  0.25f, -0.75f, 1.0f,
-        0.25f, -0.25f, -0.75f, 1.0f,
+        0.25f,  0.25f, -2.75f, 1.0f,
+        -0.25f,  0.25f, -2.75f, 1.0f,
+        0.25f, -0.25f, -2.75f, 1.0f,
 
-        0.25f, -0.25f, -0.75f, 1.0f,
-        -0.25f,  0.25f, -0.75f, 1.0f,
-        -0.25f, -0.25f, -0.75f, 1.0f,
+        0.25f, -0.25f, -2.75f, 1.0f,
+        -0.25f,  0.25f, -2.75f, 1.0f,
+        -0.25f, -0.25f, -2.75f, 1.0f,
 
-        -0.25f,  0.25f,  0.75f, 1.0f,
-        -0.25f, -0.25f,  0.75f, 1.0f,
-        -0.25f, -0.25f, -0.75f, 1.0f,
+        -0.25f,  0.25f, -1.25f, 1.0f,
+        -0.25f, -0.25f, -1.25f, 1.0f,
+        -0.25f, -0.25f, -2.75f, 1.0f,
 
-        -0.25f,  0.25f,  0.75f, 1.0f,
-        -0.25f, -0.25f, -0.75f, 1.0f,
-        -0.25f,  0.25f, -0.75f, 1.0f,
+        -0.25f,  0.25f, -1.25f, 1.0f,
+        -0.25f, -0.25f, -2.75f, 1.0f,
+        -0.25f,  0.25f, -2.75f, 1.0f,
 
-        0.25f,  0.25f,  0.75f, 1.0f,
-        0.25f, -0.25f, -0.75f, 1.0f,
-        0.25f, -0.25f,  0.75f, 1.0f,
+        0.25f,  0.25f, -1.25f, 1.0f,
+        0.25f, -0.25f, -2.75f, 1.0f,
+        0.25f, -0.25f, -1.25f, 1.0f,
 
-        0.25f,  0.25f,  0.75f, 1.0f,
-        0.25f,  0.25f, -0.75f, 1.0f,
-        0.25f, -0.25f, -0.75f, 1.0f,
+        0.25f,  0.25f, -1.25f, 1.0f,
+        0.25f,  0.25f, -2.75f, 1.0f,
+        0.25f, -0.25f, -2.75f, 1.0f,
 
-        0.25f,  0.25f, -0.75f, 1.0f,
-        0.25f,  0.25f,  0.75f, 1.0f,
-        -0.25f,  0.25f,  0.75f, 1.0f,
+        0.25f,  0.25f, -2.75f, 1.0f,
+        0.25f,  0.25f, -1.25f, 1.0f,
+        -0.25f,  0.25f, -1.25f, 1.0f,
 
-        0.25f,  0.25f, -0.75f, 1.0f,
-        -0.25f,  0.25f,  0.75f, 1.0f,
-        -0.25f,  0.25f, -0.75f, 1.0f,
+        0.25f,  0.25f, -2.75f, 1.0f,
+        -0.25f,  0.25f, -1.25f, 1.0f,
+        -0.25f,  0.25f, -2.75f, 1.0f,
 
-        0.25f, -0.25f, -0.75f, 1.0f,
-        -0.25f, -0.25f,  0.75f, 1.0f,
-        0.25f, -0.25f,  0.75f, 1.0f,
+        0.25f, -0.25f, -2.75f, 1.0f,
+        -0.25f, -0.25f, -1.25f, 1.0f,
+        0.25f, -0.25f, -1.25f, 1.0f,
 
-        0.25f, -0.25f, -0.75f, 1.0f,
-        -0.25f, -0.25f, -0.75f, 1.0f,
-        -0.25f, -0.25f,  0.75f, 1.0f,
+        0.25f, -0.25f, -2.75f, 1.0f,
+        -0.25f, -0.25f, -2.75f, 1.0f,
+        -0.25f, -0.25f, -1.25f, 1.0f,
 
 
 
@@ -126,7 +126,7 @@ class OrthographicCube: Framework {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
         glUseProgram(theProgram)
-        glUniform2f(offsetUniform, 0.5f, 0.25f)
+        glUniform2f(offsetUniform, 0.5f, 0.5f)
 
         val colorData = vertexData.size * 2L
 
@@ -155,17 +155,19 @@ class OrthographicCube: Framework {
 
     fun initializeProgram(): Int {
         val shaderList = listOf(
-            Support.loadShader(GL_VERTEX_SHADER, "OrthoWithOffset.vert"),
+            Support.loadShader(GL_VERTEX_SHADER, "ManualPerspective.vert"),
             Support.loadShader(GL_FRAGMENT_SHADER, "StandardColors.frag")
         )
         val theProgram = Support.createProgram(shaderList)
         offsetUniform = glGetUniformLocation(theProgram, "offset")
 
-        val loopDurationUnf = glGetUniformLocation(theProgram, "loopDuration")
-        val fragLoopDurUnf = glGetUniformLocation(theProgram, "fragLoopDuration")
+        val frustumScaleUnif = glGetUniformLocation(theProgram, "frustumScale")
+        val zNearUnif = glGetUniformLocation(theProgram, "zNear")
+        val zFarUnif = glGetUniformLocation(theProgram, "zFar")
         glUseProgram(theProgram)
-        glUniform1f(loopDurationUnf, 5.0f)
-        glUniform1f(fragLoopDurUnf, 10.0f)
+        glUniform1f(frustumScaleUnif, 1.0f)
+        glUniform1f(zNearUnif, 1.0f)
+        glUniform1f(zFarUnif, 3.0f)
         glUseProgram(0)
 
         for (shader in shaderList) {

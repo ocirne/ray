@@ -106,7 +106,7 @@ class Main {
     fun loop() {
         GL.createCapabilities()
 
-        val tutorial = OrthographicCube()
+        val tutorial = Tutorial4()
 
         while (!glfwWindowShouldClose(window)) {
             handleResize()
