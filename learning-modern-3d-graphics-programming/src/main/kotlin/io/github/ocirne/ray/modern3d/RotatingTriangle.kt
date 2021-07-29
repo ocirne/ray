@@ -2,7 +2,7 @@ package io.github.ocirne.ray.modern3d
 
 import org.lwjgl.opengl.GL30C.*
 
-class RotatingTriangle: Tutorial {
+class RotatingTriangle: Framework {
 
     private val theProgram: Int
     private var elapsedTimeUniform: Int = 0

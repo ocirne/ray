@@ -106,7 +106,7 @@ class Main {
     fun loop() {
         GL.createCapabilities()
 
-        val tutorial = RotatingTriangle()
+        val tutorial = OrthographicCube()
 
         while (!glfwWindowShouldClose(window)) {
             handleResize()

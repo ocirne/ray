@@ -1,6 +1,6 @@
 package io.github.ocirne.ray.modern3d
 
-interface Tutorial {
+interface Framework {
 
     /** called before OpenGL is initialized */
 //    fun defaults()
