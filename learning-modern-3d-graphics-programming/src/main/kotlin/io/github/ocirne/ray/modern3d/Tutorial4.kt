@@ -6,6 +6,7 @@ class Tutorial4: Framework {
 
     private val theProgram: Int
     private var offsetUniform: Int = 0
+    private var perspectiveMatrixUnif: Int = 0
     private val vertexBufferObject: Int
     private val vao: Int
 
@@ -155,21 +156,28 @@ class Tutorial4: Framework {
 
     fun initializeProgram(): Int {
         val shaderList = listOf(
-            Support.loadShader(GL_VERTEX_SHADER, "ManualPerspective.vert"),
+            Support.loadShader(GL_VERTEX_SHADER, "MatrixPerspective.vert"),
             Support.loadShader(GL_FRAGMENT_SHADER, "StandardColors.frag")
         )
         val theProgram = Support.createProgram(shaderList)
         offsetUniform = glGetUniformLocation(theProgram, "offset")
+        perspectiveMatrixUnif = glGetUniformLocation(theProgram, "perspectiveMatrix");
 
-        val frustumScaleUnif = glGetUniformLocation(theProgram, "frustumScale")
-        val zNearUnif = glGetUniformLocation(theProgram, "zNear")
-        val zFarUnif = glGetUniformLocation(theProgram, "zFar")
-        glUseProgram(theProgram)
-        glUniform1f(frustumScaleUnif, 1.0f)
-        glUniform1f(zNearUnif, 1.0f)
-        glUniform1f(zFarUnif, 3.0f)
-        glUseProgram(0)
+        val fFrustumScale = 1.0f
+        val fzNear = 0.5f
+        val fzFar = 3.0f
 
+        val theMatrix = FloatArray(16) { 0f }
+        theMatrix[0] = fFrustumScale
+        theMatrix[5] = fFrustumScale
+        theMatrix[10] = (fzFar + fzNear) / (fzNear - fzFar)
+        theMatrix[14] = (2 * fzFar * fzNear) / (fzNear - fzFar)
+        theMatrix[11] = -1.0f
+
+        glUseProgram(theProgram);
+        glUniformMatrix4fv(perspectiveMatrixUnif, false, theMatrix)
+
+        glUseProgram(0);
         for (shader in shaderList) {
             glDeleteShader(shader)
         }
