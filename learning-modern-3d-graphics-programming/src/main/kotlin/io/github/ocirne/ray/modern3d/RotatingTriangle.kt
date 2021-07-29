@@ -5,23 +5,20 @@ import org.lwjgl.opengl.GL30C.*
 class RotatingTriangle: Tutorial {
 
     private val theProgram: Int
-    private val elapsedTimeUniform: Int
+    private var elapsedTimeUniform: Int = 0
     private val positionBufferObject: Int
+    private val vao: Int
 
     init {
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
         theProgram = initializeProgram()
-        elapsedTimeUniform = glGetUniformLocation(theProgram, "time")
-
-        val loopDurationUnf = glGetUniformLocation(theProgram, "loopDuration")
-        glUseProgram(theProgram)
-        glUniform1f(loopDurationUnf, 5.0f)
-        glUseProgram(0)
-
         positionBufferObject = initializeVertexBuffer()
+
+        vao = glGenVertexArrays()
+        glBindVertexArray(vao)
     }
 
     override fun display() {
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
         glUseProgram(theProgram)
@@ -37,7 +34,7 @@ class RotatingTriangle: Tutorial {
 
         glDisableVertexAttribArray(0)
         glDisableVertexAttribArray(1)
-        glUseProgram(0);
+        glUseProgram(0)
     }
 
     private fun initializeVertexBuffer(): Int {
@@ -64,6 +61,7 @@ class RotatingTriangle: Tutorial {
             Support.loadShader(GL_FRAGMENT_SHADER, "calcColor.frag")
         )
         val theProgram = Support.createProgram(shaderList)
+        elapsedTimeUniform = glGetUniformLocation(theProgram, "time")
 
         val loopDurationUnf = glGetUniformLocation(theProgram, "loopDuration")
         val fragLoopDurUnf = glGetUniformLocation(theProgram, "fragLoopDuration")
