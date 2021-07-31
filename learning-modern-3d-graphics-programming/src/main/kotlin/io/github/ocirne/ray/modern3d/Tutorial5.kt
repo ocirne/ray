@@ -149,10 +149,16 @@ class Tutorial5: Framework {
         glEnable(GL_CULL_FACE)
         glCullFace(GL_BACK)
         glFrontFace(GL_CW)
+
+        glEnable(GL_DEPTH_TEST)
+        glDepthMask(true)
+        glDepthFunc(GL_LEQUAL)
+        glDepthRange(0.0, 1.0)
     }
 
     override fun display() {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
+        glClearDepth(1.0)
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
         glUseProgram(theProgram)
