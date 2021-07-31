@@ -5,11 +5,9 @@ import org.lwjgl.glfw.Callbacks
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
 import org.lwjgl.opengl.GL
-import org.lwjgl.opengl.GL30C.*
 import org.lwjgl.system.MemoryStack
 import org.lwjgl.system.MemoryUtil
 import java.nio.IntBuffer
-import kotlin.math.min
 
 class Main {
 
@@ -99,7 +97,7 @@ class Main {
     fun loop() {
         GL.createCapabilities()
 
-        val tutorial = Tutorial4()
+        val tutorial = Tutorial5()
 
         while (!glfwWindowShouldClose(window)) {
             handleResize(tutorial)
