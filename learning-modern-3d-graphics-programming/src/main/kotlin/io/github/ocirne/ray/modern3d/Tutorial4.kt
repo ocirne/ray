@@ -4,14 +4,14 @@ import org.lwjgl.opengl.GL30C.*
 
 class Tutorial4: Framework {
 
-    private val theProgram: Int
+    private var theProgram: Int = 0
     private var offsetUniform: Int = 0
     private var perspectiveMatrixUnif: Int = 0
     private val perspectiveMatrix = FloatArray(16) { 0f }
     private val fFrustumScale = 1.0f
 
-    private val vertexBufferObject: Int
-    private val vao: Int
+    private var vertexBufferObject: Int = 0
+    private var vao: Int = 0
 
     val vertexData = floatArrayOf(
         0.25f,  0.25f, -1.25f, 1.0f,
@@ -113,7 +113,7 @@ class Tutorial4: Framework {
         0.0f, 1.0f, 1.0f, 1.0f,
         0.0f, 1.0f, 1.0f, 1.0f)
 
-    init {
+    override fun initialization() {
         theProgram = initializeProgram()
         vertexBufferObject = initializeVertexBuffer()
 
@@ -184,6 +184,8 @@ class Tutorial4: Framework {
         }
         return theProgram
     }
+
+    override fun keyboard(key: Int, x: Int, y: Int) { }
 
     override fun reshape(w: Int, h: Int) {
         perspectiveMatrix[0] = fFrustumScale / (w / h.toFloat())

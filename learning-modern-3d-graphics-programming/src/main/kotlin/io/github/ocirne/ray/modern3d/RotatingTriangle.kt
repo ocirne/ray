@@ -5,12 +5,12 @@ import kotlin.math.min
 
 class RotatingTriangle: Framework {
 
-    private val theProgram: Int
+    private var theProgram: Int = 0
     private var elapsedTimeUniform: Int = 0
-    private val positionBufferObject: Int
-    private val vao: Int
+    private var positionBufferObject: Int = 0
+    private var vao: Int = 0
 
-    init {
+    override fun initialization() {
         theProgram = initializeProgram()
         positionBufferObject = initializeVertexBuffer()
 
@@ -76,6 +76,8 @@ class RotatingTriangle: Framework {
         }
         return theProgram
     }
+
+    override fun keyboard(key: Int, x: Int, y: Int) { }
 
     override fun reshape(w: Int, h: Int) {
         val size = min(w, h)

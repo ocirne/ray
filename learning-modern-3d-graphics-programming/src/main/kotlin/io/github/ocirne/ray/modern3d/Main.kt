@@ -14,6 +14,8 @@ class Main {
     // The window handle
     private var window: Long = 0
 
+    private val tutorial = Tutorial5()
+
     fun run() {
         println("Hello LWJGL " + Version.getVersion() + "!")
         defaults()
@@ -53,6 +55,9 @@ class Main {
                 window,
                 true
             ) // We will detect this in the rendering loop
+            if (action == GLFW_RELEASE) {
+                tutorial.keyboard(key, 0, 0)
+            }
         }
         MemoryStack.stackPush().let { stack ->
             val pWidth = stack.mallocInt(1) // int*
@@ -97,7 +102,7 @@ class Main {
     fun loop() {
         GL.createCapabilities()
 
-        val tutorial = Tutorial5()
+        tutorial.initialization()
 
         while (!glfwWindowShouldClose(window)) {
             handleResize(tutorial)

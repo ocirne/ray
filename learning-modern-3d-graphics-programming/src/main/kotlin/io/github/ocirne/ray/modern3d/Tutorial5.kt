@@ -1,19 +1,21 @@
 package io.github.ocirne.ray.modern3d
 
+import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL30C.*
+import org.lwjgl.opengl.GL32C.GL_DEPTH_CLAMP
 import org.lwjgl.opengl.GL32C.glDrawElementsBaseVertex
 
 class Tutorial5: Framework {
 
-    private val theProgram: Int
+    private var theProgram: Int = 0
     private var offsetUniform: Int = 0
     private var perspectiveMatrixUnif: Int = 0
     private val perspectiveMatrix = FloatArray(16) { 0f }
     private val fFrustumScale = 1.0f
 
-    private val vertexBufferObject: Int
-    private val indexBufferObject: Int
-    private val vao: Int
+    private var vertexBufferObject: Int = 0
+    private var indexBufferObject: Int = 0
+    private var vao: Int = 0
 
     val numberOfVertices = 36
 
@@ -140,7 +142,7 @@ class Tutorial5: Framework {
         17, 16, 14,
     )
 
-    init {
+    override fun initialization() {
         theProgram = initializeProgram()
         vertexBufferObject = initializeVertexBuffer()
         indexBufferObject = initializeIndexBuffer()
@@ -231,6 +233,21 @@ class Tutorial5: Framework {
             glDeleteShader(shader)
         }
         return theProgram
+    }
+
+    var depthClampingActive = false
+
+    override fun keyboard(key: Int, x: Int, y: Int) {
+        when (key) {
+            GLFW_KEY_SPACE -> {
+                if (depthClampingActive) {
+                    glDisable(GL_DEPTH_CLAMP)
+                } else {
+                    glEnable(GL_DEPTH_CLAMP)
+                }
+                depthClampingActive = !depthClampingActive
+            }
+        }
     }
 
     override fun reshape(w: Int, h: Int) {
