@@ -1,6 +1,7 @@
 package io.github.ocirne.ray.modern3d
 
 import org.lwjgl.opengl.GL30C.*
+import org.lwjgl.opengl.GL32C.glDrawElementsBaseVertex
 
 class Tutorial5: Framework {
 
@@ -12,8 +13,7 @@ class Tutorial5: Framework {
 
     private val vertexBufferObject: Int
     private val indexBufferObject: Int
-    private val vaoObject1: Int
-    private val vaoObject2: Int
+    private val vao: Int
 
     val numberOfVertices = 36
 
@@ -49,6 +49,9 @@ class Tutorial5: Framework {
         LEFT_EXTENT,	TOP_EXTENT,		REAR_EXTENT,
         RIGHT_EXTENT,	TOP_EXTENT,		REAR_EXTENT,
         RIGHT_EXTENT,	BOTTOM_EXTENT,	REAR_EXTENT,
+
+//	0, 2, 1,
+//	3, 2, 0,
 
         // Object 2 positions
         TOP_EXTENT,		RIGHT_EXTENT,	REAR_EXTENT,
@@ -141,8 +144,7 @@ class Tutorial5: Framework {
         theProgram = initializeProgram()
         vertexBufferObject = initializeVertexBuffer()
         indexBufferObject = initializeIndexBuffer()
-        vaoObject1 = initializeVertexArrayObject1()
-        vaoObject2 = initializeVertexArrayObject2()
+        vao = initializeVertexArrayObject()
 
         glEnable(GL_CULL_FACE)
         glCullFace(GL_BACK)
@@ -154,13 +156,12 @@ class Tutorial5: Framework {
         glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT) // clear the framebuffer
 
         glUseProgram(theProgram)
-        glBindVertexArray(vaoObject1)
+        glBindVertexArray(vao)
         glUniform3f(offsetUniform, 0.0f, 0.0f, 0.0f)
         glDrawElements(GL_TRIANGLES, indexData.size, GL_UNSIGNED_SHORT, 0)
 
-        glBindVertexArray(vaoObject2)
         glUniform3f(offsetUniform, 0.0f, 0.0f, -1.0f)
-        glDrawElements(GL_TRIANGLES, indexData.size, GL_UNSIGNED_SHORT, 0)
+        glDrawElementsBaseVertex(GL_TRIANGLES, indexData.size, GL_UNSIGNED_SHORT, 0, numberOfVertices / 2)
 
         glBindVertexArray(0)
         glUseProgram(0)
@@ -182,39 +183,20 @@ class Tutorial5: Framework {
         return indexBufferObj
     }
 
-    fun initializeVertexArrayObject1(): Int {
-        val vaoObj = glGenVertexArrays()
-        glBindVertexArray(vaoObj)
+    fun initializeVertexArrayObject(): Int {
+        val vao = glGenVertexArrays()
+        glBindVertexArray(vao)
 
-        val colorDataOffset = 12 * numberOfVertices
-
+        val colorDataOffset = 12L * numberOfVertices
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject)
         glEnableVertexAttribArray(0)
         glEnableVertexAttribArray(1)
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0)
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, colorDataOffset.toLong())
+        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, colorDataOffset)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject)
 
         glBindVertexArray(0)
-        return vaoObj
-    }
-
-    fun initializeVertexArrayObject2(): Int {
-        val vaoObj = glGenVertexArrays()
-        glBindVertexArray(vaoObj)
-
-        val posDataOffset = 6 * numberOfVertices
-        val colorDataOffset = 20 * numberOfVertices
-
-        //Use the same buffer object previously bound to GL_ARRAY_BUFFER. (!)
-        glEnableVertexAttribArray(0)
-        glEnableVertexAttribArray(1)
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, posDataOffset.toLong())
-        glVertexAttribPointer(1, 4, GL_FLOAT, false, 0, colorDataOffset.toLong())
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject)
-
-        glBindVertexArray(0)
-        return vaoObj
+        return vao
     }
 
     fun initializeProgram(): Int {
@@ -246,7 +228,7 @@ class Tutorial5: Framework {
     }
 
     override fun reshape(w: Int, h: Int) {
-        perspectiveMatrix[0] = fFrustumScale / (h / w.toFloat())
+        perspectiveMatrix[0] = fFrustumScale / (w / h.toFloat())
         perspectiveMatrix[5] = fFrustumScale
         glUseProgram(theProgram)
         glUniformMatrix4fv(perspectiveMatrixUnif, false, perspectiveMatrix)
