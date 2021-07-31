@@ -168,7 +168,7 @@ class Tutorial5: Framework {
         glUniform3f(offsetUniform, 0.0f, 0.0f, 0.5f)
         glDrawElements(GL_TRIANGLES, indexData.size, GL_UNSIGNED_SHORT, 0)
 
-        glUniform3f(offsetUniform, 0.0f, 0.0f, -1.0f)
+        glUniform3f(offsetUniform, 0.0f, 0.0f, 0.4f)
         glDrawElementsBaseVertex(GL_TRIANGLES, indexData.size, GL_UNSIGNED_SHORT, 0, numberOfVertices / 2)
 
         glBindVertexArray(0)
