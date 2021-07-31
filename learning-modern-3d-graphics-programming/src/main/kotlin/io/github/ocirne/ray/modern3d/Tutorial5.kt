@@ -163,7 +163,7 @@ class Tutorial5: Framework {
 
         glUseProgram(theProgram)
         glBindVertexArray(vao)
-        glUniform3f(offsetUniform, 0.0f, 0.0f, 0.0f)
+        glUniform3f(offsetUniform, 0.0f, 0.0f, -1.0f)
         glDrawElements(GL_TRIANGLES, indexData.size, GL_UNSIGNED_SHORT, 0)
 
         glUniform3f(offsetUniform, 0.0f, 0.0f, -1.0f)
