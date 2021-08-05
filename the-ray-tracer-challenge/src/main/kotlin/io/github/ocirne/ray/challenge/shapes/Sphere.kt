@@ -12,7 +12,7 @@ import kotlin.math.sqrt
 
 data class Sphere(
     override val transform: Matrix = identityMatrix,
-    override val material: Material = Material()
+    override var material: Material = Material()
 ) : Shape(transform, material) {
 
     override fun localIntersect(localRay: Ray): List<Intersection> {

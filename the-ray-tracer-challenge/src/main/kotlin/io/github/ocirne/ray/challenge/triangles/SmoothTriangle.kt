@@ -18,7 +18,7 @@ data class SmoothTriangle(
     val n1: Vector,
     val n2: Vector,
     val n3: Vector,
-    override val material: Material = Material()
+    override var material: Material = Material()
 ) : Shape(material = material) {
 
     private val e1: Vector = p2 - p1

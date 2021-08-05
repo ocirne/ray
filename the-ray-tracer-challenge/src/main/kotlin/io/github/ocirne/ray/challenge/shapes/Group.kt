@@ -5,14 +5,13 @@ import io.github.ocirne.ray.challenge.matrices.Matrix
 import io.github.ocirne.ray.challenge.matrices.identityMatrix
 import io.github.ocirne.ray.challenge.raysphere.Intersection
 import io.github.ocirne.ray.challenge.raysphere.Ray
-import io.github.ocirne.ray.challenge.triangles.Triangle
 import io.github.ocirne.ray.challenge.tuples.Point
 import io.github.ocirne.ray.challenge.tuples.Vector
 import io.github.ocirne.ray.challenge.tuples.point
 
 data class Group(
     override val transform: Matrix = identityMatrix,
-    override val material: Material = Material()
+    override var material: Material = Material()
 ) : Shape(transform, material), Collection<Shape> {
 
     override var size = 0
@@ -52,6 +51,7 @@ data class Group(
     }
 
     fun addChild(shape: Shape) {
+        shape.material = material
         children.add(shape)
         shape.parent = this
         size = children.size

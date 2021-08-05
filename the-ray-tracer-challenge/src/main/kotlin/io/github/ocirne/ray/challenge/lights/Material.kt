@@ -6,7 +6,7 @@ import io.github.ocirne.ray.challenge.tuples.*
 import kotlin.math.pow
 
 data class Material(
-    val color: Color = WHITE,
+    var color: Color = WHITE,
     var pattern: Pattern? = null,
     // TODO val?
     var ambient: Double = 0.1,

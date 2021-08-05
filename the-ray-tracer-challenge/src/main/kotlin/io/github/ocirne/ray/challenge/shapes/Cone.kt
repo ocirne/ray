@@ -16,7 +16,7 @@ import kotlin.math.*
 
 data class Cone(
     override val transform: Matrix = identityMatrix,
-    override val material: Material = Material(),
+    override var material: Material = Material(),
     val maximum: Double = POSITIVE_INFINITY,
     val minimum: Double = NEGATIVE_INFINITY,
     val closed: Boolean = false

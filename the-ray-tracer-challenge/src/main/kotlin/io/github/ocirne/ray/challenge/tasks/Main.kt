@@ -28,16 +28,18 @@ fun renderScene(sceneNo: Int): Canvas {
         20 -> funWithSmoothing1()
         21 -> funWithCSG1()
         22 -> funWithCSG2()
+        23 -> funWithLeoCAD1()
+        24 -> funWithLeoCAD2()
         else -> throw IllegalArgumentException("Unknown sceneNo $sceneNo")
     }
 }
 
 fun main() {
-    val sceneNo = 22
+    val sceneNo = 23
     val timeInMillisRendering = measureTimeMillis {
         val canvas = renderScene(sceneNo)
         val timestamp = System.currentTimeMillis().toString()
-        File("output/imagetimestamp.ppm").printWriter().use(canvas::toPPM)
+        File("output/image$timestamp.ppm").printWriter().use(canvas::toPPM)
     }
     println("rendering total $timeInMillisRendering ms")
 }

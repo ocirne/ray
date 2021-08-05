@@ -13,7 +13,7 @@ import kotlin.math.abs
 
 data class Cube(
     override val transform: Matrix = identityMatrix,
-    override val material: Material = Material()
+    override var material: Material = Material()
 ) : Shape(transform, material) {
 
     override fun localIntersect(localRay: Ray): List<Intersection> {

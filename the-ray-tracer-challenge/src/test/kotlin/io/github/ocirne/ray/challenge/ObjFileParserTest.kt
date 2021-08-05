@@ -21,7 +21,7 @@ internal class ObjFileParserTest {
             and came back the previous night.
             """
         val parser = ObjFileParser(gibberish)
-        parser.ignored shouldBe 5
+        parser.ignoredInObjects shouldBe 5
     }
 
     @Test

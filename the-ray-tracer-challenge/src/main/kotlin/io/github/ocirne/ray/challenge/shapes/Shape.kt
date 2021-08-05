@@ -10,7 +10,7 @@ import io.github.ocirne.ray.challenge.tuples.Vector
 
 abstract class Shape(
     open val transform: Matrix = identityMatrix,
-    open val material: Material = Material(),
+    open var material: Material = Material(),
     var parent: Shape? = null
 ) {
 
