@@ -164,7 +164,7 @@ class Tutorial4: Framework {
         )
         val theProgram = Support.createProgram(shaderList)
         offsetUniform = glGetUniformLocation(theProgram, "offset")
-        perspectiveMatrixUnif = glGetUniformLocation(theProgram, "perspectiveMatrix");
+        perspectiveMatrixUnif = glGetUniformLocation(theProgram, "perspectiveMatrix")
 
         val fzNear = 0.5f
         val fzFar = 3.0f
@@ -175,10 +175,10 @@ class Tutorial4: Framework {
         perspectiveMatrix[14] = (2 * fzFar * fzNear) / (fzNear - fzFar)
         perspectiveMatrix[11] = -1.0f
 
-        glUseProgram(theProgram);
+        glUseProgram(theProgram)
         glUniformMatrix4fv(perspectiveMatrixUnif, false, perspectiveMatrix)
 
-        glUseProgram(0);
+        glUseProgram(0)
         for (shader in shaderList) {
             glDeleteShader(shader)
         }
