@@ -4,9 +4,10 @@ import io.github.ocirne.ray.modern3d.Support.glutGet
 import org.lwjgl.opengl.GL30C.*
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlin.math.tan
 
-class Tutorial6: Framework {
+class Tutorial6 : Framework {
 
     private var theProgram: Int = 0
     private var modelToCameraMatrixUnif: Int = 0
@@ -57,14 +58,24 @@ class Tutorial6: Framework {
     )
 
     val g_instanceList = listOf(
+// Translation:
 //        StationaryOffset,
 //        OvalOffset,
 //        BottomCircleOffset,
-        NullScale(Vec3(0.0f, 0.0f, -45.0f)),
-        StaticUniformScale(Vec3(-10.0f, -10.0f, -45.0f)),
-        StaticNonUniformScale(Vec3(-10.0f, 10.0f, -45.0f)),
-        DynamicUniformScale(Vec3(10.0f, 10.0f, -45.0f)),
-        DynamicNonUniformScale(Vec3(10.0f, -10.0f, -45.0f)),
+
+// Scaling:
+//        NullScale(Vec3(0.0f, 0.0f, -45.0f)),
+//        StaticUniformScale(Vec3(-10.0f, -10.0f, -45.0f)),
+//        StaticNonUniformScale(Vec3(-10.0f, 10.0f, -45.0f)),
+//        DynamicUniformScale(Vec3(10.0f, 10.0f, -45.0f)),
+//        DynamicNonUniformScale(Vec3(10.0f, -10.0f, -45.0f)),
+
+// Rotation:
+        NullRotation(Vec3(0.0f, 0.0f, -25.0f)),
+        RotateX(Vec3(-5.0f, -5.0f, -25.0f)),
+        RotateY(Vec3(-5.0f, 5.0f, -25.0f)),
+        RotateZ(Vec3(5.0f, 5.0f, -25.0f)),
+        RotateAxis(Vec3(5.0f, -5.0f, -25.0f)),
     )
 
     fun initializeProgram(): Int {
@@ -169,10 +180,10 @@ class Tutorial6: Framework {
         glUseProgram(theProgram)
         glUniformMatrix4fv(cameraToClipMatrixUnif, false, cameraToClipMatrix.toFloatArray())
         glUseProgram(0)
-        glViewport(0,0, w, h)
+        glViewport(0, 0, w, h)
     }
 
-    override fun keyboard(key: Int, x: Int, y: Int) { }
+    override fun keyboard(key: Int, x: Int, y: Int) {}
 
     fun calcFrustumScale(fFovDeg: Float): Float {
         val degToRad = 3.14159f * 2.0f / 360.0f
@@ -182,13 +193,14 @@ class Tutorial6: Framework {
 }
 
 
-object StationaryOffset: Instance() {
+object StationaryOffset : Instance(null) {
+
     override fun calcOffset(fElapsedTime: Float): Vec3 {
         return Vec3(0.0f, 0.0f, -20.0f)
     }
 }
 
-object OvalOffset: Instance() {
+object OvalOffset : Instance(null) {
 
     override fun calcOffset(fElapsedTime: Float): Vec3 {
         val fLoopDuration = 3
@@ -204,7 +216,7 @@ object OvalOffset: Instance() {
     }
 }
 
-object BottomCircleOffset: Instance() {
+object BottomCircleOffset : Instance(null) {
 
     override fun calcOffset(fElapsedTime: Float): Vec3 {
         val fLoopDuration = 12
@@ -228,44 +240,28 @@ fun calcLerpFactor(fElapsedTime: Float, fLoopDuration: Int): Float {
     return fValue * 2.0f
 }
 
-class NullScale(val offset: Vec3): Instance() {
-
-    override fun calcOffset(fElapsedTime: Float): Vec3 {
-        return offset
-    }
+class NullScale(offset: Vec3) : Instance(offset) {
 
     override fun calcScale(fElapsedTime: Float): Vec3 {
         return Vec3(1.0f, 1.0f, 1.0f)
     }
 }
 
-class StaticUniformScale(val offset: Vec3): Instance() {
-
-    override fun calcOffset(fElapsedTime: Float): Vec3 {
-        return offset
-    }
+class StaticUniformScale(offset: Vec3) : Instance(offset) {
 
     override fun calcScale(fElapsedTime: Float): Vec3 {
         return Vec3(4.0f, 4.0f, 4.0f)
     }
 }
 
-class StaticNonUniformScale(val offset: Vec3): Instance() {
-
-    override fun calcOffset(fElapsedTime: Float): Vec3 {
-        return offset
-    }
+class StaticNonUniformScale(offset: Vec3) : Instance(offset) {
 
     override fun calcScale(fElapsedTime: Float): Vec3 {
         return Vec3(0.5f, 1.0f, 10.0f)
     }
 }
 
-class DynamicUniformScale(val offset: Vec3): Instance() {
-
-    override fun calcOffset(fElapsedTime: Float): Vec3 {
-        return offset
-    }
+class DynamicUniformScale(offset: Vec3) : Instance(offset) {
 
     val fLoopDuration = 3
 
@@ -274,11 +270,7 @@ class DynamicUniformScale(val offset: Vec3): Instance() {
     }
 }
 
-class DynamicNonUniformScale(val offset: Vec3): Instance() {
-
-    override fun calcOffset(fElapsedTime: Float): Vec3 {
-        return offset
-    }
+class DynamicNonUniformScale(offset: Vec3) : Instance(offset) {
 
     val fXLoopDuration = 3
     val fZLoopDuration = 5
@@ -292,51 +284,174 @@ class DynamicNonUniformScale(val offset: Vec3): Instance() {
     }
 }
 
+fun computeAngleRad(fElapsedTime: Float, fLoopDuration: Int): Float {
+    val fScale = 3.14159f * 2.0f / fLoopDuration
+    val fCurrTimeThroughLoop = fElapsedTime % fLoopDuration
+    return fCurrTimeThroughLoop * fScale
+}
 
-abstract class Instance {
+class NullRotation(offset: Vec3) : Instance(offset) {
+
+    override fun calcRotation(fElapsedTime: Float): Mat3 {
+        return Mat3()
+    }
+}
+
+class RotateX(offset: Vec3) : Instance(offset) {
+
+    override fun calcRotation(fElapsedTime: Float): Mat3 {
+        val fAngRad = computeAngleRad(fElapsedTime, 3)
+        val fCos = cos(fAngRad)
+        val fSin = sin(fAngRad)
+
+        val theMat = Mat3()
+        theMat[1].y = fCos
+        theMat[2].y = -fSin
+        theMat[1].z = fSin
+        theMat[2].z = fCos
+        return theMat
+    }
+}
+
+class RotateY(offset: Vec3) : Instance(offset) {
+
+    override fun calcRotation(fElapsedTime: Float): Mat3 {
+        val fAngRad = computeAngleRad(fElapsedTime, 2)
+        val fCos = cos(fAngRad)
+        val fSin = sin(fAngRad)
+
+        val theMat = Mat3()
+        theMat[0].x = fCos
+        theMat[2].x = fSin
+        theMat[0].z = -fSin
+        theMat[2].z = fCos
+        return theMat
+    }
+}
+
+class RotateZ(offset: Vec3) : Instance(offset) {
+    override fun calcRotation(fElapsedTime: Float): Mat3 {
+        val fAngRad = computeAngleRad(fElapsedTime, 2)
+        val fCos = cos(fAngRad)
+        val fSin = sin(fAngRad)
+
+        val theMat = Mat3()
+        theMat[0].x = fCos
+        theMat[1].x = -fSin
+        theMat[0].y = fSin
+        theMat[1].y = fCos
+        return theMat
+    }
+}
+
+class RotateAxis(offset: Vec3) : Instance(offset) {
+
+    override fun calcRotation(fElapsedTime: Float): Mat3 {
+        val fAngRad = computeAngleRad(fElapsedTime, 2)
+        val fCos = cos(fAngRad)
+        val fInvCos = 1.0f - fCos
+        val fSin = sin(fAngRad)
+        val fInvSin = 1.0f - fSin
+
+        val axis = Vec3(1.0f, 1.0f, 1.0f).normalize()
+
+        val theMat = Mat3()
+        theMat[0].x = (axis.x * axis.x) + ((1 - axis.x * axis.x) * fCos)
+        theMat[1].x = axis.x * axis.y * (fInvCos) - (axis.z * fSin)
+        theMat[2].x = axis.x * axis.z * (fInvCos) + (axis.y * fSin)
+
+        theMat[0].y = axis.x * axis.y * (fInvCos) + (axis.z * fSin)
+        theMat[1].y = (axis.y * axis.y) + ((1 - axis.y * axis.y) * fCos)
+        theMat[2].y = axis.y * axis.z * (fInvCos) - (axis.x * fSin)
+
+        theMat[0].z = axis.x * axis.z * (fInvCos) - (axis.y * fSin)
+        theMat[1].z = axis.y * axis.z * (fInvCos) + (axis.x * fSin)
+        theMat[2].z = (axis.z * axis.z) + ((1 - axis.z * axis.z) * fCos)
+        return theMat
+    }
+}
+
+abstract class Instance(val offset: Vec3?) {
 
     fun constructMatrix(fElapsedTime: Float): Mat4 {
         val theScale = calcScale(fElapsedTime)
-        val theMat = Mat4()
-        theMat[0].x = theScale.x
-        theMat[1].y = theScale.y
-        theMat[2].z = theScale.z
+        val rotMatrix = calcRotation(fElapsedTime)
+        val theMat = Mat4(rotMatrix)
+        if (theScale != null) {
+            theMat[0].x = theScale.x
+            theMat[1].y = theScale.y
+            theMat[2].z = theScale.z
+        }
         theMat[3] = Vec4(calcOffset(fElapsedTime), 1.0f)
         return theMat
     }
 
-    abstract fun calcOffset(fElapsedTime: Float): Vec3
+    open fun calcOffset(fElapsedTime: Float): Vec3 {
+        return offset!!
+    }
 
-    open fun calcScale(fElapsedTime: Float): Vec3 {
-        return Vec3(1.0f, 1.0f, 1.0f)
+    open fun calcScale(fElapsedTime: Float): Vec3? {
+        return null
+    }
+
+    open fun calcRotation(fElapsedTime: Float): Mat3 {
+        return Mat3()
     }
 }
 
 class Vec4(var x: Float, var y: Float, var z: Float, var w: Float) {
 
-    constructor(v3: Vec3, w: Float): this(v3.x, v3.y, v3.z, w)
+    constructor(v3: Vec3, w: Float) : this(v3.x, v3.y, v3.z, w)
 
-    constructor(): this (0.0f, 0.0f, 0.0f, 0.0f)
+    constructor() : this(0.0f, 0.0f, 0.0f, 0.0f)
 
     override fun toString(): String {
         return "$x $y $z $w"
     }
 }
 
-class Vec3(val x: Float, val y: Float, val z: Float) {
+class Vec3(var x: Float, var y: Float, var z: Float) {
+    fun normalize(): Vec3 {
+        val length = sqrt(x*x + y*y + z*z)
+        return Vec3(x/length, y/length, z/length)
+    }
 
-    constructor(s: Float): this(s, s, s)
+    constructor(s: Float) : this(s, s, s)
+
+    constructor() : this(0.0f, 0.0f, 0.0f)
 }
 
-class Mat4 {
-    val m = Array(4) { Vec4() }
+class Mat3 {
+    val m = Array(3) { Vec3() }
 
     init {
         m[0].x = 1.0f
         m[1].y = 1.0f
         m[2].z = 1.0f
+    }
+
+    operator fun get(i: Int): Vec3 {
+        return m[i]
+    }
+}
+
+class Mat4(mat3: Mat3) {
+    val m = Array(4) { Vec4() }
+
+    init {
+        m[0].x = mat3[0].x
+        m[0].y = mat3[0].y
+        m[0].z = mat3[0].z
+        m[1].x = mat3[1].x
+        m[1].y = mat3[1].y
+        m[1].z = mat3[1].z
+        m[2].x = mat3[2].x
+        m[2].y = mat3[2].y
+        m[2].z = mat3[2].z
         m[3].w = 1.0f
     }
+
+    constructor() : this(Mat3())
 
     operator fun set(i: Int, vec: Vec4) {
         m[i] = vec
@@ -349,10 +464,10 @@ class Mat4 {
     fun toFloatArray(): FloatArray {
         val fa = FloatArray(16) { 1.0f }
         m.forEachIndexed { x, vec4 ->
-            fa[4*x+0] = vec4.x
-            fa[4*x+1] = vec4.y
-            fa[4*x+2] = vec4.z
-            fa[4*x+3] = vec4.w
+            fa[4 * x + 0] = vec4.x
+            fa[4 * x + 1] = vec4.y
+            fa[4 * x + 2] = vec4.z
+            fa[4 * x + 3] = vec4.w
         }
         return fa
     }
