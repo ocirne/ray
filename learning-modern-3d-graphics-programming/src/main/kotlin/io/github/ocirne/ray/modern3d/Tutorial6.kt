@@ -57,9 +57,14 @@ class Tutorial6: Framework {
     )
 
     val g_instanceList = listOf(
-        StationaryOffset,
-        OvalOffset,
-        BottomCircleOffset,
+//        StationaryOffset,
+//        OvalOffset,
+//        BottomCircleOffset,
+        NullScale(Vec3(0.0f, 0.0f, -45.0f)),
+        StaticUniformScale(Vec3(-10.0f, -10.0f, -45.0f)),
+        StaticNonUniformScale(Vec3(-10.0f, 10.0f, -45.0f)),
+        DynamicUniformScale(Vec3(10.0f, 10.0f, -45.0f)),
+        DynamicNonUniformScale(Vec3(10.0f, -10.0f, -45.0f)),
     )
 
     fun initializeProgram(): Int {
@@ -73,7 +78,7 @@ class Tutorial6: Framework {
         cameraToClipMatrixUnif = glGetUniformLocation(theProgram, "cameraToClipMatrix")
 
         val fzNear = 1.0f
-        val fzFar = 45.0f
+        val fzFar = 61.0f
 
         cameraToClipMatrix[0].x = fFrustumScale
         cameraToClipMatrix[1].y = fFrustumScale
@@ -215,17 +220,96 @@ object BottomCircleOffset: Instance() {
     }
 }
 
+fun calcLerpFactor(fElapsedTime: Float, fLoopDuration: Int): Float {
+    var fValue = (fElapsedTime % fLoopDuration) / fLoopDuration
+    if (fValue > 0.5f) {
+        fValue = 1.0f - fValue
+    }
+    return fValue * 2.0f
+}
+
+class NullScale(val offset: Vec3): Instance() {
+
+    override fun calcOffset(fElapsedTime: Float): Vec3 {
+        return offset
+    }
+
+    override fun calcScale(fElapsedTime: Float): Vec3 {
+        return Vec3(1.0f, 1.0f, 1.0f)
+    }
+}
+
+class StaticUniformScale(val offset: Vec3): Instance() {
+
+    override fun calcOffset(fElapsedTime: Float): Vec3 {
+        return offset
+    }
+
+    override fun calcScale(fElapsedTime: Float): Vec3 {
+        return Vec3(4.0f, 4.0f, 4.0f)
+    }
+}
+
+class StaticNonUniformScale(val offset: Vec3): Instance() {
+
+    override fun calcOffset(fElapsedTime: Float): Vec3 {
+        return offset
+    }
+
+    override fun calcScale(fElapsedTime: Float): Vec3 {
+        return Vec3(0.5f, 1.0f, 10.0f)
+    }
+}
+
+class DynamicUniformScale(val offset: Vec3): Instance() {
+
+    override fun calcOffset(fElapsedTime: Float): Vec3 {
+        return offset
+    }
+
+    val fLoopDuration = 3
+
+    override fun calcScale(fElapsedTime: Float): Vec3 {
+        return Vec3(mix(1.0f, 4.0f, calcLerpFactor(fElapsedTime, fLoopDuration)))
+    }
+}
+
+class DynamicNonUniformScale(val offset: Vec3): Instance() {
+
+    override fun calcOffset(fElapsedTime: Float): Vec3 {
+        return offset
+    }
+
+    val fXLoopDuration = 3
+    val fZLoopDuration = 5
+
+    override fun calcScale(fElapsedTime: Float): Vec3 {
+        return Vec3(
+            mix(1.0f, 0.5f, calcLerpFactor(fElapsedTime, fXLoopDuration)),
+            1.0f,
+            mix(1.0f, 10.0f, calcLerpFactor(fElapsedTime, fZLoopDuration))
+        )
+    }
+}
+
+
 abstract class Instance {
 
     fun constructMatrix(fElapsedTime: Float): Mat4 {
+        val theScale = calcScale(fElapsedTime)
         val theMat = Mat4()
-
+        theMat[0].x = theScale.x
+        theMat[1].y = theScale.y
+        theMat[2].z = theScale.z
         theMat[3] = Vec4(calcOffset(fElapsedTime), 1.0f)
-
         return theMat
     }
 
     abstract fun calcOffset(fElapsedTime: Float): Vec3
+
+    open fun calcScale(fElapsedTime: Float): Vec3 {
+        return Vec3(1.0f, 1.0f, 1.0f)
+    }
 }
 
 class Vec4(var x: Float, var y: Float, var z: Float, var w: Float) {
@@ -239,7 +323,10 @@ class Vec4(var x: Float, var y: Float, var z: Float, var w: Float) {
     }
 }
 
-class Vec3(val x: Float, val y: Float, val z: Float)
+class Vec3(val x: Float, val y: Float, val z: Float) {
+
+    constructor(s: Float): this(s, s, s)
+}
 
 class Mat4 {
     val m = Array(4) { Vec4() }
@@ -273,4 +360,8 @@ class Mat4 {
     override fun toString(): String {
         return m.map { v -> v.toString() }.joinToString()
     }
+}
+
+fun mix(x: Float, y: Float, a: Float): Float {
+    return x * (1.0f - a) + y * a
 }
