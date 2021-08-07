@@ -23,7 +23,7 @@ class Tutorial6 : Framework {
 
     val fFrustumScale = calcFrustumScale(45.0f)
 
-    val vertexData = floatArrayOf(
+    val vertexData = VertexData(
         +1.0f, +1.0f, +1.0f,
         -1.0f, -1.0f, +1.0f,
         -1.0f, +1.0f, -1.0f,
@@ -33,16 +33,16 @@ class Tutorial6 : Framework {
         +1.0f, +1.0f, -1.0f,
         +1.0f, -1.0f, +1.0f,
         -1.0f, +1.0f, +1.0f,
+    ).colors(
+        GREEN_COLOR,
+        BLUE_COLOR,
+        RED_COLOR,
+        BROWN_COLOR,
 
-        0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
-
-        0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
+        GREEN_COLOR,
+        BLUE_COLOR,
+        RED_COLOR,
+        BROWN_COLOR,
     )
 
     val indexData = shortArrayOf(
@@ -397,86 +397,4 @@ abstract class Instance(val offset: Vec3?) {
     open fun calcRotation(fElapsedTime: Float): Mat3 {
         return Mat3()
     }
-}
-
-class Vec4(var x: Float, var y: Float, var z: Float, var w: Float) {
-
-    constructor(v3: Vec3, w: Float) : this(v3.x, v3.y, v3.z, w)
-
-    constructor() : this(0.0f, 0.0f, 0.0f, 0.0f)
-
-    override fun toString(): String {
-        return "$x $y $z $w"
-    }
-}
-
-class Vec3(var x: Float, var y: Float, var z: Float) {
-    fun normalize(): Vec3 {
-        val length = sqrt(x*x + y*y + z*z)
-        return Vec3(x/length, y/length, z/length)
-    }
-
-    constructor(s: Float) : this(s, s, s)
-
-    constructor() : this(0.0f, 0.0f, 0.0f)
-}
-
-class Mat3 {
-    val m = Array(3) { Vec3() }
-
-    init {
-        m[0].x = 1.0f
-        m[1].y = 1.0f
-        m[2].z = 1.0f
-    }
-
-    operator fun get(i: Int): Vec3 {
-        return m[i]
-    }
-}
-
-class Mat4(mat3: Mat3) {
-    val m = Array(4) { Vec4() }
-
-    init {
-        m[0].x = mat3[0].x
-        m[0].y = mat3[0].y
-        m[0].z = mat3[0].z
-        m[1].x = mat3[1].x
-        m[1].y = mat3[1].y
-        m[1].z = mat3[1].z
-        m[2].x = mat3[2].x
-        m[2].y = mat3[2].y
-        m[2].z = mat3[2].z
-        m[3].w = 1.0f
-    }
-
-    constructor() : this(Mat3())
-
-    operator fun set(i: Int, vec: Vec4) {
-        m[i] = vec
-    }
-
-    operator fun get(i: Int): Vec4 {
-        return m[i]
-    }
-
-    fun toFloatArray(): FloatArray {
-        val fa = FloatArray(16) { 1.0f }
-        m.forEachIndexed { x, vec4 ->
-            fa[4 * x + 0] = vec4.x
-            fa[4 * x + 1] = vec4.y
-            fa[4 * x + 2] = vec4.z
-            fa[4 * x + 3] = vec4.w
-        }
-        return fa
-    }
-
-    override fun toString(): String {
-        return m.map { v -> v.toString() }.joinToString()
-    }
-}
-
-fun mix(x: Float, y: Float, a: Float): Float {
-    return x * (1.0f - a) + y * a
 }

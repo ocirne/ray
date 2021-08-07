@@ -46,3 +46,28 @@ object Support {
         return fElapsedTime
     }
 }
+
+data class Color(val r: Float, val g: Float, val b: Float, val a: Float)
+
+val RED_COLOR = Color(1.0f, 0.0f, 0.0f, 1.0f)
+val GREEN_COLOR = Color(0.0f, 1.0f, 0.0f, 1.0f)
+val BLUE_COLOR = Color(0.0f, 0.0f, 1.0f, 1.0f)
+val YELLOW_COLOR = Color(1.0f, 1.0f, 0.0f, 1.0f)
+val CYAN_COLOR = Color(0.0f, 1.0f, 1.0f, 1.0f)
+val MAGENTA_COLOR = Color(1.0f, 0.0f, 1.0f, 1.0f)
+val GREY_COLOR = Color(0.8f, 0.8f, 0.8f, 1.0f)
+val BROWN_COLOR = Color(0.5f, 0.5f, 0.0f, 1.0f)
+
+
+class VertexData(vararg elements: Float) {
+
+    val vertices = elements
+
+    fun colors(vararg colors: Color): FloatArray {
+        var result = vertices
+        for (color in colors) {
+            result += floatArrayOf(color.r, color.g, color.b, color.a)
+        }
+        return result
+    }
+}

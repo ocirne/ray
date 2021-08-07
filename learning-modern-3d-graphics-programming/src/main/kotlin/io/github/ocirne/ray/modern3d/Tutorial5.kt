@@ -27,7 +27,7 @@ class Tutorial5: Framework {
     val FRONT_EXTENT = -1.25f
     val REAR_EXTENT = -1.75f
 
-    val vertexData = floatArrayOf(
+    val vertexData = VertexData(
         // Object 1 positions
         LEFT_EXTENT,	TOP_EXTENT,		REAR_EXTENT,
         LEFT_EXTENT,	MIDDLE_EXTENT,	FRONT_EXTENT,
@@ -78,54 +78,54 @@ class Tutorial5: Framework {
         TOP_EXTENT,		RIGHT_EXTENT,	REAR_EXTENT,
         TOP_EXTENT,		LEFT_EXTENT,	REAR_EXTENT,
         BOTTOM_EXTENT,	LEFT_EXTENT,	REAR_EXTENT,
+    ).colors(
+        //Object 1 colors
+        GREEN_COLOR,
+        GREEN_COLOR,
+        GREEN_COLOR,
+        GREEN_COLOR,
 
-        // Object 1 colors
-        0.75f, 0.75f, 1.0f, 1.0f,
-        0.75f, 0.75f, 1.0f, 1.0f,
-        0.75f, 0.75f, 1.0f, 1.0f,
-        0.75f, 0.75f, 1.0f, 1.0f,
+        BLUE_COLOR,
+        BLUE_COLOR,
+        BLUE_COLOR,
+        BLUE_COLOR,
 
-        0.0f, 0.5f, 0.0f, 1.0f,
-        0.0f, 0.5f, 0.0f, 1.0f,
-        0.0f, 0.5f, 0.0f, 1.0f,
-        0.0f, 0.5f, 0.0f, 1.0f,
+        RED_COLOR,
+        RED_COLOR,
+        RED_COLOR,
 
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
+        GREY_COLOR,
+        GREY_COLOR,
+        GREY_COLOR,
 
-        0.8f, 0.8f, 0.8f, 1.0f,
-        0.8f, 0.8f, 0.8f, 1.0f,
-        0.8f, 0.8f, 0.8f, 1.0f,
+        BROWN_COLOR,
+        BROWN_COLOR,
+        BROWN_COLOR,
+        BROWN_COLOR,
 
-        0.5f, 0.5f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
+        //Object 2 colors
+        RED_COLOR,
+        RED_COLOR,
+        RED_COLOR,
+        RED_COLOR,
 
-        // Object 2 colors
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
+        BROWN_COLOR,
+        BROWN_COLOR,
+        BROWN_COLOR,
+        BROWN_COLOR,
 
-        0.5f, 0.5f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f, 1.0f,
+        BLUE_COLOR,
+        BLUE_COLOR,
+        BLUE_COLOR,
 
-        0.0f, 0.5f, 0.0f, 1.0f,
-        0.0f, 0.5f, 0.0f, 1.0f,
-        0.0f, 0.5f, 0.0f, 1.0f,
+        GREEN_COLOR,
+        GREEN_COLOR,
+        GREEN_COLOR,
 
-        0.75f, 0.75f, 1.0f, 1.0f,
-        0.75f, 0.75f, 1.0f, 1.0f,
-        0.75f, 0.75f, 1.0f, 1.0f,
-
-        0.8f, 0.8f, 0.8f, 1.0f,
-        0.8f, 0.8f, 0.8f, 1.0f,
-        0.8f, 0.8f, 0.8f, 1.0f,
-        0.8f, 0.8f, 0.8f, 1.0f,
+        GREY_COLOR,
+        GREY_COLOR,
+        GREY_COLOR,
+        GREY_COLOR,
     )
 
     val indexData = shortArrayOf(
