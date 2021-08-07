@@ -4,7 +4,6 @@ import io.github.ocirne.ray.modern3d.Support.glutGet
 import org.lwjgl.opengl.GL30C.*
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.math.sqrt
 import kotlin.math.tan
 
 class Tutorial6 : Framework {

@@ -102,10 +102,11 @@ class Mat4(mat3: Mat3) {
         val r = Mat4()
         for (row in 0 until 4) {
             for (col in 0 until 4) {
-                r.m[row][col] = m[row][0] * b.m[0][col] +
-                        m[row][1] * b.m[1][col] +
-                        m[row][2] * b.m[2][col] +
-                        m[row][3] * b.m[3][col]
+                // Different from Matrix multiplication in the ray tracer challenge (!?)
+                r.m[row][col] = b.m[row][0] * m[0][col] +
+                                b.m[row][1] * m[1][col] +
+                                b.m[row][2] * m[2][col] +
+                                b.m[row][3] * m[3][col]
             }
         }
         return r
