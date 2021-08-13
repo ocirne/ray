@@ -33,14 +33,43 @@ class Vec4(var x: Float, var y: Float, var z: Float, var w: Float) {
 }
 
 class Vec3(var x: Float, var y: Float, var z: Float) {
-    fun normalize(): Vec3 {
-        val length = sqrt(x*x + y*y + z*z)
-        return Vec3(x/length, y/length, z/length)
-    }
 
     constructor(s: Float) : this(s, s, s)
 
     constructor() : this(0.0f, 0.0f, 0.0f)
+
+    fun length(): Float {
+        return sqrt(x*x + y*y + z*z)
+    }
+
+    fun normalize(): Vec3 {
+        val length = length()
+        return Vec3(x/length, y/length, z/length)
+    }
+
+    operator fun plus(b: Vec3): Vec3 {
+        return Vec3(x + b.x, y + b.y, z + b.z)
+    }
+
+    operator fun times(f: Float): Vec3 {
+        return Vec3(x * f, y * f, z * f)
+    }
+
+    operator fun minus(b: Vec3): Vec3 {
+        return Vec3(x - b.x, y - b.y, z - b.z)
+    }
+
+    operator fun unaryMinus(): Vec3 {
+        return Vec3(-x, -y, -z)
+    }
+
+    fun cross(b: Vec3): Vec3 {
+        return Vec3(
+            y * b.z - z * b.y,
+            z * b.x - x * b.z,
+            x * b.y - y * b.x
+        )
+    }
 }
 
 class Mat3 {
@@ -111,8 +140,30 @@ class Mat4(mat3: Mat3) {
         }
         return r
     }
+
+    fun transpose(): Mat4 {
+        val r = Mat4()
+        for (row in 0 until 4) {
+            for (col in 0 until 4) {
+                r.m[row][col] = m[col][row]
+            }
+        }
+        return r
+    }
 }
 
 fun mix(x: Float, y: Float, a: Float): Float {
     return x * (1.0f - a) + y * a
+}
+
+fun length(v: Vec3): Float {
+    return v.length()
+}
+
+fun normalize(v: Vec3): Vec3 {
+    return v.normalize()
+}
+
+fun cross(a: Vec3, b: Vec3): Vec3 {
+    return a.cross(b)
 }

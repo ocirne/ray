@@ -14,7 +14,7 @@ class Main {
     // The window handle
     private var window: Long = 0
 
-    private val tutorial = Tutorial6FunWithMatrices()
+    private val tutorial = Tutorial7()
 
     fun run() {
         println("Hello LWJGL " + Version.getVersion() + "!")

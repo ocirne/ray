@@ -2,8 +2,6 @@ package io.github.ocirne.ray.modern3d
 
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL30C.*
-import kotlin.math.cos
-import kotlin.math.sin
 import kotlin.math.tan
 
 class Tutorial6FunWithMatrices : Framework {
@@ -236,106 +234,6 @@ class Tutorial6FunWithMatrices : Framework {
         val degToRad = 3.14159f * 2.0f / 360.0f
         val fFovRad = fFovDeg * degToRad
         return 1.0f / tan(fFovRad / 2.0f)
-    }
-}
-fun degToRad(fAngDeg: Float): Float {
-    val fDegToRad = 3.14159f * 2.0f / 360.0f
-    return fAngDeg * fDegToRad
-}
-
-fun clamp(fValue: Float, fMinValue: Float, fMaxValue: Float): Float {
-    if (fValue < fMinValue)
-        return fMinValue
-    if (fValue > fMaxValue)
-        return fMaxValue
-    return fValue
-}
-
-fun rotateXMatrix(fAngDeg: Float): Mat3 {
-
-    val fAngRad = degToRad(fAngDeg)
-    val fCos = cos(fAngRad)
-    val fSin = sin(fAngRad)
-
-    val theMat = Mat3()
-    theMat[1].y = fCos
-    theMat[2].y = -fSin
-    theMat[1].z = fSin
-    theMat[2].z = fCos
-    return theMat
-}
-
-fun rotateYMatrix(fAngDeg: Float): Mat3 {
-
-    val fAngRad = degToRad(fAngDeg)
-    val fCos = cos(fAngRad)
-    val fSin = sin(fAngRad)
-
-    val theMat = Mat3()
-    theMat[0].x = fCos
-    theMat[2].x = fSin
-    theMat[0].z = -fSin
-    theMat[2].z = fCos
-    return theMat
-}
-
-fun rotateZMatrix(fAngDeg: Float): Mat3 {
-
-    val fAngRad = degToRad(fAngDeg)
-    val fCos = cos(fAngRad)
-    val fSin = sin(fAngRad)
-
-    val theMat = Mat3()
-    theMat[0].x = fCos
-    theMat[1].x = -fSin
-    theMat[0].y = fSin
-    theMat[1].y = fCos
-    return theMat
-}
-
-class MatrixStack {
-
-    private var currMat = Mat4()
-    private val matrices = ArrayDeque<Mat4>()
-
-    fun top(): Mat4 {
-        return currMat
-    }
-
-    fun rotateX(fAngDeg: Float) {
-        currMat *= Mat4(rotateXMatrix(fAngDeg))
-    }
-
-    fun rotateY(fAngDeg: Float) {
-        currMat *= Mat4(rotateYMatrix(fAngDeg))
-    }
-
-    fun rotateZ(fAngDeg: Float) {
-        currMat *= Mat4(rotateZMatrix(fAngDeg))
-    }
-
-    fun scale(scaleVec: Vec3) {
-        val scaleMat = Mat4()
-        scaleMat[0].x = scaleVec.x
-        scaleMat[1].y = scaleVec.y
-        scaleMat[2].z = scaleVec.z
-
-        currMat *= scaleMat
-    }
-
-    fun translate(offsetVec: Vec3) {
-        val translateMat = Mat4()
-        translateMat[3] = Vec4(offsetVec, 1.0f)
-
-        currMat *= translateMat
-    }
-
-    fun push() {
-        matrices.add(currMat)
-    }
-
-    fun pop() {
-        currMat = matrices.removeLast()
     }
 }
 

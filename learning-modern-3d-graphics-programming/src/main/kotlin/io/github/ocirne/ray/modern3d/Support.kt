@@ -71,3 +71,23 @@ class VertexData(vararg elements: Float) {
         return result
     }
 }
+
+fun degToRad(fAngDeg: Float): Float {
+    val fDegToRad = 3.14159f * 2.0f / 360.0f
+    return fAngDeg * fDegToRad
+}
+
+fun clamp(fValue: Float, fMinValue: Float, fMaxValue: Float): Float {
+    if (fValue < fMinValue)
+        return fMinValue
+    if (fValue > fMaxValue)
+        return fMaxValue
+    return fValue
+}
+
+class Mesh(filename: String) {
+
+    fun render() {
+        TODO("Not yet implemented")
+    }
+}
